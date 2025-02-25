@@ -16,7 +16,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 # Load environment variables
 load_dotenv()
 
-
 app = Flask(__name__)
 
 # Database configurations
@@ -28,6 +27,8 @@ app.config['SQLALCHEMY_BINDS'] = {
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+app.config['SECRET_KEY'] = 'Akingbesote Babajide Created This Site 08134812419'  # Replace with a secure key
 
 # Securely load secret key
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -567,7 +568,6 @@ def admin_login():
         else:
             error_message = "Invalid username or password!"
     return render_template("admin_login.html", error=error_message)
-
 
 @app.route('/admin/panel')
 def admin_panel():
