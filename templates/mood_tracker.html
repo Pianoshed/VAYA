@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Challenge</title>
+    <style>
+
+        /* Logo Section */
+.logo-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.logo-container img {
+    height: 40px;
+    width: auto;
+    max-width: 100px;
+}
+  /* Chat Button */
+        .chat-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00cc66;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0px 4px 10px rgba(0, 255, 127, 0.5);
+            text-decoration: none;
+        }
+
+        .chat-btn:hover {
+            background: #00994d;
+        }
+
+
+        * { box-sizing: border-box; font-family: "Arial", sans-serif; margin: 0; padding: 0; }
+        body { text-align: center; transition: background 0.8s ease-in-out; background: #f4f4f9; height: 100vh; padding: 20px; }
+        .container { max-width: 600px; margin: auto; padding: 10px; }
+        .card { background: white; padding: 20px; margin: 10px 0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.2s ease-in-out; }
+        .card:hover { transform: scale(1.02); }
+        h2, h3 { color: #333; }
+        .mood-buttons button { padding: 10px; margin: 5px; border: none; cursor: pointer; border-radius: 5px; }
+        .happy { background: #ffcc00; }
+        .neutral { background: #bbb; }
+        .sad { background: #ff6666; }
+        button { background: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; width: 100%; margin-top: 10px; border-radius: 5px; }
+        button:hover { background: #45a049; }
+        .streak { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        .reward { font-size: 16px; color: #4CAF50; font-weight: bold; margin-top: 15px; display: none; }
+        .journal-entry { text-align: left; background: #fff; padding: 10px; margin-top: 10px; border-radius: 5px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); }
+        .journal-container { display: none; }
+    </style>
+</head>
+<body>
+ <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+                </a>
+            </div>
+    <div class="container">
+        <h2>🌟 Mental Health Challenge</h2>
+
+        <!-- Mood Selection -->
+        <div class="card">
+            <h3>How do you feel today?</h3>
+            <div class="mood-buttons">
+                <button class="happy" data-mood="Happy">😊 Happy</button>
+                <button class="neutral" data-mood="Neutral">😐 Neutral</button>
+                <button class="sad" data-mood="Sad">😢 Sad</button>
+            </div>
+        </div>
+
+        <!-- Affirmation -->
+        <div class="card">
+            <h3>Daily Affirmation</h3>
+            <p id="affirmation-text">Click below for a positive thought</p>
+            <button id="new-affirmation-btn">New Affirmation</button>
+        </div>
+
+        <!-- Daily Challenge -->
+        <div class="card">
+            <h3>Today's Challenge</h3>
+            <p id="challenge-text">Click below for your challenge</p>
+            <button id="new-challenge-btn">New Challenge</button>
+        </div>
+
+        <!-- Journal Entry -->
+        <div class="card">
+            <h3>📝 Journal Your Thoughts</h3>
+            <textarea id="journal-entry" placeholder="Write about your day..." rows="4" style="width: 100%;"></textarea>
+            <button id="save-journal-btn">Save Entry</button>
+        </div>
+
+        <!-- View Past Journals -->
+        <div class="card">
+            <h3>📅 Past Journal Entries</h3>
+            <button id="view-journals-btn">View Entries</button>
+            <div class="journal-container" id="journal-container"></div>
+        </div>
+
+        <!-- Streak Counter -->
+        <div class="card">
+            <h3>🔥 Streak Tracker</h3>
+            <p id="streak-text">Streak: 0 Days</p>
+            <div class="reward" id="reward-text">🎁 Keep going for a surprise!</div>
+        </div>
+    </div>
+   <!-- WhatsApp Chat Button -->
+    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 Chat with Us</a>
+
+    <script>
+        let streakCount = localStorage.getItem("streak") || 0;
+        let selectedMood = "";
+        let selectedChallenge = "";
+
+        // Mood Selection
+        document.querySelectorAll(".mood-buttons button").forEach(button => {
+            button.addEventListener("click", function() {
+                selectedMood = this.dataset.mood;
+                document.body.style.background = selectedMood === "Happy" ? "#ffeb99" : selectedMood === "Neutral" ? "#e0e0e0" : "#ff9999";
+            });
+        });
+
+        // Fetch New Affirmation
+        document.getElementById("new-affirmation-btn").addEventListener("click", () => {
+            fetch("/api/affirmation")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("affirmation-text").textContent = data.affirmation;
+                    updateStreak();
+                });
+        });
+
+        // Fetch New Challenge
+        document.getElementById("new-challenge-btn").addEventListener("click", () => {
+            fetch("/api/challenge")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("challenge-text").textContent = data.challenge;
+                    selectedChallenge = data.challenge;
+                    updateStreak();
+                });
+        });
+
+        // Update Streak Counter
+        function updateStreak() {
+            streakCount++;
+            localStorage.setItem("streak", streakCount);
+            document.getElementById("streak-text").textContent = `🔥 Streak: ${streakCount} Days`;
+
+            if (streakCount >= 3) {
+                document.getElementById("reward-text").style.display = "block";
+                document.getElementById("reward-text").textContent = "🎉 Keep it up!";
+            }
+        }
+
+        // Save Journal Entry with Mood & Challenge
+        document.getElementById("save-journal-btn").addEventListener("click", () => {
+            const entry = document.getElementById("journal-entry").value;
+            if (entry.trim() === "" || selectedMood === "" || selectedChallenge === "") {
+                alert("Please select a mood, a challenge, and write a journal entry before saving.");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString();
+            let savedJournals = JSON.parse(localStorage.getItem("journals")) || [];
+            savedJournals.push({ timestamp, mood: selectedMood, challenge: selectedChallenge, entry });
+
+            localStorage.setItem("journals", JSON.stringify(savedJournals));
+            document.getElementById("journal-entry").value = "";
+            alert("Journal entry saved! 📖");
+        });
+
+        // View and Toggle Past Journal Entries
+        document.getElementById("view-journals-btn").addEventListener("click", () => {
+            let savedJournals = JSON.parse(localStorage.getItem("journals")) || [];
+            const journalContainer = document.getElementById("journal-container");
+
+            // Toggle visibility
+            if (journalContainer.style.display === "block") {
+                journalContainer.style.display = "none";
+                return;
+            }
+
+            journalContainer.innerHTML = "";
+            if (savedJournals.length === 0) {
+                journalContainer.innerHTML = "<p>No journal entries yet.</p>";
+            } else {
+                savedJournals.forEach(journal => {
+                    let entryDiv = document.createElement("div");
+                    entryDiv.classList.add("journal-entry");
+                    entryDiv.innerHTML = `
+                        <strong>${journal.timestamp}</strong>
+                        <p>📝 <strong>Journal:</strong> ${journal.entry}</p>
+                        <p>😊 <strong>Mood:</strong> ${journal.mood}</p>
+                        <p>🎯 <strong>Challenge:</strong> ${journal.challenge}</p>
+                    `;
+                    journalContainer.appendChild(entryDiv);
+                });
+            }
+
+            journalContainer.style.display = "block";
+        });
+        // Function to set a cookie
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+// Function to get a cookie value
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i].trim();
+        if (c.indexOf(nameEQ) === 0) {
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+        }
+    }
+    return null;
+}
+
+// Function to check and load saved streak count
+function loadStreak() {
+    let streak = getCookie("streak");
+    if (streak) {
+        document.getElementById("streak-text").textContent = `🔥 Streak: ${streak} Days`;
+    }
+}
+
+// Function to update streak and store in cookies
+function updateStreak() {
+    let streak = getCookie("streak") || 0;
+    streak = parseInt(streak) + 1;
+    setCookie("streak", streak, 30); // Store for 30 days
+    document.getElementById("streak-text").textContent = `🔥 Streak: ${streak} Days`;
+
+    if (streak >= 3) {
+        document.getElementById("reward-text").style.display = "block";
+        document.getElementById("reward-text").textContent = "🎉 Keep it up!";
+    }
+}
+
+// Load streak on page load
+window.onload = loadStreak;
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mental Health & Sex Education Assessment</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Body and Background */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url("/static/men1.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      line-height: 1.6;
+      position: relative;
+    }
+    /* Overlay for readability */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+    /* Header Styling */
+    .header {
+      background: rgba(44, 62, 80, 0.85);
+      padding: 20px;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .logo-container img {
+      height: 40px;
+      transition: transform 0.3s;
+    }
+    .logo-container img:hover {
+      transform: scale(1.1);
+    }
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .title-container h1 {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .quiz-icon {
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .nav-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .nav-container a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 5px 10px;
+      transition: color 0.3s;
+    }
+    .nav-container a:hover {
+      color: #ffeb3b;
+    }
+    /* Main Form Container */
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    /* Personal Info Section */
+    .personal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .personal-info label {
+      font-weight: 500;
+      text-align: left;
+    }
+    .personal-info input,
+    .personal-info select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    .question {
+      text-align: left;
+    }
+    .question p {
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    button[type="submit"] {
+      background: #2c3e50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button[type="submit"]:hover {
+      background: #34495e;
+    }
+    /* Floating Help Button */
+    .help-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease;
+    }
+    .help-btn:hover {
+      background: #c0392b;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+      .title-container h1 {
+        font-size: 1.5rem;
+      }
+      .quiz-icon {
+        font-size: 1.5rem;
+      }
+      .nav-container a {
+        font-size: 0.9rem;
+      }
+    }
+    /* Smart Header for Mobile (max-width: 480px) */
+    @media (max-width: 480px) {
+      .logo-container {
+        flex-direction: flex;
+        gap: 5px;
+      }
+      .logo-container img {
+        height: 30px;
+      }
+      .title-container {
+        flex-direction: flex;
+        gap: 5px;
+      }
+      .title-container h1 {
+        font-size: 1rem;
+      }
+      .quiz-icon {
+        font-size: 1.3rem;
+      }
+      .nav-container {
+        flex-direction: column;
+        gap: 5px;
+      }
+      .nav-container a {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <!-- Header Section -->
+  <div class="header">
+    <div class="logo-container">
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+      </a>
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+      </a>
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+      </a>
+    </div>
+    <div class="title-container">
+      <h1>MENTAL HEALTH ASSESSMENT</h1>
+      <div class="quiz-icon">✔</div>
+    </div>
+    <nav class="nav-container">
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('Register') }}">Book a Free Consultation Today</a>
+      <a href="{{ url_for('sel-activities') }}">Learn More with SEL Activities</a>
+    </nav>
+  </div>
+  <!-- Assessment Container -->
+  <div class="container">
+    <form id="assessment-form" method="POST" action="{{ url_for('submit_assessment') }}">
+      <!-- Personal Information Fields -->
+      <div class="personal-info">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" placeholder="Enter your age" required>
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex" required>
+          <option value="">Select your sex</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <!-- Dynamically Populated Questions -->
+      <div id="questions-container"></div>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <!-- Floating "Need Help?" Button -->
+  <a href="{{ url_for('Register') }}" class="help-btn">Need Help?</a>
+  <script>
+    const questions = [
+      {
+        text: "1. How often do you feel overwhelmed by stress?",
+        category: "mental-health",
+        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
+      },
+      {
+        text: "2. Do you have trouble sleeping due to anxiety or worry?",
+        category: "mental-health",
+        options: ["Never", "Occasionally", "Frequently", "Almost every night", "Every night"]
+      },
+      {
+        text: "3. Have you ever been pressured into sexual activity?",
+        category: "gender-violence",
+        options: ["No, never", "Once", "A few times", "Often", "Prefer not to say"]
+      },
+      {
+        text: "4. Do you know where to seek help for gender-based violence?",
+        category: "gender-violence",
+        options: ["No, I have no idea", "I have some idea", "I know a few resources", "I know exactly where to go", "I have sought help before"]
+      },
+      {
+        text: "5. How comfortable are you discussing mental health?",
+        category: "mental-health",
+        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
+      },
+      {
+        text: "6. Do you believe men and women should have equal power in relationships?",
+        category: "gender-violence",
+        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+      },
+      {
+        text: "7. Have you ever felt discriminated against because of your gender?",
+        category: "gender-violence",
+        options: ["Never", "Rarely", "Sometimes", "Often", "All the time"]
+      },
+      {
+        text: "8. Do you practice safe sex (contraception & protection)?",
+        category: "sex-education",
+        options: ["Never", "Rarely", "Sometimes", "Usually", "Always"]
+      },
+      {
+        text: "9. How well do you understand STIs?",
+        category: "sex-education",
+        options: ["Not at all", "A little", "Somewhat", "Well", "Very well"]
+      },
+      {
+        text: "10. Have you experienced or witnessed verbal abuse in a relationship?",
+        category: "gender-violence",
+        options: ["Never", "Rarely", "A few times", "Often", "Regularly"]
+      },
+      {
+        text: "11. Do you feel comfortable discussing consent in relationships?",
+        category: "sex-education",
+        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
+      },
+      {
+        text: "12. How often do you feel a lack of motivation in daily activities?",
+        category: "mental-health",
+        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
+      },
+      {
+        text: "13. Have you ever sought help for mental health concerns?",
+        category: "mental-health",
+        options: ["No, never", "I thought about it", "Once or twice", "Several times", "Frequently"]
+      },
+      {
+        text: "14. Do you believe sex education should be taught in schools?",
+        category: "sex-education",
+        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+      },
+      {
+        text: "15. Have you or someone you know faced domestic violence?",
+        category: "gender-violence",
+        options: ["Never", "Once", "A few times", "Often", "Regularly"]
+      },
+      {
+        text: "16. Do you know your legal rights against sexual harassment?",
+        category: "gender-violence",
+        options: ["Not at all", "A little", "Somewhat", "Well", "Very well"]
+      },
+      {
+        text: "17. Have you ever felt guilty discussing sexual health topics?",
+        category: "sex-education",
+        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
+      },
+      {
+        text: "18. How comfortable are you seeking support for gender-based violence?",
+        category: "gender-violence",
+        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
+      },
+      {
+        text: "19. Do you believe discussing sexual health reduces stigma?",
+        category: "sex-education",
+        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+      },
+      {
+        text: "20. How confident are you in recognizing signs of an abusive relationship?",
+        category: "gender-violence",
+        options: ["Not confident at all", "Slightly confident", "Somewhat confident", "Confident", "Very confident"]
+      }
+    ];
+    // Dynamically populate questions into the form
+    const questionContainer = document.getElementById("questions-container");
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("question");
+      let optionsHTML = `<select name="q${index}" required><option value="">Select an answer</option>`;
+      q.options.forEach((option, i) => {
+        optionsHTML += `<option value="${i + 1}">${option}</option>`;
+      });
+      optionsHTML += `</select>`;
+      questionDiv.innerHTML = `<p>${q.text}</p>${optionsHTML}`;
+      questionContainer.appendChild(questionDiv);
+    });
+    window.addEventListener("load", function(){
+    document.getElementById("assessment-form").reset();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Support - Ondo State</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+           background-image: url("/static/men5.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+
+              /* Header Styling with Transparent Resene Blue Gradient */
+    header {
+        background: linear-gradient(135deg, rgba(0, 80, 158, 0.8), rgba(0, 63, 127, 0.7)); /* Transparent Blue */
+        color: white;
+        text-align: center;
+        padding: 3em 2em;
+        border-radius: 12px;
+        box-shadow: 0px 8px 20px rgba(0, 63, 127, 0.3);
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px); /* Glass Effect */
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Header Text Styling */
+    header h1 {
+        font-size: 2.2em;
+        font-weight: bold;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 0.5em;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    header h1:hover {
+        transform: scale(1.05);
+    }
+
+    header p {
+        font-size: 1.1em;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        color: #f4f4f4;
+        animation: fadeInUp 1.5s ease-in-out;
+    }
+
+    /* Navigation Links */
+    .nav-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .home-btn, .nav-link {
+        display: inline-block;
+        padding: 12px 24px;
+        font-size: 1em;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease-in-out;
+        backdrop-filter: blur(5px);
+    }
+
+    .home-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .home-btn:hover {
+        background: rgba(255, 255, 255, 0.5);
+        color: black;
+    }
+
+    .nav-link {
+        background: transparent;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.5);
+        color: #00509e;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design - Compact Mobile Fonts */
+    @media (max-width: 768px) {
+        header {
+            padding: 2em 1.5em;
+        }
+
+        header h1 {
+            font-size: 1.8em; /* Reduced font size */
+        }
+
+        header p {
+            font-size: 1em; /* Reduced font size */
+        }
+
+        .home-btn, .nav-link {
+            font-size: 0.9em;
+            padding: 10px 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        header h1 {
+            font-size: 1.5em; /* More compact for small screens */
+        }
+
+        header p {
+            font-size: 0.9em; /* Optimized for very small devices */
+        }
+
+        .home-btn, .nav-link {
+            font-size: 0.85em;
+            padding: 8px 16px;
+        }
+    }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            animation: slideInUp 1s ease-out;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 20px auto;
+            background-color: #0066A1;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004c75;
+        }
+
+        .services-list h2 {
+            font-size: 1.8rem;
+            color: #0066A1;
+            margin-bottom: 10px;
+        }
+
+        .services-list ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .services-list ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Logo Section */
+.logo-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.logo-container img {
+    height: 40px;
+    width: auto;
+    max-width: 100px;
+}
+
+    </style>
+</head>
+<body>
+  <header>
+         <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+                </a>
+            </div>
+    <h1>Mental Health & Counseling Support</h1>
+    <p>Connect with a professional counselor for mental health support, guidance, and care.</p>
+
+    <div class="nav-container">
+        <a href="{{ url_for('index') }}" class="home-btn">🏠 Home</a>
+        <a href="{{ url_for('sel-activities') }}" class="nav-link">📚 Learn More with SEL Activities</a>
+    </div>
+
+</header>
+
+    <div class="container">
+        <form method="POST" action="/submit">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Date of Birth</label>
+                <input type="date" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="service">Select Support Service</label>
+                <select id="service" name="service" required>
+                    <option value="counseling">One-on-One Counseling</option>
+                    <option value="group-therapy">Group Therapy Sessions</option>
+                    <option value="stress-management">Stress & Anxiety Management</option>
+                    <option value="substance-abuse">Substance Abuse Counseling</option>
+                    <option value="depression-support">Depression Support</option>
+                    <option value="suicide-prevention">Suicide Prevention Support</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <section class="services-list">
+            <h2>Our Mental Health Services</h2>
+            <ul>
+                <li>Professional counseling for stress, anxiety, and depression.</li>
+                <li>Group therapy for shared experiences and support.</li>
+                <li>Suicide prevention and crisis intervention.</li>
+                <li>Support for substance abuse recovery.</li>
+                <li>Guidance on coping strategies for mental well-being.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

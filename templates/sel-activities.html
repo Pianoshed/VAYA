@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEL & Sex Education Activities</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Header Section with Dynamic Background */
+        header {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+
+        .overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+
+
+        }
+
+        .overlay h1 {
+            font-size: 4rem;
+            margin-bottom: 5px;
+        }
+
+        .overlay p {
+            font-size: 1rem;
+            max-width: 90%;
+        }
+
+        /* SEL Activities Section */
+        #sel-activities {
+            background: white;
+            padding: 30px 15px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-section select {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .activity-card {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            max-width: 100%;
+        }
+
+        .activity-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-card:focus {
+            outline: 2px solid #2c3e50;
+        }
+
+        /* Mobile Optimization */
+        @media screen and (max-width: 768px) {
+            header {
+                height: 200px;
+            }
+
+            .overlay h1 {
+                font-size: 1.8rem;
+            }
+
+            .overlay p {
+                font-size: 0.9rem;
+            }
+
+            #sel-activities {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .filter-section select {
+                font-size: 0.9rem;
+            }
+
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-card {
+                font-size: 0.9rem;
+            }
+        }
+                /* Logo Section */
+.logo-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.logo-container img {
+    height: 40px;
+    width: auto;
+    max-width: 100px;
+}
+         .footer-section {
+    background: rgba(44, 62, 80, 0.9); /* Dark, subtle background */
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px 10px;
+    margin-top: 40px;
+  }
+  .footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .footer-content h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5em;
+    color: #00aaff; /* Bright accent for the heading */
+  }
+  .footer-content p {
+    font-size: 1rem;
+    margin-bottom: 1em;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: #00aaff;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  .cta-btn:hover {
+    background: #0088cc;
+  }
+  /* Responsive: adjust text size for smaller screens */
+  @media (max-width: 600px) {
+    .footer-content h1 {
+      font-size: 1.5rem;
+    }
+    .footer-content p, .cta-btn {
+      font-size: 0.9rem;
+    }
+  }
+
+    </style>
+</head>
+<body>
+
+<!-- Header Section with Changing Background -->
+<header id="dynamic-header">
+
+    <div class="overlay">
+          <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+                </a>
+            </div>
+        <h1>🌟 SEL & Sex Education 🌟</h1>
+        <p>Engage in hands-on activities to build emotional intelligence, relationships, and healthy lifestyle choices.</p>
+    </div>
+
+</header>
+
+<!-- SEL Activities Section -->
+<section id="sel-activities">
+    <div class="container">
+        <h2>🎭 Explore SEL & Sex Education Activities 🎭</h2>
+   </div>
+
+        <!-- Filter Options -->
+        <div class="filter-section">
+            <label for="activity-filter">Filter by category:</label>
+            <select id="activity-filter">
+                <option value="all">All</option>
+                <option value="self-awareness">Self-Awareness</option>
+                <option value="self-management">Self-Management</option>
+                <option value="social-awareness">Social Awareness</option>
+                <option value="relationship-skills">Relationship Skills</option>
+                <option value="responsible-decision-making">Responsible Decision-Making</option>
+                <option value="sex-education">Sex Education</option>
+            </select>
+        </div>
+
+             <!-- Activity Grid -->
+        <div class="activity-grid">
+            <div class="activity-card" data-category="self-awareness">
+                <h3>📝 Self-Awareness: Journaling</h3>
+                <p>Reflect on emotions, strengths, and personal growth.</p>
+            </div>
+            <div class="activity-card" data-category="self-management">
+                <h3>🧘 Self-Management: Meditation</h3>
+                <p>Practice deep breathing to reduce stress and improve focus.</p>
+            </div>
+            <div class="activity-card" data-category="social-awareness">
+                <h3>👣 Social Awareness: Empathy Walk</h3>
+                <p>Step into someone else's shoes by understanding their experiences.</p>
+            </div>
+            <div class="activity-card" data-category="relationship-skills">
+                <h3>💬 Relationship Skills: Listening</h3>
+                <p>Improve communication by truly listening before responding.</p>
+            </div>
+            <div class="activity-card" data-category="responsible-decision-making">
+                <h3>🤔 Decision-Making: Ethical Dilemmas</h3>
+                <p>Discuss real-life moral choices and their consequences.</p>
+            </div>
+            <div class="activity-card" data-category="sex-education">
+                <h3>❤️ Healthy Relationships</h3>
+                <p>Learn about consent, boundaries, and healthy romantic relationships.</p>
+            </div>
+            <div class="activity-card" data-category="sex-education">
+                <h3>🩺 Understanding STIs & Protection</h3>
+                <p>Explore safe practices, prevention methods, and myths about STIs.</p>
+            </div>
+        </div>
+</section>
+<footer class="footer-section">
+  <div class="footer-content">
+    <h1>Book a Free Consultation Today</h1>
+    <p>Your guide to mental well-being, support, and professional help.</p>
+    <a href="{{ url_for('Register') }}" class="cta-btn">🚨 Need Help Now?</a>
+  </div>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterDropdown = document.getElementById("activity-filter");
+        const activityCards = document.querySelectorAll(".activity-card");
+
+        // Background images array
+        const images = [
+            "url('/static/you2.jpg')",
+            "url('/static/you6.jpg')",
+            "url('/static/you4.jpg')",
+            "url('/static/you5.jpg')"
+        ];
+
+        let index = 0;
+        const header = document.getElementById("dynamic-header");
+
+        function changeBackground() {
+            header.style.backgroundImage = images[index];
+            index = (index + 1) % images.length;
+        }
+
+        // Change background every 5 seconds
+        setInterval(changeBackground, 5000);
+        changeBackground();
+
+        // Filter activities
+        filterDropdown.addEventListener("change", function () {
+            const selectedCategory = this.value;
+            let visible = false;
+
+            activityCards.forEach(card => {
+                if (selectedCategory === "all" || card.getAttribute("data-category") === selectedCategory) {
+                    card.style.display = "block";
+                    visible = true;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

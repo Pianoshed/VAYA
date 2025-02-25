@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 30px;
+    }
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    button {
+      padding: 8px 15px;
+      border: none;
+      background: green;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: darkgreen;
+    }
+    .logout {
+      margin-top: 20px;
+      display: inline-block;
+      text-decoration: none;
+      background: red;
+      padding: 10px 15px;
+      color: white;
+    }
+    .logout:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+<body>
+  <h2>Welcome to Admin Panel</h2>
+
+  <table>
+    <tr>
+      <th>File Name</th>
+      <th>Download</th>
+      <th>Clear</th>
+    </tr>
+    {% for file in files %}
+    <tr>
+      <td>{{ file }}</td>
+      <td>
+        <a href="{{ url_for('download_responses') }}">
+          <button>Download Responses</button>
+        </a>
+      </td>
+      <td>
+        <!-- Form to clear the Excel file -->
+        <form action="{{ url_for('clear_excel') }}" method="POST" onsubmit="return confirm('Are you sure you want to clear all responses?');">
+          <button type="submit" style="background: red;">Clear Responses</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="{{ url_for('admin_logout') }}" class="logout">Logout</a>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Resource Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset & General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+             background: url('{{ url_for("static", filename="men2.jpg") }}') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+           /* Header Styling */
+        header {
+           background: rgba(35,35,255,0.6);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 1.2em;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* Call-to-Action Button */
+        .cta-btn {
+            display: inline-block;
+            background: #ff3b3b;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: 0.3s;
+            box-shadow: 0px 4px 8px rgba(255, 59, 59, 0.4);
+        }
+
+        .cta-btn:hover {
+            background: #d62d2d;
+            box-shadow: 0px 4px 12px rgba(255, 59, 59, 0.6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            header {
+                padding: 30px 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1.1em;
+            }
+
+            .cta-btn {
+                font-size: 1.1em;
+                padding: 10px 18px;
+            }
+        }
+        /* Buttons */
+        .action-btn {
+            background: #ff3b3b;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #d62d2d;
+        }
+
+        /* Content Box */
+        .container {
+            background: rgba(35,35,255,0.6);
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h2 {
+            color: #00c8ff;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        ul li {
+            padding: 10px;
+            font-size: 1.05em;
+        }
+
+        ul li a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        ul li a:hover {
+            color: #ffea80;
+            text-decoration: underline;
+        }
+
+        /* Chat Button */
+        .chat-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00cc66;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0px 4px 10px rgba(0, 255, 127, 0.5);
+            text-decoration: none;
+        }
+
+        .chat-btn:hover {
+            background: #00994d;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            body {
+                font-size: 0.95em;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .chat-btn {
+                font-size: 1em;
+                padding: 12px 16px;
+            }
+        }
+
+
+        /* Logo Section */
+.logo-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.logo-container img {
+    height: 40px;
+    width: auto;
+    max-width: 100px;
+}
+
+    </style>
+</head>
+<body>
+
+
+     <!-- Modern Header Section -->
+    <header>
+         <div class="logo-container">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+                </a>
+            </div>
+        <h1>Mental Health Resource Bank</h1>
+        <p>Your guide to mental well-being, support, and professional help.</p>
+        <a href="{{ url_for('Register') }}" class="cta-btn">🚨 Need Help Now?</a>
+    </header>
+
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>📌 Emergency & Crisis Support</h2>
+        <p>Get immediate professional help in a crisis.</p>
+        <ul>
+            <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">WHO Mental Health Resources</a></li>
+            <li><a href="https://findahelpline.com" target="_blank">Find a Helpline Worldwide</a></li>
+            <li><strong>Nigeria Suicide Prevention Hotline:</strong> Call <strong>0800 1111 113</strong></li>
+        </ul>
+
+        <h2>🧘 Self-Help & Well-Being</h2>
+        <ul>
+            <li><a href="https://www.calm.com" target="_blank">Calm – Meditation & Relaxation</a></li>
+            <li><a href="https://www.headspace.com" target="_blank">Headspace – Mindfulness</a></li>
+            <li><a href="https://www.moodgym.com.au" target="_blank">MoodGym – CBT for Depression</a></li>
+        </ul>
+
+        <h2>💬 Free Counseling & Support</h2>
+        <ul>
+            <li><a href="https://www.7cups.com" target="_blank">7 Cups – Free Emotional Support</a></li>
+            <li><a href="https://www.icallhelpline.org" target="_blank">iCall Mental Health Helpline</a></li>
+        </ul>
+    </div>
+
+    <!-- WhatsApp Chat Button -->
+    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 Chat with Us</a>
+
+</body>
+</html>
