@@ -213,17 +213,26 @@
                         margin-bottom: 30px;
                     }
 
-                    /* Toolkit Section */
-                    #sel-toolkit {
-                        background: white;
-                        padding: 40px 20px;
-                        max-width: 900px;
-                        margin: auto;
-                        border-radius: 12px;
-                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                    }
+    /* Toolkit Section */
+#sel-toolkit {
+    background: rgba(255, 255, 255, 0.3); /* Semi-transparent */
+    backdrop-filter: blur(10px); /* Blur effect */
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    #sel-toolkit {
+        padding: 20px 15px; /* Reduce padding for smaller screens */
+        max-width: 95%; /* Make it more adaptive */
+        border-radius: 10px;
+        font-size: 0.9rem; /* Slightly smaller text */
+    }
+}
 
                         .hero-content {
                             max-width: 700px;
@@ -424,6 +433,7 @@ section {
 
 h3, h4 {
     color: #333;
+    font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 15px;
 }
@@ -461,6 +471,38 @@ h3, h4 {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: 10px;
+    }
+
+    h3, h4 {
+        font-size: 1.2rem; /* Smaller headings */
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.5); /* Semi-transparent on mobile */
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 0.9rem; /* Smaller text */
+    }
+
+    .feature-list li {
+        background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
 /* CTA Section */
 .cta {
     text-align: center;
@@ -470,12 +512,16 @@ h3, h4 {
     border-radius: 16px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
     margin-top: 30px;
+    transition: all 0.3s ease;
 }
 
+/* CTA Heading */
 .cta h4 {
     margin-bottom: 10px;
+    font-size: 1.5rem;
 }
 
+/* CTA Button */
 .cta button {
     background: orange;
     color: white;
@@ -484,11 +530,33 @@ h3, h4 {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease-in-out;
 }
 
+/* Button Hover Effect */
 .cta button:hover {
     background: #002147;
+    transform: scale(1.05);
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .cta {
+        padding: 10px 15px; /* Reduce padding for compact size */
+        border-radius: 12px;
+        background: rgba(255, 204, 0, 0.6); /* Semi-transparent */
+        backdrop-filter: blur(5px); /* Slight blur effect */
+        font-size: 0.9rem;
+    }
+
+    .cta h4 {
+        font-size: 1.2rem; /* Smaller heading */
+    }
+
+    .cta button {
+        padding: 8px 16px; /* Smaller button */
+        font-size: 0.85rem;
+    }
 }
 
 
