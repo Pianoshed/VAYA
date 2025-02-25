@@ -337,6 +337,7 @@ button:active {
                             cursor: pointer;
                             border: none;
                             transition: background 0.3s, transform 0.3s;
+                            z-index: 9; /* Higher than other sections */
                         }
 
                         .chat-btn:hover {
@@ -394,15 +395,7 @@ button:active {
                             cursor: pointer;
                             color: white;
                         }
-footer .card {
-    background: transparent;
-    box-shadow: none;
-}
 
-footer .feature-list li {
-    background: transparent;
-    box-shadow: none;
-}
   /* General Section Styling */
 section {
      padding: 40px 0px;
@@ -584,6 +577,73 @@ h3, h4 {
     background-color: #0056b3;
   }
 
+                        footer {
+    background-color: #2A2A2A; /* Resene color (Dark Gray) */
+    color: #F5F5F5; /* Light Gray for contrast */
+    padding: 2rem 1rem;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: relative; /* Ensures it stays independent */
+    z-index: 8; /* Higher than other sections */
+}
+
+.footer-container {
+    max-width: 100%;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05); /* Subtle transparency effect */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+footer h2 {
+    color: #FFD700; /* Resene-inspired gold accent */
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+footer address {
+    font-style: normal;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+footer a {
+    color: #00AEEF; /* Resene blue accent */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    color: #0077B6; /* Slightly darker Resene blue */
+}
+
+footer p {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 1.5rem;
+        border-radius: 5px;
+    }
+
+    footer h2 {
+        font-size: 1.5rem;
+    }
+
+    footer address {
+        font-size: 0.9rem;
+    }
+
+    footer p {
+        font-size: 0.8rem; /* Reduce font size for copyright text */
+    }
+}
+
+
                     </style>
                 </head>
                 <body>
@@ -738,18 +798,17 @@ h3, h4 {
   // Call checkCookieConsent on page load
   checkCookieConsent();
 </script>
-
-                    <footer>
-                        <section id="contact" class="container">
-            <h2>Contact Us</h2>
-           <address>
-                <p>Email: <a href="mailto:sascp@ondostate.gov.ng">sascp@ondostate.gov.ng</a></p>
-                <p>Phone: +234 805 123 4567</p>
-                <p>Address: Ondo State Ministry of Health, Akure, Ondo State, Nigeria.</p>
-            </address>
-                         </section>
-                        <p>&copy; 2024 Ondo Youth Connect Hub. All Rights Reserved.</p>
-                    </footer>
+<footer>
+    <section id="contact" class="footer-container">
+        <h2>Contact Us</h2>
+        <address>
+            <p>Email: <a href="mailto:sascp@ondostate.gov.ng">sascp@ondostate.gov.ng</a></p>
+            <p>Phone: +234 805 123 4567</p>
+            <p>Address: Ondo State Ministry of Health, Akure, Ondo State, Nigeria.</p>
+        </address>
+    </section>
+    <p>&copy; 2024 Ondo Youth Connect Hub. All Rights Reserved.</p>
+</footer>
                     <script>
                         function toggleMenu() {
                             document.querySelector(".menu").classList.toggle("active");
