@@ -3,162 +3,556 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assessment Results</title>
+  <title>Assessment Results - Youth Connect Hub</title>
   <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-image: url("/static/men1.jpg");
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
+    :root {
+      --primary: #FF6B35;
+      --secondary: #F7931E;
+      --accent: #FDC500;
+      --dark: #1A1A2E;
+      --success: #06FFA5;
+      --warning: #FDC500;
+      --danger: #FF006E;
+    }
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
       color: #333;
-      text-align: center;
     }
-    .header {
-      padding: 15px;
-      background-color: #2c3e50;
-      color: white;
-    }
-   /* Loading Overlay */
+
+    /* Loading Animation */
     #loading {
       position: fixed;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.7);
+      top: 0;
+      left: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       z-index: 9999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 3s;
     }
- /* Loading Overlay Styles */
-  #loading {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Fade out overlay starting after 3 seconds for 0.5s */
-    animation: fadeOutOverlay 0.5s ease forwards;
-    animation-delay: 3s;
-  }
 
-  @keyframes fadeOutOverlay {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
 
-  /* Spinner Styles */
-  .spinner {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #2c3e50;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    /* Spin 3 times, then finish */
-    animation: spin 1s linear 3, fadeOut 0.5s linear 1 forwards;
-    animation-delay: 0s, 3s;
-  }
+    .spinner-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+    .spinner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 8px solid rgba(255, 255, 255, 0.2);
+      border-top: 8px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
 
-  @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-    /* Body and Background */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: white;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .loading-emoji {
+      font-size: 4rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+    }
+
+    /* Main Container */
     .container {
-      width: 95%;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: 0 auto;
+      animation: slideUp 0.8s ease-out;
     }
-    .result {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 10px;
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .feedback {
-      font-size: 18px;
-      color: #2c3e50;
-    }
-    .recommendation {
-      margin-top: 20px;
+
+    /* Header */
+    .header {
       text-align: center;
+      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     }
-    .recommendation img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-      opacity: 0.6; /* Slight transparency */
+
+    .header h1 {
+      font-family: 'Righteous', cursive;
+      font-size: clamp(2rem, 5vw, 3rem);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
     }
-    .appointment-btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: #2c3e50;
-      color: #fff;
+
+    /* Results Card */
+    .results-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 2rem;
+    }
+
+    /* Score Display */
+    .score-container {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 15px;
+      color: white;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 1rem;
+      position: relative;
+    }
+
+    .score-ring {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .score-ring circle {
+      fill: none;
+      stroke-width: 15;
+      stroke-linecap: round;
+      transition: stroke-dasharray 2s ease-out;
+    }
+
+    .score-bg {
+      stroke: rgba(255, 255, 255, 0.2);
+    }
+
+    .score-progress {
+      stroke: url(#gradient);
+      stroke-dasharray: 0 628;
+      animation: fillProgress 2s ease-out forwards;
+    }
+
+    @keyframes fillProgress {
+      to {
+        stroke-dasharray: var(--progress) 628;
+      }
+    }
+
+    .score-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-label {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    /* Feedback Section */
+    .feedback-section {
+      margin: 2rem 0;
+    }
+
+    .feedback-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .feedback-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Recommendation Cards */
+    .recommendations {
+      display: grid;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .recommendation-card {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      padding: 2rem;
+      border-radius: 15px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .recommendation-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translate(-50%, -50%); }
+      100% { transform: translate(50%, 50%); }
+    }
+
+    .recommendation-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .recommendation-card p {
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    .recommendation-icon {
+      font-size: 2.5rem;
+    }
+
+    /* Action Buttons */
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
       text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
+      text-align: center;
+      display: inline-block;
     }
-    .appointment-btn:hover {
-      background: #34495e;
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--dark);
+      border: 2px solid var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: var(--dark);
+      color: white;
+    }
+
+    /* Resources Grid */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .resource-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      border-top: 4px solid var(--primary);
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .resource-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .resource-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .resource-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Encouragement Banner */
+    .encouragement {
+      background: linear-gradient(135deg, #06FFA5, #00D9C0);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      margin: 2rem 0;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 10px 40px rgba(6, 255, 165, 0.3); }
+      50% { box-shadow: 0 10px 60px rgba(6, 255, 165, 0.6); }
+    }
+
+    .encouragement h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .score-circle {
+        width: 150px;
+        height: 150px;
+      }
+
+      .score-value {
+        font-size: 3rem;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-<!-- Loading Animation -->
+  <!-- Loading Animation -->
   <div id="loading">
-    <div class="spinner"></div>
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <div class="loading-emoji">🧠</div>
+    </div>
+    <div class="loading-text">Analyzing Your Results...</div>
   </div>
 
-  <div class="overlay"></div>
-  <div class="header">
-    <h1>Assessment Results</h1>
-  </div>
+  <!-- Main Content -->
   <div class="container">
-    <div class="result">
-      Your Score: {{ score }}/100
+    <div class="header">
+      <h1>Your Assessment Results</h1>
+      <p>Understanding your mental wellness journey</p>
     </div>
-    <div class="feedback">
-      {{ feedback }}
-    </div>
-    {% if score < 60 %}
-      <div class="recommendation">
-        <img src="{{ url_for('static', filename='emo.gif') }}" alt="Low Score Recommendation">
-        <p>Based on your score, we recommend you book an appointment to chat with a professional counsellor.</p>
-        <a href="{{ url_for('Register') }}" class="appointment-btn">Book an Appointment</a>
-      </div>
-    {% else %}
-      <div class="recommendation">
-        <img src="{{ url_for('static', filename='emo1.gif') }}" alt="High Score Recommendation">
-        <p>Great work! Your score indicates strong awareness and knowledge. Keep it up!</p>
-      </div>
-    {% endif %}
-    <br>
-    <a href="{{ url_for('index') }}">Return to Home</a>
-  </div>
-<script>
-  // When the overlay's fadeOut animation ends, hide it completely.
-  document.getElementById("loading").addEventListener("animationend", function(e) {
-    // Check if the fadeOut animation has ended
-    if (e.animationName === "fadeOutOverlay") {
-      this.style.display = "none";
-    }
-  });
-</script>
 
+    <div class="results-card">
+      <!-- Score Display -->
+      <div class="score-container">
+        <div class="score-circle">
+          <svg class="score-ring" viewBox="0 0 200 200">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#06FFA5;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#00D9C0;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle class="score-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="score-progress" cx="100" cy="100" r="90" 
+                    style="--progress: {{ (score / 100 * 628)|round|int }}"></circle>
+          </svg>
+          <div class="score-value">{{ score }}</div>
+        </div>
+        <div class="score-label">out of 100</div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div class="feedback-section">
+        <h2 class="feedback-title">What This Means</h2>
+        <div class="feedback-text">
+          {% if score < 40 %}
+            Your responses indicate you may be experiencing some challenges with your mental wellness. Remember, reaching out for help is a sign of strength, not weakness. You're taking the first step by completing this assessment.
+          {% elif score < 60 %}
+            Your responses show you're managing, but there's room for growth and support. This is a great time to develop new coping strategies and connect with resources that can help you thrive.
+          {% elif score < 80 %}
+            You're showing good awareness and healthy practices! Keep building on this foundation and continue engaging with supportive resources to maintain your well-being.
+          {% else %}
+            Excellent! Your responses reflect strong mental wellness practices. Keep up the great work and consider helping others by sharing what works for you.
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Personalized Recommendations -->
+      <div class="recommendations">
+        {% if score < 60 %}
+        <div class="recommendation-card">
+          <h3><span class="recommendation-icon">👨‍⚕️</span> Talk to a Professional</h3>
+          <p>We strongly recommend booking a free consultation with one of our trained counselors. They're here to listen, support, and guide you through any challenges you're facing.</p>
+        </div>
+        {% endif %}
+
+        <div class="recommendation-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+          <h3><span class="recommendation-icon">📝</span> Start a Mood Journal</h3>
+          <p>Track your daily emotions and identify patterns. Our mood tracker helps you understand your feelings better and celebrate your progress.</p>
+        </div>
+
+        <div class="recommendation-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+          <h3><span class="recommendation-icon">🎯</span> Try SEL Activities</h3>
+          <p>Explore our Social-Emotional Learning activities designed specifically for teens. Build resilience, emotional intelligence, and healthy relationships.</p>
+        </div>
+      </div>
+
+      <!-- Encouragement Banner -->
+      <div class="encouragement">
+        <h3>🌟 You're Not Alone! 🌟</h3>
+        <p style="font-size: 1.2rem; line-height: 1.6;">
+          Taking this assessment shows you care about your mental health. That's amazing! 
+          Every journey starts with a single step, and you've just taken yours. 
+          We're here to support you every step of the way.
+        </p>
+      </div>
+
+      <!-- Resources -->
+      <h2 class="feedback-title">Next Steps & Resources</h2>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-icon">📚</div>
+          <h4>Learn More</h4>
+          <p>Explore our resource library for articles, videos, and guides on mental wellness.</p>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">💬</div>
+          <h4>Join Community</h4>
+          <p>Connect with peers who understand what you're going through in a safe space.</p>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">🎮</div>
+          <h4>Interactive Tools</h4>
+          <p>Use our mood tracker, challenges, and activities to build healthy habits.</p>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">🆘</div>
+          <h4>Crisis Support</h4>
+          <p>If you need immediate help, contact our crisis support line or emergency services.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        {% if score < 60 %}
+        <a href="{{ url_for('Register') }}" class="btn btn-primary">Book Free Counseling</a>
+        {% endif %}
+        <a href="{{ url_for('mood_tracker') }}" class="btn btn-secondary">Start Mood Tracking</a>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Return Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hide loading screen after animation
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+    }, 4000);
+
+    // Animate score on load
+    window.addEventListener('load', () => {
+      const scoreValue = {{ score }};
+      const scoreElement = document.querySelector('.score-value');
+      let current = 0;
+      const increment = scoreValue / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= scoreValue) {
+          current = scoreValue;
+          clearInterval(timer);
+        }
+        scoreElement.textContent = Math.round(current);
+      }, 40);
+    });
+  </script>
 </body>
 </html>

@@ -3,64 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Challenge</title>
+    <title>Mood Tracker - Youth Connect Hub</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --accent: #FDC500;
+            --dark: #1A1A2E;
+            --happy: #FFD93D;
+            --sad: #6C88C4;
+            --angry: #FF5E5B;
+            --calm: #00D9C0;
+            --excited: #FF006E;
+        }
 
-        /* Logo Section */
-.logo-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.logo-container img {
-    height: 40px;
-    width: auto;
-    max-width: 100px;
-}
-  /* Chat Button */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-container img {
+            height: 40px;
+            transition: transform 0.3s;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h1 {
+            font-family: 'Righteous', cursive;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        /* Mood Selection */
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mood-btn {
+            padding: 1.5rem 1rem;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .mood-btn.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+            transform: scale(1.05);
+        }
+
+        .mood-btn::after {
+            content: attr(data-mood);
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* Affirmation & Challenge */
+        .affirmation-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .challenge-box {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Journal */
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            margin-top: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Streak Counter */
+        .streak-display {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .streak-number {
+            font-size: 4rem;
+            font-weight: 800;
+            display: block;
+            margin: 1rem 0;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .flame-icon {
+            font-size: 3rem;
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Journal Entries */
+        .journal-entries {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .journal-entry {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .journal-entry:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .entry-mood {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .entry-text {
+            margin-top: 0.5rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Chat Button */
         .chat-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #00cc66;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #FF006E);
             color: white;
-            padding: 14px 18px;
-            border-radius: 50px;
-            font-size: 1.2em;
             border: none;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0px 4px 10px rgba(0, 255, 127, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .chat-btn:hover {
-            background: #00994d;
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
         }
 
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-        * { box-sizing: border-box; font-family: "Arial", sans-serif; margin: 0; padding: 0; }
-        body { text-align: center; transition: background 0.8s ease-in-out; background: #f4f4f9; height: 100vh; padding: 20px; }
-        .container { max-width: 600px; margin: auto; padding: 10px; }
-        .card { background: white; padding: 20px; margin: 10px 0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.2s ease-in-out; }
-        .card:hover { transform: scale(1.02); }
-        h2, h3 { color: #333; }
-        .mood-buttons button { padding: 10px; margin: 5px; border: none; cursor: pointer; border-radius: 5px; }
-        .happy { background: #ffcc00; }
-        .neutral { background: #bbb; }
-        .sad { background: #ff6666; }
-        button { background: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; width: 100%; margin-top: 10px; border-radius: 5px; }
-        button:hover { background: #45a049; }
-        .streak { font-size: 18px; font-weight: bold; margin-top: 10px; }
-        .reward { font-size: 16px; color: #4CAF50; font-weight: bold; margin-top: 15px; display: none; }
-        .journal-entry { text-align: left; background: #fff; padding: 10px; margin-top: 10px; border-radius: 5px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); }
-        .journal-container { display: none; }
+            .mood-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
- <div class="logo-container">
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
                 <a href="{{ url_for('index') }}">
                     <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
                 </a>
@@ -71,200 +390,240 @@
                     <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
                 </a>
             </div>
-    <div class="container">
-        <h2>🌟 Mental Health Challenge</h2>
+            <h1>🌟 Mood Tracker 🌟</h1>
+            <p class="subtitle">Track your emotions, build healthy habits, and grow stronger every day</p>
+        </div>
 
-        <!-- Mood Selection -->
-        <div class="card">
-            <h3>How do you feel today?</h3>
-            <div class="mood-buttons">
-                <button class="happy" data-mood="Happy">😊 Happy</button>
-                <button class="neutral" data-mood="Neutral">😐 Neutral</button>
-                <button class="sad" data-mood="Sad">😢 Sad</button>
+        <div class="grid">
+            <!-- Mood Selection Card -->
+            <div class="card">
+                <h2><span class="card-icon">😊</span> How do you feel today?</h2>
+                <div class="mood-grid">
+                    <button class="mood-btn" data-mood="Happy" onclick="selectMood(this, '😊')">😊</button>
+                    <button class="mood-btn" data-mood="Calm" onclick="selectMood(this, '😌')">😌</button>
+                    <button class="mood-btn" data-mood="Sad" onclick="selectMood(this, '😢')">😢</button>
+                    <button class="mood-btn" data-mood="Angry" onclick="selectMood(this, '😠')">😠</button>
+                    <button class="mood-btn" data-mood="Excited" onclick="selectMood(this, '🤩')">🤩</button>
+                    <button class="mood-btn" data-mood="Anxious" onclick="selectMood(this, '😰')">😰</button>
+                </div>
+            </div>
+
+            <!-- Affirmation Card -->
+            <div class="card">
+                <h2><span class="card-icon">✨</span> Daily Affirmation</h2>
+                <div class="affirmation-box" id="affirmation-text">
+                    Click below for your daily boost of positivity
+                </div>
+                <button class="btn btn-primary" onclick="getAffirmation()">Get New Affirmation</button>
+            </div>
+
+            <!-- Challenge Card -->
+            <div class="card">
+                <h2><span class="card-icon">🎯</span> Today's Challenge</h2>
+                <div class="challenge-box" id="challenge-text">
+                    Ready for today's wellness challenge?
+                </div>
+                <button class="btn btn-primary" onclick="getChallenge()">Get New Challenge</button>
+            </div>
+
+            <!-- Streak Card -->
+            <div class="card">
+                <div class="streak-display">
+                    <div class="flame-icon">🔥</div>
+                    <span class="streak-number" id="streak-number">0</span>
+                    <div>Day Streak!</div>
+                    <p style="margin-top: 1rem; opacity: 0.9;">Keep checking in daily to build your streak!</p>
+                </div>
             </div>
         </div>
 
-        <!-- Affirmation -->
+        <!-- Journal Card -->
         <div class="card">
-            <h3>Daily Affirmation</h3>
-            <p id="affirmation-text">Click below for a positive thought</p>
-            <button id="new-affirmation-btn">New Affirmation</button>
-        </div>
-
-        <!-- Daily Challenge -->
-        <div class="card">
-            <h3>Today's Challenge</h3>
-            <p id="challenge-text">Click below for your challenge</p>
-            <button id="new-challenge-btn">New Challenge</button>
-        </div>
-
-        <!-- Journal Entry -->
-        <div class="card">
-            <h3>📝 Journal Your Thoughts</h3>
-            <textarea id="journal-entry" placeholder="Write about your day..." rows="4" style="width: 100%;"></textarea>
-            <button id="save-journal-btn">Save Entry</button>
-        </div>
-
-        <!-- View Past Journals -->
-        <div class="card">
-            <h3>📅 Past Journal Entries</h3>
-            <button id="view-journals-btn">View Entries</button>
-            <div class="journal-container" id="journal-container"></div>
-        </div>
-
-        <!-- Streak Counter -->
-        <div class="card">
-            <h3>🔥 Streak Tracker</h3>
-            <p id="streak-text">Streak: 0 Days</p>
-            <div class="reward" id="reward-text">🎁 Keep going for a surprise!</div>
+            <h2><span class="card-icon">📝</span> Journal Your Thoughts</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Writing helps process emotions and track your journey</p>
+            <textarea id="journal-entry" placeholder="What's on your mind today? How are you feeling? What happened?"></textarea>
+            <button class="btn btn-primary" onclick="saveJournal()">Save Entry</button>
+            <button class="btn btn-secondary" onclick="toggleJournals()">View Past Entries</button>
+            <div class="journal-entries" id="journal-container" style="display: none;"></div>
         </div>
     </div>
-   <!-- WhatsApp Chat Button -->
-    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 Chat with Us</a>
+
+    <!-- Chat Button -->
+    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬</a>
 
     <script>
-        let streakCount = localStorage.getItem("streak") || 0;
-        let selectedMood = "";
-        let selectedChallenge = "";
+        let selectedMood = '';
+        let selectedMoodEmoji = '';
+        let selectedChallenge = '';
 
-        // Mood Selection
-        document.querySelectorAll(".mood-buttons button").forEach(button => {
-            button.addEventListener("click", function() {
-                selectedMood = this.dataset.mood;
-                document.body.style.background = selectedMood === "Happy" ? "#ffeb99" : selectedMood === "Neutral" ? "#e0e0e0" : "#ff9999";
-            });
-        });
+        // Load streak on page load
+        window.onload = function() {
+            loadStreak();
+        };
 
-        // Fetch New Affirmation
-        document.getElementById("new-affirmation-btn").addEventListener("click", () => {
-            fetch("/api/affirmation")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("affirmation-text").textContent = data.affirmation;
-                    updateStreak();
-                });
-        });
+        function selectMood(button, emoji) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to selected button
+            button.classList.add('active');
+            
+            // Store selected mood
+            selectedMood = button.dataset.mood;
+            selectedMoodEmoji = emoji;
+            
+            // Change background based on mood
+            const colors = {
+                'Happy': 'linear-gradient(135deg, #FFD93D, #F7931E)',
+                'Calm': 'linear-gradient(135deg, #00D9C0, #667eea)',
+                'Sad': 'linear-gradient(135deg, #6C88C4, #4E4CB8)',
+                'Angry': 'linear-gradient(135deg, #FF5E5B, #F7931E)',
+                'Excited': 'linear-gradient(135deg, #FF006E, #FF5E5B)',
+                'Anxious': 'linear-gradient(135deg, #764ba2, #667eea)'
+            };
+            
+            document.body.style.background = colors[selectedMood];
+        }
 
-        // Fetch New Challenge
-        document.getElementById("new-challenge-btn").addEventListener("click", () => {
-            fetch("/api/challenge")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("challenge-text").textContent = data.challenge;
-                    selectedChallenge = data.challenge;
-                    updateStreak();
-                });
-        });
+        async function getAffirmation() {
+            try {
+                const response = await fetch('/api/affirmation');
+                const data = await response.json();
+                document.getElementById('affirmation-text').textContent = data.affirmation;
+                updateStreak();
+            } catch (error) {
+                console.error('Error fetching affirmation:', error);
+            }
+        }
 
-        // Update Streak Counter
+        async function getChallenge() {
+            try {
+                const response = await fetch('/api/challenge');
+                const data = await response.json();
+                document.getElementById('challenge-text').textContent = data.challenge;
+                selectedChallenge = data.challenge;
+                updateStreak();
+            } catch (error) {
+                console.error('Error fetching challenge:', error);
+            }
+        }
+
         function updateStreak() {
-            streakCount++;
-            localStorage.setItem("streak", streakCount);
-            document.getElementById("streak-text").textContent = `🔥 Streak: ${streakCount} Days`;
-
-            if (streakCount >= 3) {
-                document.getElementById("reward-text").style.display = "block";
-                document.getElementById("reward-text").textContent = "🎉 Keep it up!";
+            let streak = parseInt(localStorage.getItem('streak') || '0');
+            const lastVisit = localStorage.getItem('lastVisit');
+            const today = new Date().toDateString();
+            
+            if (lastVisit !== today) {
+                streak++;
+                localStorage.setItem('streak', streak);
+                localStorage.setItem('lastVisit', today);
+            }
+            
+            document.getElementById('streak-number').textContent = streak;
+            
+            // Celebration for milestones
+            if (streak % 7 === 0 && streak > 0) {
+                celebrateStreak(streak);
             }
         }
 
-        // Save Journal Entry with Mood & Challenge
-        document.getElementById("save-journal-btn").addEventListener("click", () => {
-            const entry = document.getElementById("journal-entry").value;
-            if (entry.trim() === "" || selectedMood === "" || selectedChallenge === "") {
-                alert("Please select a mood, a challenge, and write a journal entry before saving.");
+        function loadStreak() {
+            const streak = localStorage.getItem('streak') || '0';
+            document.getElementById('streak-number').textContent = streak;
+        }
+
+        function celebrateStreak(streak) {
+            alert(`🎉 Amazing! You've reached a ${streak}-day streak! Keep going! 🔥`);
+        }
+
+        async function saveJournal() {
+            const entry = document.getElementById('journal-entry').value.trim();
+            
+            if (!entry) {
+                alert('Please write something in your journal before saving.');
+                return;
+            }
+            
+            if (!selectedMood) {
+                alert('Please select your mood before saving.');
                 return;
             }
 
-            const timestamp = new Date().toLocaleString();
-            let savedJournals = JSON.parse(localStorage.getItem("journals")) || [];
-            savedJournals.push({ timestamp, mood: selectedMood, challenge: selectedChallenge, entry });
+            const journalData = {
+                mood: selectedMood,
+                entry: entry,
+                activity: selectedChallenge || '',
+                timestamp: new Date().toISOString()
+            };
 
-            localStorage.setItem("journals", JSON.stringify(savedJournals));
-            document.getElementById("journal-entry").value = "";
-            alert("Journal entry saved! 📖");
-        });
-
-        // View and Toggle Past Journal Entries
-        document.getElementById("view-journals-btn").addEventListener("click", () => {
-            let savedJournals = JSON.parse(localStorage.getItem("journals")) || [];
-            const journalContainer = document.getElementById("journal-container");
-
-            // Toggle visibility
-            if (journalContainer.style.display === "block") {
-                journalContainer.style.display = "none";
-                return;
-            }
-
-            journalContainer.innerHTML = "";
-            if (savedJournals.length === 0) {
-                journalContainer.innerHTML = "<p>No journal entries yet.</p>";
-            } else {
-                savedJournals.forEach(journal => {
-                    let entryDiv = document.createElement("div");
-                    entryDiv.classList.add("journal-entry");
-                    entryDiv.innerHTML = `
-                        <strong>${journal.timestamp}</strong>
-                        <p>📝 <strong>Journal:</strong> ${journal.entry}</p>
-                        <p>😊 <strong>Mood:</strong> ${journal.mood}</p>
-                        <p>🎯 <strong>Challenge:</strong> ${journal.challenge}</p>
-                    `;
-                    journalContainer.appendChild(entryDiv);
+            try {
+                const response = await fetch('/save_journal_entry', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(journalData)
                 });
+
+                if (response.ok) {
+                    // Also save to localStorage for immediate display
+                    let journals = JSON.parse(localStorage.getItem('journals') || '[]');
+                    journals.unshift({
+                        timestamp: new Date().toLocaleString(),
+                        mood: selectedMood,
+                        moodEmoji: selectedMoodEmoji,
+                        entry: entry,
+                        challenge: selectedChallenge
+                    });
+                    localStorage.setItem('journals', JSON.stringify(journals));
+
+                    document.getElementById('journal-entry').value = '';
+                    alert('✅ Journal entry saved successfully!');
+                    
+                    // Refresh journal display if visible
+                    if (document.getElementById('journal-container').style.display === 'block') {
+                        loadJournals();
+                    }
+                } else {
+                    alert('Failed to save journal entry. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error saving journal:', error);
+                alert('An error occurred. Please try again.');
+            }
+        }
+
+        function toggleJournals() {
+            const container = document.getElementById('journal-container');
+            
+            if (container.style.display === 'none') {
+                loadJournals();
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function loadJournals() {
+            const journals = JSON.parse(localStorage.getItem('journals') || '[]');
+            const container = document.getElementById('journal-container');
+            
+            if (journals.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No journal entries yet. Start writing!</p>';
+                return;
             }
 
-            journalContainer.style.display = "block";
-        });
-        // Function to set a cookie
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        let date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
-}
-
-// Function to get a cookie value
-function getCookie(name) {
-    let nameEQ = name + "=";
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        let c = cookies[i].trim();
-        if (c.indexOf(nameEQ) === 0) {
-            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            container.innerHTML = journals.map(journal => `
+                <div class="journal-entry">
+                    <div class="entry-date">${journal.timestamp}</div>
+                    <div>
+                        <span class="entry-mood">${journal.moodEmoji} ${journal.mood}</span>
+                        ${journal.challenge ? `<span style="color: #666; font-size: 0.9rem;">Challenge: ${journal.challenge}</span>` : ''}
+                    </div>
+                    <div class="entry-text">${journal.entry}</div>
+                </div>
+            `).join('');
         }
-    }
-    return null;
-}
-
-// Function to check and load saved streak count
-function loadStreak() {
-    let streak = getCookie("streak");
-    if (streak) {
-        document.getElementById("streak-text").textContent = `🔥 Streak: ${streak} Days`;
-    }
-}
-
-// Function to update streak and store in cookies
-function updateStreak() {
-    let streak = getCookie("streak") || 0;
-    streak = parseInt(streak) + 1;
-    setCookie("streak", streak, 30); // Store for 30 days
-    document.getElementById("streak-text").textContent = `🔥 Streak: ${streak} Days`;
-
-    if (streak >= 3) {
-        document.getElementById("reward-text").style.display = "block";
-        document.getElementById("reward-text").textContent = "🎉 Keep it up!";
-    }
-}
-
-// Load streak on page load
-window.onload = loadStreak;
-
-
     </script>
-
 </body>
 </html>
