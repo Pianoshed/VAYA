@@ -1,630 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mental Health Assessment - Youth Connect Hub</title>
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #FF6B35;
-      --secondary: #F7931E;
-      --accent: #FDC500;
-      --dark: #1A1A2E;
-      --purple: #9D4EDD;
-      --blue: #00B4D8;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Check - Youth Connect Hub</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --dark: #1A1A2E;
+            --success: #2ecc71;
+            --light: #ffffff;
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      color: #333;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #000; color: var(--dark); overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
 
-    /* Header */
-    .header {
-      background: rgba(26, 26, 46, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 1.5rem 2rem;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    }
+        /* Background & Overlay */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("{{ url_for('static', filename='you1.jpg') }}");
+            background-size: cover; background-position: center; z-index: -2;
+        }
+        body::after {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.92) 0%, rgba(157, 78, 221, 0.65) 100%);
+            z-index: -1;
+        }
 
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 107, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+        }
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
+        /* --- NAVIGATION HEADER --- */
+        nav { 
+            background: rgba(26, 26, 46, 0.95); 
+            backdrop-filter: blur(15px); 
+            padding: 0.8rem 2rem; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-section { display: flex; align-items: center; }
+        .logo-section img { height: 45px; margin-right: 15px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
 
-    .logo-container img {
-      height: 40px;
-      transition: transform 0.3s;
-    }
+        /* Progress Bar */
+        .progress-sticky { 
+            position: sticky; 
+            top: 75px; 
+            z-index: 900; 
+            background: rgba(255,255,255,0.95); 
+            padding: 15px; 
+            border-bottom: 4px solid var(--primary); 
+            backdrop-filter: blur(10px); 
+        }
+        .bar-bg { flex: 1; height: 12px; background: #eee; border-radius: 20px; overflow: hidden; margin: 0 15px; }
+        .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-    .logo-container img:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
+        /* Main Content Wrapper */
+        .main-content { max-width: 850px; margin: 120px auto 50px; padding: 0 1.5rem; flex: 1; }
+        .form-card { background: white; border-radius: 30px; padding: 3rem; box-shadow: 0 25px 50px rgba(0,0,0,0.3); animation: fadeInUp 0.8s ease-out; }
 
-    .title-container {
-      text-align: center;
-    }
+        /* Personal Info Grid */
+        .personal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--dark); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select { width: 100%; padding: 1rem; border: 2px solid #f0f0f0; border-radius: 15px; transition: 0.3s; font-family: inherit; font-size: 1rem; }
+        .form-group input:focus { border-color: var(--primary); outline: none; background: #fffaf5; }
 
-    .title-container h1 {
-      font-family: 'Righteous', cursive;
-      font-size: clamp(1.8rem, 5vw, 2.5rem);
-      color: white;
-      margin-bottom: 0.5rem;
-    }
+        /* Question Block Styling */
+        .question-block { 
+            background: #f9f9f9; padding: 2rem; border-radius: 20px; margin-bottom: 1.5rem; 
+            border-left: 8px solid #ddd; transition: 0.4s; position: relative;
+        }
+        .question-block.answered { 
+            background: #fff; border-left-color: var(--success); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); transform: scale(1.02);
+        }
+        .category-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 5px 12px; border-radius: 8px; margin-bottom: 12px; display: inline-block; }
+        .question-text { font-weight: 600; font-size: 1.1rem; line-height: 1.5; margin-bottom: 15px; }
 
-    .title-icon {
-      font-size: 2rem;
-      animation: bounce 2s infinite;
-    }
+        .submit-btn {
+            width: 100%; padding: 1.5rem; border-radius: 50px; border: none; background: var(--primary); color: white;
+            font-weight: 800; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+            margin-top: 2rem; animation: pulse 2s infinite; transition: 0.3s;
+        }
+        .submit-btn:hover { background: #e85a28; transform: translateY(-3px); }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+        /* --- ROBUST FOOTER --- */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+            margin-top: 50px;
+            border-top: 4px solid var(--primary);
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-brand h2 { font-family: 'Righteous', cursive; color: var(--primary); margin-bottom: 1rem; }
+        .footer-brand p { opacity: 0.7; line-height: 1.6; font-size: 0.9rem; }
+        .footer-links h4 { margin-bottom: 1.2rem; font-size: 1.1rem; color: var(--secondary); }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .footer-links a:hover { color: white; padding-left: 5px; }
+        .social-icons { display: flex; gap: 15px; margin-top: 1.5rem; }
+        .social-icons a { 
+            width: 40px; height: 40px; background: rgba(255,255,255,0.1); 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; color: white; transition: 0.3s; 
+        }
+        .social-icons a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-bottom { 
+            text-align: center; margin-top: 3rem; padding-top: 2rem; 
+            border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.5;
+        }
 
-    .nav-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      color: rgba(255, 255, 255, 0.9);
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      transition: all 0.3s;
-    }
-
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-    }
-
-    /* Main Container */
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    /* Progress Bar */
-    .progress-container {
-      background: white;
-      border-radius: 15px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .progress-text {
-      text-align: center;
-      margin-bottom: 1rem;
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .progress-bar-bg {
-      width: 100%;
-      height: 20px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      width: 0%;
-      transition: width 0.5s ease;
-      border-radius: 10px;
-    }
-
-    /* Form Card */
-    .form-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      margin-bottom: 2rem;
-    }
-
-    /* Personal Info */
-    .personal-info {
-      display: grid;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      padding-bottom: 2rem;
-      border-bottom: 2px solid #f0f0f0;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--dark);
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 0.8rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      transition: border-color 0.3s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    /* Question Card */
-    .question {
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      background: #f9f9f9;
-      border-radius: 15px;
-      border-left: 4px solid var(--primary);
-      transition: all 0.3s;
-    }
-
-    .question:hover {
-      background: #f5f5f5;
-      transform: translateX(5px);
-    }
-
-    .question p {
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--dark);
-      font-size: 1.1rem;
-    }
-
-    .question select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      background: white;
-    }
-
-    .question select:hover {
-      border-color: var(--primary);
-    }
-
-    .question select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-    }
-
-    /* Category Badges */
-    .category-badge {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .mental-health {
-      background: #E3F2FD;
-      color: #1976D2;
-    }
-
-    .gender-violence {
-      background: #FCE4EC;
-      color: #C2185B;
-    }
-
-    .sex-education {
-      background: #F3E5F5;
-      color: #7B1FA2;
-    }
-
-    /* Submit Button */
-    .submit-btn {
-      width: 100%;
-      padding: 1.2rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
-    }
-
-    .submit-btn:active {
-      transform: translateY(-1px);
-    }
-
-    /* Help Button */
-    .help-btn {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #FF006E);
-      color: white;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-      transition: all 0.3s;
-      z-index: 999;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .help-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
-    }
-
-    /* Info Banner */
-    .info-banner {
-      background: linear-gradient(135deg, #00D9C0, #06FFA5);
-      color: white;
-      padding: 1.5rem;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .info-banner h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .info-banner p {
-      opacity: 0.95;
-      line-height: 1.6;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .logo-container {
-        gap: 0.5rem;
-      }
-
-      .logo-container img {
-        height: 30px;
-      }
-
-      .title-container h1 {
-        font-size: 1.5rem;
-      }
-
-      .nav-links {
-        gap: 0.5rem;
-      }
-
-      .nav-links a {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
-      }
-
-      .form-card {
-        padding: 1.5rem;
-      }
-
-      .question {
-        padding: 1rem;
-      }
-    }
-  </style>
+        @media (max-width: 768px) {
+            .personal-info, .footer-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <div class="header">
-    <div class="header-content">
-      <div class="logo-container">
-        <a href="{{ url_for('index') }}">
-          <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-        </a>
-        <a href="{{ url_for('index') }}">
-          <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-        </a>
-        <a href="{{ url_for('index') }}">
-          <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-        </a>
-      </div>
-      <div class="title-container">
-        <h1>Mental Health Assessment <span class="title-icon">🧠</span></h1>
-      </div>
-      <nav class="nav-links">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('Register') }}">Book Consultation</a>
-        <a href="{{ url_for('sel-activities') }}">SEL Activities</a>
-      </nav>
-    </div>
-  </div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <!-- Info Banner -->
-    <div class="info-banner">
-      <h3>🌟 Your Privacy Matters 🌟</h3>
-      <p>This assessment is confidential and helps us understand how we can best support you. Be honest - there are no right or wrong answers!</p>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="progress-container">
-      <div class="progress-text">
-        <span id="progress-text">Question <span id="current-q">0</span> of 20</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progress-bar"></div>
-      </div>
-    </div>
-
-    <!-- Assessment Form -->
-    <div class="form-card">
-      <form id="assessment-form" method="POST" action="{{ url_for('submit_assessment') }}">
-        <!-- Personal Information -->
-        <div class="personal-info">
-          <div class="form-group">
-            <label for="age">Your Age *</label>
-            <input type="number" id="age" name="age" placeholder="Enter your age" required min="10" max="25">
-          </div>
-          <div class="form-group">
-            <label for="sex">Gender *</label>
-            <select id="sex" name="sex" required>
-              <option value="">Select your gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </div>
+    <nav>
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+            <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+            <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
         </div>
+        <div class="nav-links">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/mental"><i class="fas fa-brain"></i> Mental Health</a>
+            <a href="/Resources"><i class="fas fa-book"></i> Resources</a>
+        </div>
+    </nav>
 
-        <!-- Questions Container -->
-        <div id="questions-container"></div>
-
-        <button type="submit" class="submit-btn">Submit Assessment</button>
-      </form>
+    <div class="progress-sticky">
+        <div class="nav-container" style="display:flex; align-items: center; max-width:1200px; margin:0 auto;">
+            <span style="font-weight: 800; font-size: 0.9rem;">VIBE PROGRESS:</span>
+            <div class="bar-bg"><div class="bar-fill" id="progressBar"></div></div>
+            <span id="percLabel" style="font-weight: 800; color: var(--primary);">0%</span>
+        </div>
     </div>
-  </div>
 
-  <!-- Help Button -->
-  <a href="{{ url_for('Register') }}" class="help-btn" title="Need help?">🆘</a>
+    <div class="main-content">
+        <div class="form-card">
+            <form id="vibeForm" method="POST" action="{{ url_for('submit_assessment') }}">
+                
+                <h2 style="font-family: 'Righteous', cursive; margin-bottom: 1.5rem; color: var(--primary); font-size: 2rem;">Vibe Assessment 🔍</h2>
+                <p style="margin-bottom: 2rem; opacity: 0.7; font-size: 0.9rem;">Please provide your basic details so we can tailor your wellness journey results.</p>
+                
+                <div class="personal-info">
+                    <div class="form-group">
+                        <label>Email Address 📧</label>
+                        <input type="email" name="email" placeholder="Required for your results" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number 📱</label>
+                        <input type="tel" name="phone" placeholder="Valid Nigerian Phone No." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Age 🎂</label>
+                        <input type="number" name="age" min="10" max="35" placeholder="e.g. 21" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender 🌈</label>
+                        <select name="sex" required>
+                            <option value="">Select...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
 
-  <script>
-    const questions = [
-      {
-        text: "1. How often do you feel overwhelmed by stress?",
-        category: "mental-health",
-        categoryLabel: "Mental Health",
-        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
-      },
-      {
-        text: "2. Do you have trouble sleeping due to anxiety or worry?",
-        category: "mental-health",
-        categoryLabel: "Mental Health",
-        options: ["Never", "Occasionally", "Frequently", "Almost every night", "Every night"]
-      },
-      {
-        text: "3. Have you ever been pressured into sexual activity?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["No, never", "Once", "A few times", "Often", "Prefer not to say"]
-      },
-      {
-        text: "4. Do you know where to seek help for gender-based violence?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["No, I have no idea", "I have some idea", "I know a few resources", "I know exactly where to go", "I have sought help before"]
-      },
-      {
-        text: "5. How comfortable are you discussing mental health?",
-        category: "mental-health",
-        categoryLabel: "Mental Health",
-        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
-      },
-      {
-        text: "6. Do you believe men and women should have equal power in relationships?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
-      },
-      {
-        text: "7. Have you ever felt discriminated against because of your gender?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Never", "Rarely", "Sometimes", "Often", "All the time"]
-      },
-      {
-        text: "8. Do you practice safe sex (contraception & protection)?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Never", "Rarely", "Sometimes", "Usually", "Always"]
-      },
-      {
-        text: "9. How well do you understand STIs?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Not at all", "A little", "Somewhat", "Well", "Very well"]
-      },
-      {
-        text: "10. Have you experienced or witnessed verbal abuse in a relationship?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Never", "Rarely", "A few times", "Often", "Regularly"]
-      },
-      {
-        text: "11. Do you feel comfortable discussing consent in relationships?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
-      },
-      {
-        text: "12. How often do you feel a lack of motivation in daily activities?",
-        category: "mental-health",
-        categoryLabel: "Mental Health",
-        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
-      },
-      {
-        text: "13. Have you ever sought help for mental health concerns?",
-        category: "mental-health",
-        categoryLabel: "Mental Health",
-        options: ["No, never", "I thought about it", "Once or twice", "Several times", "Frequently"]
-      },
-      {
-        text: "14. Do you believe sex education should be taught in schools?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
-      },
-      {
-        text: "15. Have you or someone you know faced domestic violence?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Never", "Once", "A few times", "Often", "Regularly"]
-      },
-      {
-        text: "16. Do you know your legal rights against sexual harassment?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Not at all", "A little", "Somewhat", "Well", "Very well"]
-      },
-      {
-        text: "17. Have you ever felt guilty discussing sexual health topics?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
-      },
-      {
-        text: "18. How comfortable are you seeking support for gender-based violence?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"]
-      },
-      {
-        text: "19. Do you believe discussing sexual health reduces stigma?",
-        category: "sex-education",
-        categoryLabel: "Sexual Health",
-        options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
-      },
-      {
-        text: "20. How confident are you in recognizing signs of an abusive relationship?",
-        category: "gender-violence",
-        categoryLabel: "Gender & Safety",
-        options: ["Not confident at all", "Slightly confident", "Somewhat confident", "Confident", "Very confident"]
-      }
-    ];
+                <div id="questions-container"></div>
 
-    // Populate questions
-    const questionContainer = document.getElementById("questions-container");
-    questions.forEach((q, index) => {
-      const questionDiv = document.createElement("div");
-      questionDiv.classList.add("question");
-      
-      let optionsHTML = `<select name="q${index}" required onchange="updateProgress()">
-        <option value="">Select an answer</option>`;
-      
-      q.options.forEach((option, i) => {
-        optionsHTML += `<option value="${i + 1}">${option}</option>`;
-      });
-      optionsHTML += `</select>`;
-      
-      questionDiv.innerHTML = `
-        <span class="category-badge ${q.category}">${q.categoryLabel}</span>
-        <p>${q.text}</p>
-        ${optionsHTML}
-      `;
-      questionContainer.appendChild(questionDiv);
-    });
+                <button type="submit" class="submit-btn">Unlock My Vibe Score 🚀</button>
+            </form>
+        </div>
+    </div>
 
-    // Update progress
-    function updateProgress() {
-      const total = questions.length;
-      const answered = document.querySelectorAll('select[name^="q"]').length;
-      let completed = 0;
-      
-      document.querySelectorAll('select[name^="q"]').forEach(select => {
-        if (select.value) completed++;
-      });
-      
-      const percentage = (completed / total) * 100;
-      document.getElementById('progress-bar').style.width = percentage + '%';
-      document.getElementById('current-q').textContent = completed;
-    }
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Youth Connect Hub</h2>
+                <p>Empowering the youth of Ondo State with the tools, resources, and support needed for a healthy mental and social life. Your vibe matters.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home Page</a></li>
+                    <li><a href="/mental">Mood Tracker</a></li>
+                    <li><a href="/sel_activities">SEL Activities</a></li>
+                    <li><a href="/Resources">Emergency Contacts</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Us</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Akure, Ondo State</a></li>
+                    <li><a href="tel:08134812419"><i class="fas fa-phone"></i> +234 813 481 2419</a></li>
+                    <li><a href="mailto:support@youthconnect.com"><i class="fas fa-envelope"></i> help@youthhub.ng</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Youth Connect Hub | Developed for Ondo State Ministry of Health
+        </div>
+    </footer>
 
-    // Reset form on load
-    window.addEventListener("load", function() {
-      document.getElementById("assessment-form").reset();
-      updateProgress();
-    });
+    <script>
+        const questions = [
+            { text: "Have you felt cheerful and in good spirits?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Have you felt calm and relaxed?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Have you felt active and vigorous lately?", cat: "Energy", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you wake up feeling fresh and rested? 😴", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Is your daily life filled with things that interest you?", cat: "Life", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you feel little interest or pleasure in doing things? 😔", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"] },
+            { text: "Do you feel down, depressed, or hopeless?", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"] },
+            { text: "How often do you find it hard to concentrate on school or work?", cat: "Focus", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "How often do you feel nervous, anxious, or on edge?", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you feel like your emotions are out of control? 🌊", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you feel safe and respected in your home environment? 🏠", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"] },
+            { text: "Do you have a trusted person to talk to if you're in trouble?", cat: "Support", color: "#d1ffd6", opts: ["No one", "Maybe one person", "Yes, I have a squad"] },
+            { text: "Has anyone physically or emotionally hurt you recently? 🛑", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"] },
+            { text: "Do you feel pressured to do things you don't want to do?", cat: "Boundaries", color: "#ffd1d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you feel you can say 'No' without being afraid?", cat: "Boundaries", color: "#ffd1d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Do you feel like you belong in your community or peer group?", cat: "Social", color: "#e9d1ff", opts: ["Not at all", "A little", "Somewhat", "Very much"] },
+            { text: "How often do you feel lonely even when with others?", cat: "Social", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            { text: "Are you optimistic about what the future holds for you? ✨", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"] },
+            { text: "When things go wrong, do you feel you can handle them?", cat: "Resilience", color: "#d1ffd6", opts: ["I give up", "With lots of help", "Mostly", "I'm a survivor"] },
+            { text: "Do you know where to go for help in Ondo if you feel sad?", cat: "Help", color: "#fff4d1", opts: ["No", "I've heard of places", "Yes, I know Youth Connect"] }
+        ];
 
-    // Form validation
-    document.getElementById('assessment-form').addEventListener('submit', function(e) {
-      const total = questions.length;
-      let answered = 0;
-      
-      document.querySelectorAll('select[name^="q"]').forEach(select => {
-        if (select.value) answered++;
-      });
-      
-      if (answered < total) {
-        e.preventDefault();
-        alert(`Please answer all questions. You've answered ${answered} out of ${total} questions.`);
+        const container = document.getElementById("questions-container");
         
-        // Scroll to first unanswered question
-        const firstUnanswered = Array.from(document.querySelectorAll('select[name^="q"]'))
-          .find(select => !select.value);
-        if (firstUnanswered) {
-          firstUnanswered.closest('.question').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          firstUnanswered.focus();
+        questions.forEach((q, i) => {
+            const div = document.createElement("div");
+            div.className = "question-block";
+            div.id = `block-q${i+1}`;
+            div.innerHTML = `
+                <span class="category-tag" style="background:${q.color}">${q.cat}</span>
+                <p class="question-text">${i+1}. ${q.text}</p>
+                <select name="q${i+1}" required onchange="updateBlockStatus(${i+1})">
+                    <option value="">Choose an answer...</option>
+                    ${q.opts.map((o, idx) => `<option value="${idx+1}">${o}</option>`).join('')}
+                </select>
+            `;
+            container.appendChild(div);
+        });
+
+        function updateBlockStatus(id) {
+            const select = document.querySelector(`select[name="q${id}"]`);
+            const block = document.getElementById(`block-q${id}`);
+            if (select.value !== "") {
+                block.classList.add('answered');
+            } else {
+                block.classList.remove('answered');
+            }
+            updateProgress();
         }
-      }
-    });
-  </script>
+
+        function updateProgress() {
+            const selects = document.querySelectorAll('select[name^="q"]');
+            const answered = Array.from(selects).filter(s => s.value !== "").length;
+            const perc = Math.round((answered / questions.length) * 100);
+            document.getElementById('progressBar').style.width = perc + '%';
+            document.getElementById('percLabel').innerText = perc + '%';
+        }
+    </script>
 </body>
 </html>

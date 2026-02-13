@@ -92,29 +92,18 @@ class SubmitAssessment(db.Model):
     __bind_key__ = 'submit_assessment'
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.String(100), default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    email = db.Column(db.String(100)) # New
+    phone = db.Column(db.String(20))  # New
     age = db.Column(db.Integer)
     sex = db.Column(db.String(20))
-    q0 = db.Column(db.Integer)
-    q1 = db.Column(db.Integer)
-    q2 = db.Column(db.Integer)
-    q3 = db.Column(db.Integer)
-    q4 = db.Column(db.Integer)
-    q5 = db.Column(db.Integer)
-    q6 = db.Column(db.Integer)
-    q7 = db.Column(db.Integer)
-    q8 = db.Column(db.Integer)
-    q9 = db.Column(db.Integer)
-    q10 = db.Column(db.Integer)
-    q11 = db.Column(db.Integer)
-    q12 = db.Column(db.Integer)
-    q13 = db.Column(db.Integer)
-    q14 = db.Column(db.Integer)
-    q15 = db.Column(db.Integer)
-    q16 = db.Column(db.Integer)
-    q17 = db.Column(db.Integer)
-    q18 = db.Column(db.Integer)
-    q19 = db.Column(db.Integer)
-
+    # Create q1 through q20
+    q1 = db.Column(db.Integer); q2 = db.Column(db.Integer); q3 = db.Column(db.Integer)
+    q4 = db.Column(db.Integer); q5 = db.Column(db.Integer); q6 = db.Column(db.Integer)
+    q7 = db.Column(db.Integer); q8 = db.Column(db.Integer); q9 = db.Column(db.Integer)
+    q10 = db.Column(db.Integer); q11 = db.Column(db.Integer); q12 = db.Column(db.Integer)
+    q13 = db.Column(db.Integer); q14 = db.Column(db.Integer); q15 = db.Column(db.Integer)
+    q16 = db.Column(db.Integer); q17 = db.Column(db.Integer); q18 = db.Column(db.Integer)
+    q19 = db.Column(db.Integer); q20 = db.Column(db.Integer)
 
 class Feedback(db.Model):
     __bind_key__ = 'submit_assessment'
@@ -186,19 +175,48 @@ def get_cookie():
         return jsonify({cookie_name: cookie_value})
     else:
         return jsonify({"error": "Cookie not found"}), 404
+        
 @app.route('/mood_tracker')
 def mood_tracker():
     return render_template('mood_tracker.html')
 
-# API: Get a Random Affirmation
+# API: Get a Random Affirmation (one per day based on date)
 @app.route('/api/affirmation', methods=['GET'])
 def get_affirmation():
-    return jsonify({"affirmation": random.choice(affirmations)})
+    """
+    Returns the same affirmation for the entire day.
+    Uses current date as seed to ensure consistency.
+    """
+    # Get today's date as string
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Use date as seed for random selection
+    random.seed(today + "affirmation")  # Add suffix to make it unique from challenge
+    daily_affirmation = random.choice(affirmations)
+    
+    # Reset random seed to not affect other operations
+    random.seed()
+    
+    return jsonify({"affirmation": daily_affirmation})
 
-# API: Get a Random Challenge
+# API: Get a Random Challenge (one per day based on date)
 @app.route('/api/challenge', methods=['GET'])
 def get_challenge():
-    return jsonify({"challenge": random.choice(challenges)})
+    """
+    Returns the same challenge for the entire day.
+    Uses current date as seed to ensure consistency.
+    """
+    # Get today's date as string
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Use date as seed for random selection
+    random.seed(today + "challenge")  # Add suffix to make it unique from affirmation
+    daily_challenge = random.choice(challenges)
+    
+    # Reset random seed to not affect other operations
+    random.seed()
+    
+    return jsonify({"challenge": daily_challenge})
 
 
 
@@ -211,7 +229,7 @@ def get_journals():
 
 # API to save journal entries
 @app.route('/save_journal_entry', methods=['POST'])
-def save_journal_entry():
+def save_journal_entry_route():
     data = request.get_json()
 
     if not data or 'mood' not in data or 'entry' not in data:
@@ -271,109 +289,63 @@ def index():
 def submit_assessment():
     total_score = 0
     unanswered_questions = 0
+    
+    # 1. Capture Personal Info
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    age = request.form.get("age")
+    sex = request.form.get("sex")
 
-    # Define custom score mappings for each question
+    # 2. Scoring Map (Ensure exactly 20 items)
+    # 1-5 represents the value of the option selected
     score_mappings = [
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q0
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q1
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q2
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q3
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q4
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q5
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q6
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q7
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q8
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q9
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q10
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q11
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q12
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q13
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q14
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q15
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # q16
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q17
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # q18
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}  # q19
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, # q1, q2
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q3, q4
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q5, q6
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q7, q8
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, # q9, q10
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q11, q12
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q13, q14
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q15, q16
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q17, q18
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}  # q19, q20
     ]
 
-    # Calculate the total score using the score mappings
-    for index in range(20):
-        answer = request.form.get(f'q{index}')
-        if answer:
+    # 3. Loop through q1 to q20
+    answers_dict = {}
+    for i in range(1, 21):
+        val = request.form.get(f'q{i}')
+        if val:
             try:
-                ans_num = int(answer)
-                total_score += score_mappings[index][ans_num]
+                ans_int = int(val)
+                total_score += score_mappings[i-1][ans_int]
+                answers_dict[f'q{i}'] = ans_int
             except (ValueError, KeyError):
                 unanswered_questions += 1
         else:
             unanswered_questions += 1
 
-    # If any question is unanswered, show an error
+    # 4. Error Check
     if unanswered_questions > 0:
-        return render_template('error.html', message="Please answer all questions before submitting.")
+        return render_template('error.html', message=f"Please answer all questions. You missed {unanswered_questions}.")
 
-    # Collect personal info and timestamp
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    age = request.form.get("age", "Not Provided")
-    sex = request.form.get("sex", "Not Provided")
+    # 5. Save to Database
+    try:
+        new_assessment = SubmitAssessment(
+            email=email,
+            phone=phone,
+            age=age,
+            sex=sex,
+            **answers_dict # This automatically maps q1=val, q2=val...
+        )
+        db.session.add(new_assessment)
+        db.session.commit()
+    except Exception as e:
+        print(f"Database Error: {e}")
+        # Even if DB fails, we want the user to see their result
+        pass
 
-    # Define option mappings for each question
-    question_options = [
-        ["Never", "Rarely", "Sometimes", "Often", "Always"],  # q0
-        ["Never", "Occasionally", "Frequently", "Almost every night", "Every night"],  # q1
-        ["No, never", "Once", "A few times", "Often", "Prefer not to say"],  # q2
-        ["No, I have no idea", "I have some idea", "I know a few resources", "I know exactly where to go",
-         "I have sought help before"],  # q3
-        ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"],  # q4
-        ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],  # q5
-        ["Never", "Rarely", "Sometimes", "Often", "All the time"],  # q6
-        ["Never", "Rarely", "Sometimes", "Usually", "Always"],  # q7
-        ["Not at all", "A little", "Somewhat", "Well", "Very well"],  # q8
-        ["Never", "Rarely", "A few times", "Often", "Regularly"],  # q9
-        ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"],  # q10
-        ["Never", "Rarely", "Sometimes", "Often", "Always"],  # q11
-        ["No, never", "I thought about it", "Once or twice", "Several times", "Frequently"],  # q12
-        ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],  # q13
-        ["Never", "Once", "A few times", "Often", "Regularly"],  # q14
-        ["Not at all", "A little", "Somewhat", "Well", "Very well"],  # q15
-        ["Never", "Rarely", "Sometimes", "Often", "Always"],  # q16
-        ["Very uncomfortable", "Somewhat uncomfortable", "Neutral", "Somewhat comfortable", "Very comfortable"],  # q17
-        ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],  # q18
-        ["Not confident at all", "Slightly confident", "Somewhat confident", "Confident", "Very confident"]  # q19
-    ]
-
-    # Build the data row with textual answers
-    data = [timestamp, age, sex]
-    for i in range(20):
-        answer = request.form.get(f"q{i}", "Not Answered")
-        try:
-            ans_num = int(answer)
-            # Convert answer number to text (answers assumed to be 1-indexed)
-            answer_text = question_options[i][ans_num - 1]
-        except (ValueError, IndexError):
-            answer_text = answer
-        data.append(answer_text)
-
-    # Save to CSV
-    with open(CSV_FILE, "a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(data)
-
-    # Save to Excel with headers
-    columns = ["Timestamp", "Age", "Sex"] + [f"Q{i}" for i in range(20)]
-    df = pd.DataFrame([data], columns=columns)
-    if os.path.exists(EXCEL_FILE):
-        with pd.ExcelWriter(EXCEL_FILE, engine="openpyxl", mode="a", if_sheet_exists="overlay") as writer:
-            wb = load_workbook(EXCEL_FILE)
-            sheet = wb.active
-            start_row = sheet.max_row + 1
-            df.to_excel(writer, index=False, header=False, startrow=start_row)
-    else:
-        df.to_excel(EXCEL_FILE, index=False)
-
-    # Redirect to the results page with the calculated score
     return redirect(url_for('assessment_results', score=total_score))
-
 
 @app.route('/assessment_results')
 def assessment_results():
@@ -505,7 +477,7 @@ def delete_submission(id):
         return jsonify({"success": False, "message": str(e)})
 
 
-@app.route('/register', endpoint='Register')
+@app.route('/register', endpoint='register')
 def register():
     return render_template('register.html')
 
@@ -517,7 +489,7 @@ def mental():
 def Resources():
     return render_template('Resources.html')
 
-@app.route('/sel-activities', endpoint='sel-activities')
+@app.route('/sel_activities')
 def sel_activities():
     return render_template('sel-activities.html')
 
@@ -587,6 +559,4 @@ def admin_logout():
 
 ### **RUN FLASK APP**
 if __name__ == "__main__":
-    app.run()
-
-
+    app.run(debug=True)

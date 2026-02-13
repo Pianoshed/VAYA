@@ -5,303 +5,362 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mental Health Support - Ondo State</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --accent: #FDC500;
+            --dark: #1A1A2E;
+            --deep-blue: #16213E;
+            --light: #F9F9F9;
+            --purple: #9D4EDD;
+            --blue: #00B4D8;
+            --pink: #FF006E;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-           background-image: url("/static/men5.jpg");
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: #000;
+            font-size: 0.95rem; /* Slightly smaller base font */
+        }
+
+        /* Fixed Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("{{ url_for('static', filename='you1.jpg') }}");
             background-size: cover;
-            padding: 40px;
+            background-position: center;
+            z-index: -2;
         }
 
-              /* Header Styling with Transparent Resene Blue Gradient */
-    header {
-        background: linear-gradient(135deg, rgba(0, 80, 158, 0.4), rgba(0, 63, 127, 0.5)); /* Transparent Blue */
-        color: white;
-        text-align: center;
-        padding: 2em 1em;
-        border-radius: 12px;
-        box-shadow: 0px 8px 20px rgba(0, 63, 127, 0.3);
-        margin-bottom: 20px;
-        backdrop-filter: blur(10px); /* Glass Effect */
-        animation: fadeIn 1.5s ease-in-out;
-    }
-
-    /* Header Text Styling */
-    header h1 {
-        font-size: 2em;
-        font-weight: bold;
-        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        margin-bottom: 0.5em;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    header h1:hover {
-        transform: scale(1.05);
-    }
-
-    header p {
-        font-size: 1em;
-        font-weight: 300;
-        margin-bottom: 1.5em;
-        color: #f4f4f4;
-        animation: fadeInUp 1.5s ease-in-out;
-    }
-
-    /* Navigation Links */
-    .nav-container {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-
-    .home-btn, .nav-link {
-        display: inline-block;
-        padding: 12px 24px;
-        font-size: 1em;
-        font-weight: bold;
-        text-decoration: none;
-        border-radius: 8px;
-        transition: all 0.3s ease-in-out;
-        backdrop-filter: blur(5px);
-    }
-
-    .home-btn {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .home-btn:hover {
-        background: rgba(255, 255, 255, 0.5);
-        color: black;
-    }
-
-    .nav-link {
-        background: transparent;
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .nav-link:hover {
-        background: rgba(255, 255, 255, 0.5);
-        color: #00509e;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Responsive Design - Compact Mobile Fonts */
-    @media (max-width: 768px) {
-        header {
-            padding: 2em 1.5em;
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(157, 78, 221, 0.45) 100%);
+            z-index: -1;
         }
 
-        header h1 {
-            font-size: 1.8em; /* Reduced font size */
+        /* Navigation */
+        nav {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 0.5rem 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        header p {
-            font-size: 1em; /* Reduced font size */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .home-btn, .nav-link {
-            font-size: 0.9em;
-            padding: 10px 18px;
-        }
-    }
+        .logo-section { display: flex; gap: 0.5rem; align-items: center; }
+        .logo-section img { height: 35px; } /* Smart logo size */
 
-    @media (max-width: 480px) {
-        header h1 {
-            font-size: 1.5em; /* More compact for small screens */
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
         }
 
-        header p {
-            font-size: 0.9em; /* Optimized for very small devices */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            transition: 0.3s;
         }
 
-        .home-btn, .nav-link {
-            font-size: 0.85em;
-            padding: 8px 16px;
-        }
-    }
+        .nav-links a:hover { opacity: 1; color: var(--primary); }
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            animation: slideInUp 1s ease-out;
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
         }
 
-        form {
-            margin-top: 20px;
+        /* Hero Section */
+        .hero {
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 50px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .hero-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 700px;
+            color: white;
         }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
+        /* Smart Headline Font */
+        .hero h1 { 
+            font-family: 'Righteous', cursive; 
+            font-size: clamp(1.8rem, 8vw, 3.5rem); 
+            margin-bottom: 0.8rem; 
+            line-height: 1.1; 
+        }
+        .hero p { 
+            font-size: clamp(0.9rem, 4vw, 1.1rem); 
+            margin-bottom: 1.5rem; 
+            opacity: 0.9; 
         }
 
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255,107,53,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-left: 5px; }
+
+        /* Flicker Animation */
+        @keyframes flickerRed {
+            0%, 100% { background-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+            50% { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
+        }
+        .btn-flicker { animation: flickerRed 1s infinite; }
+
+        /* Form Section */
+        .white-section {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 4rem 1rem;
+        }
+
+        .section-header h2 { 
+            font-family: 'Righteous', cursive; 
+            font-size: clamp(1.8rem, 6vw, 2.5rem); 
+            color: var(--dark); 
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group.full-width { grid-column: span 2; }
+
+        label { display: block; font-weight: 700; margin-bottom: 5px; color: var(--deep-blue); font-size: 0.8rem; }
         input, select {
             width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 0.75rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 0.9rem;
         }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 20px auto;
-            background-color: #0066A1;
-            color: #fff;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 3rem 1.5rem 1.5rem; }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 2rem;
+        }
+        .footer-col h4 { margin-bottom: 1rem; color: var(--primary); font-family: 'Righteous', cursive; font-size: 1rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .footer-col a { color: #ccc; text-decoration: none; }
+
+        /* Back to Top */
+        #scrollTop {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            width: 40px; height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        button:hover {
-            background-color: #004c75;
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 0; right: -100%;
+                width: 70%; height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                padding: 5rem 2rem;
+                transition: 0.4s;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            }
+            .nav-links.active { right: 0; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: auto; }
+            .btn-secondary { margin-left: 0; margin-top: 10px; display: block; }
+            .hero-card { padding: 1.5rem 1rem; }
         }
-
-        .services-list h2 {
-            font-size: 1.8rem;
-            color: #0066A1;
-            margin-bottom: 10px;
-        }
-
-        .services-list ul {
-            list-style-type: disc;
-            padding-left: 20px;
-        }
-
-        .services-list ul li {
-            margin-bottom: 10px;
-        }
-
-        /* Logo Section */
-.logo-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.logo-container img {
-    height: 40px;
-    width: auto;
-    max-width: 100px;
-}
-
     </style>
 </head>
 <body>
-  <header>
-         <div class="logo-container">
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-                </a>
-            </div>
-    <h1>Mental Health & Counseling Support</h1>
-    <p>Connect with a professional counselor for mental health support, guidance, and care.</p>
 
-    <div class="nav-container">
-        <a href="{{ url_for('index') }}" class="home-btn">🏠 Home</a>
-        <a href="{{ url_for('sel-activities') }}" class="nav-link">📚 Learn More with SEL Activities</a>
-    </div>
+    <div id="scrollTop" onclick="window.scrollTo(0,0)"><i class="fas fa-chevron-up"></i></div>
 
-</header>
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="MOH">
+            </div>
+            
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
 
-    <div class="container">
-        <form method="POST" action="/submit">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="age">Date of Birth</label>
-                <input type="date" id="age" name="age" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="service">Select Support Service</label>
-                <select id="service" name="service" required>
-                    <option value="counseling">One-on-One Counseling</option>
-                    <option value="group-therapy">Group Therapy Sessions</option>
-                    <option value="stress-management">Stress & Anxiety Management</option>
-                    <option value="substance-abuse">Substance Abuse Counseling</option>
-                    <option value="depression-support">Depression Support</option>
-                    <option value="suicide-prevention">Suicide Prevention Support</option>
-                </select>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-
-        <section class="services-list">
-            <h2>Our Mental Health Services</h2>
-            <ul>
-                <li>Professional counseling for stress, anxiety, and depression.</li>
-                <li>Group therapy for shared experiences and support.</li>
-                <li>Suicide prevention and crisis intervention.</li>
-                <li>Support for substance abuse recovery.</li>
-                <li>Guidance on coping strategies for mental well-being.</li>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('index') }}" onclick="toggleMenu()">Home</a></li>
+                <li><a href="{{ url_for('mental') }}" onclick="toggleMenu()">Assessment</a></li>
+                <li><a href="{{ url_for('sel_activities') }}" onclick="toggleMenu()">Toolkit</a></li>
+                <li><a href="{{ url_for('register') }}" onclick="toggleMenu()">Get Help</a></li>
             </ul>
-        </section>
-    </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-card">
+            <h1>Ready to talk?</h1>
+            <p>Your mental health is a journey. We walk with you.</p>
+            <div class="cta-btns">
+                <a href="#register" class="btn btn-primary">Get Help</a>
+                <a href="{{ url_for('sel_activities') }}" class="btn btn-secondary">Toolkit</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="white-section" id="register">
+        <div class="section-header">
+            <h2>Support Request</h2>
+        </div>
+
+        <div class="form-container">
+            <form method="POST" action="{{ url_for('submit') }}">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>DOB</label>
+                        <input type="date" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="mail@site.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone" placeholder="080..." required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Service</label>
+                        <select name="service" required>
+                            <option value="counseling">Counseling</option>
+                            <option value="stress">Stress Management</option>
+                            <option value="crisis">Urgent Support</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-flicker" style="width: 100%; margin-top: 1rem;">
+                    Submit Request
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>YouthConnect</h4>
+                <p style="font-size: 0.8rem; opacity: 0.8;">Ondo State Ministry of Health Initiative for mental wellbeing.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('register') }}">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Emergency</h4>
+                <p style="font-size: 0.8rem;">📞 +234 813 481 2419</p>
+            </div>
+        </div>
+        <div class="footer-bottom" style="text-align: center; padding-top: 1.5rem; font-size: 0.75rem; opacity: 0.5;">
+            &copy; 2026 Youth Connect Hub
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const links = document.getElementById('navLinks');
+            links.classList.toggle('active');
+        }
+
+        window.onscroll = function() {
+            let btn = document.getElementById("scrollTop");
+            if (document.documentElement.scrollTop > 300) {
+                btn.style.display = "flex";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    </script>
 </body>
 </html>

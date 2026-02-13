@@ -3,251 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Resource Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <title>Mental Health Resources & Crisis Support | Ondo Youth Connect Hub</title>
+    <meta name="description" content="Access the Ondo Youth Connect Resource Bank. Find emergency hotlines, self-help tools, mindfulness guides, and free counseling services for youth mental well-being.">
+    <meta name="keywords" content="Mental Health Nigeria, Crisis Hotline Ondo, Suicide Prevention Nigeria, Mindfulness Resources, Free Counseling Youth">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
+    
     <style>
-        /* Reset & General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+        :root {
+            --primary: #FF3B3B; /* Emergency Red */
+            --secondary: #00c8ff;
+            --dark: #1A1A2E;
+            --deep-blue: #16213E;
+            --glass: rgba(22, 33, 62, 0.85);
         }
 
-        /* Body Styling */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
         body {
-             background: url('{{ url_for("static", filename="men2.jpg") }}') no-repeat center center/cover;
+            font-family: 'Poppins', sans-serif;
+            background: url('{{ url_for("static", filename="men2.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
             color: white;
-            text-align: center;
-            padding: 20px;
+            min-height: 100vh;
         }
 
-           /* Header Styling */
+        /* Nav synced with index */
+        nav {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 0.7rem 1.5rem;
+            position: fixed;
+            width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section img { height: 35px; margin-right: 10px; }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: white; text-decoration: none; font-weight: 600;
+            font-size: 0.9rem; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--secondary); }
+
+        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+        /* Header Section */
         header {
-           background: rgba(35,35,255,0.6);
-            color: white;
-            padding: 40px 20px;
-            border-radius: 12px;
-            margin: 20px auto;
-            max-width: 800px;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+            padding: 120px 20px 60px;
             text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
         }
 
-        header h1 {
-            font-size: 2.5em;
-            font-weight: 600;
-        }
+        header h1 { font-family: 'Righteous', cursive; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 15px; }
+        header p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 25px; opacity: 0.9; }
 
-        header p {
-            font-size: 1.2em;
-            margin-top: 8px;
-            opacity: 0.9;
-        }
-
-        /* Call-to-Action Button */
         .cta-btn {
             display: inline-block;
-            background: #ff3b3b;
+            background: var(--primary);
             color: white;
-            padding: 12px 20px;
-            font-size: 1.2em;
-            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 50px;
             text-decoration: none;
-            border-radius: 8px;
-            margin-top: 20px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
             transition: 0.3s;
-            box-shadow: 0px 4px 8px rgba(255, 59, 59, 0.4);
         }
+        .cta-btn:hover { transform: scale(1.05); background: #d62d2d; }
 
-        .cta-btn:hover {
-            background: #d62d2d;
-            box-shadow: 0px 4px 12px rgba(255, 59, 59, 0.6);
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
-            header {
-                padding: 30px 15px;
-            }
-
-            header h1 {
-                font-size: 2em;
-            }
-
-            header p {
-                font-size: 1.1em;
-            }
-
-            .cta-btn {
-                font-size: 1.1em;
-                padding: 10px 18px;
-            }
-        }
-        /* Buttons */
-        .action-btn {
-            background: #ff3b3b;
-            color: white;
-            padding: 12px 18px;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1em;
-            margin-top: 15px;
-            border-radius: 8px;
-            transition: 0.3s;
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            background: #d62d2d;
-        }
-
-        /* Content Box */
+        /* Resource Content */
         .container {
-            background: rgba(35,35,255,0.6);
-            padding: 25px;
-            border-radius: 12px;
-            max-width: 700px;
-            margin: auto;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            margin: 0 auto 5rem;
+            padding: 0 20px;
         }
 
-        .container h2 {
-            color: #00c8ff;
-            margin-top: 20px;
-            font-weight: 600;
+        .resource-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            /* Animation state */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.6s ease-out;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-        }
+        .resource-card.visible { opacity: 1; transform: translateY(0); }
 
+        .resource-card h2 { color: var(--secondary); margin-bottom: 20px; font-family: 'Righteous'; }
+
+        ul { list-style: none; }
         ul li {
-            padding: 10px;
-            font-size: 1.05em;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
         }
+        ul li:before { content: "✦"; color: var(--secondary); margin-right: 15px; }
+        
+        ul li a { color: #ffcc00; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        ul li a:hover { color: white; }
 
-        ul li a {
-            color: #ffcc00;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        ul li a:hover {
-            color: #ffea80;
-            text-decoration: underline;
-        }
-
-        /* Chat Button */
+        /* Floating Chat */
         .chat-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px; right: 30px;
             background: #00cc66;
             color: white;
-            padding: 14px 18px;
+            padding: 15px 25px;
             border-radius: 50px;
-            font-size: 1.2em;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0px 4px 10px rgba(0, 255, 127, 0.5);
             text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 204, 102, 0.3);
+            z-index: 100;
+            transition: 0.3s;
         }
+        .chat-btn:hover { transform: translateY(-5px); }
 
-        .chat-btn:hover {
-            background: #00994d;
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 4rem 1.5rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .footer-grid {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem;
         }
+        .footer-col h4 { color: var(--secondary); margin-bottom: 1.5rem; }
+        .footer-col a { color: #ccc; text-decoration: none; display: block; margin-bottom: 10px; }
 
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
-            body {
-                font-size: 0.95em;
+        /* Mobile */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed; top: 0; left: -100%; width: 75%; height: 100vh;
+                background: var(--dark); flex-direction: column; padding: 5rem 2rem;
+                transition: 0.4s;
             }
-
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            .container {
-                width: 95%;
-            }
-
-            .chat-btn {
-                font-size: 1em;
-                padding: 12px 16px;
-            }
+            .nav-links.active { left: 0; }
         }
-
-
-        /* Logo Section */
-.logo-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.logo-container img {
-    height: 40px;
-    width: auto;
-    max-width: 100px;
-}
-
     </style>
 </head>
 <body>
 
-
-     <!-- Modern Header Section -->
-    <header>
-         <div class="logo-container">
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-                </a>
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Ministry">
             </div>
+            <ul class="nav-links" id="navMenu">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+            </ul>
+            <button class="menu-toggle" onclick="toggleNav()">☰</button>
+        </div>
+    </nav>
+
+    <header>
         <h1>Mental Health Resource Bank</h1>
-        <p>Your guide to mental well-being, support, and professional help.</p>
-        <a href="{{ url_for('Register') }}" class="cta-btn">🚨 Need Help Now?</a>
+        <p>A curated collection of professional tools, crisis hotlines, and self-help guides for every step of your wellness journey.</p>
+        <a href="{{ url_for('register') }}" class="cta-btn">🚨 Reach a Counselor Now</a>
     </header>
 
-
-    <!-- Main Content -->
     <div class="container">
-        <h2>📌 Emergency & Crisis Support</h2>
-        <p>Get immediate professional help in a crisis.</p>
-        <ul>
-            <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">WHO Mental Health Resources</a></li>
-            <li><a href="https://findahelpline.com" target="_blank">Find a Helpline Worldwide</a></li>
-            <li><strong>Nigeria Suicide Prevention Hotline:</strong> Call <strong>0800 1111 113</strong></li>
-        </ul>
+        <div class="resource-card">
+            <h2>📌 Crisis & Emergency</h2>
+            <ul>
+                <li><a href="https://findahelpline.com" target="_blank">Global Helpline Finder</a></li>
+                <li><strong>Nigeria Suicide Hotline:</strong> 0800 1111 113</li>
+                <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">WHO Mental Health Portal</a></li>
+            </ul>
+        </div>
 
-        <h2>🧘 Self-Help & Well-Being</h2>
-        <ul>
-            <li><a href="https://www.calm.com" target="_blank">Calm – Meditation & Relaxation</a></li>
-            <li><a href="https://www.headspace.com" target="_blank">Headspace – Mindfulness</a></li>
-            <li><a href="https://www.moodgym.com.au" target="_blank">MoodGym – CBT for Depression</a></li>
-        </ul>
+        <div class="resource-card">
+            <h2>🧘 Self-Care & Mindfulness</h2>
+            <ul>
+                <li><a href="https://www.headspace.com" target="_blank">Headspace – Mindfulness Exercises</a></li>
+                <li><a href="https://www.calm.com" target="_blank">Calm – Sleep & Meditation</a></li>
+                <li><a href="https://www.moodgym.com.au" target="_blank">MoodGym – CBT Skills Training</a></li>
+            </ul>
+        </div>
 
-        <h2>💬 Free Counseling & Support</h2>
-        <ul>
-            <li><a href="https://www.7cups.com" target="_blank">7 Cups – Free Emotional Support</a></li>
-            <li><a href="https://www.icallhelpline.org" target="_blank">iCall Mental Health Helpline</a></li>
-        </ul>
+        <div class="resource-card">
+            <h2>💬 Peer Support & Counseling</h2>
+            <ul>
+                <li><a href="https://www.7cups.com" target="_blank">7 Cups – Listeners & Online Therapy</a></li>
+                <li><a href="https://www.icallhelpline.org" target="_blank">iCall Helpline – Professional Support</a></li>
+            </ul>
+        </div>
     </div>
 
-    <!-- WhatsApp Chat Button -->
-    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 Chat with Us</a>
+    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 WhatsApp Support</a>
 
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Ondo Youth Connect</h4>
+                <p>Ensuring no youth in Ondo State faces mental health challenges alone.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('mental') }}">Assessment</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="mailto:support@ondoyouth.gov.ng">Email Support</a>
+                <a href="tel:+234800000">Crisis Line</a>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 2rem; opacity: 0.5;">&copy; 2026 Ondo State Ministry of Health.</p>
+    </footer>
+
+    <script>
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        // Staggered Scroll Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.resource-card').forEach(card => observer.observe(card));
+    </script>
 </body>
 </html>

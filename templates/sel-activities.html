@@ -3,581 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEL Activities - Youth Connect Hub</title>
+    
+    <title>SEL Activities & Sexual Health Education | Ondo Youth Connect Hub</title>
+    <meta name="description" content="Explore interactive Social Emotional Learning (SEL) activities and sexual health resources for Ondo State youth. Build emotional intelligence, healthy relationships, and informed decision-making skills.">
+    
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #FF6B35;
             --secondary: #F7931E;
             --accent: #FDC500;
             --dark: #1A1A2E;
+            --deep-blue: #16213E;
             --purple: #9D4EDD;
-            --blue: #00B4D8;
-            --green: #06FFA5;
-            --pink: #FF006E;
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #f4f7f6;
             color: #333;
+            overflow-x: hidden;
         }
 
-        /* Header with Slideshow */
+        /* Navigation */
+        nav {
+            background: rgba(26, 26, 46, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 0.7rem 1.5rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section { display: flex; gap: 0.8rem; align-items: center; }
+        .logo-section img { height: 35px; }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        /* Header Slideshow */
         .header-slideshow {
             position: relative;
-            height: 400px;
+            height: 500px;
             overflow: hidden;
-        }
-
-        .slideshow-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
+            margin-top: 60px;
         }
 
         .slide {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
+            transform: scale(1.1);
         }
 
-        .slide.active {
-            opacity: 1;
-        }
+        .slide.active { opacity: 1; transform: scale(1); transition: opacity 1.5s, transform 6s linear; }
 
         .header-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(26,26,46,0.9));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 2;
-        }
-
-        .logo-container {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .logo-container img {
-            height: 40px;
-            transition: transform 0.3s;
-            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-        }
-
-        .logo-container img:hover {
-            transform: scale(1.1) rotate(5deg);
+            z-index: 5;
+            text-align: center;
+            color: white;
+            padding: 2rem;
         }
 
         .header-overlay h1 {
             font-family: 'Righteous', cursive;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            color: white;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 1rem;
         }
 
-        .header-overlay p {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.95);
-            max-width: 800px;
-            text-align: center;
-            padding: 0 2rem;
-        }
+        /* Container & Filters */
+        .container { max-width: 1200px; margin: -60px auto 4rem; padding: 0 1.5rem; position: relative; z-index: 10; }
 
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: -50px auto 2rem;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 3;
-        }
-
-        /* Filter Section */
         .filter-section {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
             text-align: center;
-        }
-
-        .filter-section h2 {
-            font-family: 'Righteous', cursive;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 3rem;
         }
 
         .filter-dropdown {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 50px;
-            background: white;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            transition: all 0.3s;
-            max-width: 400px;
             width: 100%;
+            max-width: 450px;
+            padding: 1.2rem;
+            border-radius: 50px;
+            border: 2px solid #eee;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            appearance: none;
+            background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1.5rem center/1.2rem;
         }
 
-        .filter-dropdown:hover {
-            border-color: var(--primary);
-        }
-
-        .filter-dropdown:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-        }
-
-        /* Activity Grid */
+        /* Activity Cards */
         .activity-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .activity-card {
             background: white;
             border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-bottom: 4px solid transparent;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
         }
 
-        .activity-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        .activity-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .activity-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-        }
+        .activity-card:hover { transform: translateY(-10px); border-color: var(--primary); }
 
-        .activity-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .activity-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
+        .activity-icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
         .activity-category {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255, 107, 53, 0.1);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
             color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .activity-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Modal for Activity Details */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: #f0f0f0;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .modal-close:hover {
-            background: var(--primary);
-            color: white;
-            transform: rotate(90deg);
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            margin-top: 3rem;
-        }
-
-        .cta-section h2 {
-            font-family: 'Righteous', cursive;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
+            background: rgba(255,107,53,0.1);
+            padding: 4px 12px;
             border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            margin-top: 1rem;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
         }
+        .activity-card h3 { margin: 1rem 0 0.5rem; font-family: 'Righteous', cursive; }
+        .activity-card p { font-size: 0.9rem; line-height: 1.6; color: #666; }
 
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 5rem 1.5rem 2rem; margin-top: 5rem; }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 3rem;
         }
+        .footer-col h4 { color: var(--primary); margin-bottom: 1.5rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.8rem; }
+        .footer-col a { color: #bbb; text-decoration: none; transition: 0.3s; }
+        .footer-col a:hover { color: white; padding-left: 5px; }
+        .footer-bottom { text-align: center; margin-top: 2rem; font-size: 0.8rem; opacity: 0.6; }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .header-slideshow {
-                height: 300px;
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 0; left: -100%;
+                width: 75%; height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                padding: 5rem 2rem;
+                transition: 0.4s;
             }
-
-            .header-overlay h1 {
-                font-size: 2rem;
-            }
-
-            .activity-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .filter-section {
-                padding: 1.5rem;
-            }
-
-            .container {
-                margin-top: -30px;
-            }
+            .nav-links.active { left: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Slideshow -->
-    <div class="header-slideshow">
-        <div class="slideshow-container">
-            <div class="slide active" style="background-image: url('/static/you2.jpg');"></div>
-            <div class="slide" style="background-image: url('/static/you6.jpg');"></div>
-            <div class="slide" style="background-image: url('/static/you4.jpg');"></div>
-            <div class="slide" style="background-image: url('/static/you5.jpg');"></div>
-        </div>
-        <div class="header-overlay">
-            <div class="logo-container">
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-                </a>
-                <a href="{{ url_for('index') }}">
-                    <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-                </a>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Health Ministry">
             </div>
-            <h1>SEL & Sexual Health Education</h1>
-            <p>Build emotional intelligence, healthy relationships, and make informed choices through interactive activities</p>
+            <ul class="nav-links" id="navMenu">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+            </ul>
+            <button class="menu-toggle" onclick="toggleNav()">☰</button>
+        </div>
+    </nav>
+
+    <div class="header-slideshow">
+        <div class="slide active" style="background-image: url('/static/you2.jpg');"></div>
+        <div class="slide" style="background-image: url('/static/you6.jpg');"></div>
+        <div class="slide" style="background-image: url('/static/you4.jpg');"></div>
+        
+        <div class="header-overlay">
+            <h1>Grow Your Mind & Heart</h1>
+            <p>Evidence-based tools for emotional intelligence and healthy choices.</p>
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- Filter Section -->
         <div class="filter-section">
-            <h2>🎭 Explore Activities</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Choose a category to filter activities</p>
+            <h2 style="font-family: 'Righteous'; margin-bottom: 1rem;">🎯 Skill Explorer</h2>
             <select id="activity-filter" class="filter-dropdown">
-                <option value="all">All Activities</option>
-                <option value="self-awareness">Self-Awareness</option>
-                <option value="self-management">Self-Management</option>
-                <option value="social-awareness">Social Awareness</option>
-                <option value="relationship-skills">Relationship Skills</option>
-                <option value="responsible-decision-making">Responsible Decision-Making</option>
-                <option value="sex-education">Sexual Health Education</option>
+                <option value="all">Everything</option>
+                <option value="self-awareness">Self-Awareness (SDG 3)</option>
+                <option value="self-management">Self-Management (SDG 3)</option>
+                <option value="social-awareness">Social Awareness (SDG 10)</option>
+                <option value="relationship-skills">Relationship Skills (SDG 5)</option>
+                <option value="sex-education">Sexual Health (WHO/UNAIDS)</option>
             </select>
         </div>
 
-        <!-- Activity Grid -->
-        <div class="activity-grid">
-            <!-- Self-Awareness Activities -->
+        <div class="activity-grid" id="activityGrid">
+            
             <div class="activity-card" data-category="self-awareness">
-                <span class="activity-icon">📝</span>
+                <span class="activity-icon">🔍</span>
                 <span class="activity-category">Self-Awareness</span>
-                <h3>Journaling Journey</h3>
-                <p>Reflect on your emotions, strengths, and personal growth through guided journaling prompts.</p>
+                <h3>The Emotion Wheel</h3>
+                <p>Learn to identify complex emotions beyond just "happy" or "sad." Expanding your emotional vocabulary is the first step to mental health resilience.</p>
             </div>
 
             <div class="activity-card" data-category="self-awareness">
-                <span class="activity-icon">🎯</span>
+                <span class="activity-icon">🌟</span>
                 <span class="activity-category">Self-Awareness</span>
                 <h3>Values Discovery</h3>
-                <p>Identify and explore your core values to understand what truly matters to you.</p>
-            </div>
-
-            <!-- Self-Management Activities -->
-            <div class="activity-card" data-category="self-management">
-                <span class="activity-icon">🧘</span>
-                <span class="activity-category">Self-Management</span>
-                <h3>Mindful Moments</h3>
-                <p>Practice meditation and deep breathing exercises to reduce stress and improve focus.</p>
+                <p>UNICEF-aligned activity to identify your core values (honesty, courage, kindness). Understanding what you stand for helps in making tough life decisions.</p>
             </div>
 
             <div class="activity-card" data-category="self-management">
-                <span class="activity-icon">🎮</span>
+                <span class="activity-icon">🌬️</span>
                 <span class="activity-category">Self-Management</span>
-                <h3>Goal Setting Game</h3>
-                <p>Learn to set SMART goals and create action plans to achieve your dreams.</p>
+                <h3>4-7-8 Breathing</h3>
+                <p>A WHO-recommended stress relief technique. Inhale for 4s, hold for 7s, exhale for 8s. Resets your nervous system during exams or social anxiety.</p>
             </div>
 
-            <!-- Social Awareness Activities -->
-            <div class="activity-card" data-category="social-awareness">
-                <span class="activity-icon">👣</span>
-                <span class="activity-category">Social Awareness</span>
-                <h3>Empathy Walk</h3>
-                <p>Step into someone else's shoes and understand different perspectives and experiences.</p>
+            <div class="activity-card" data-category="self-management">
+                <span class="activity-icon">📅</span>
+                <span class="activity-category">Self-Management</span>
+                <h3>The Eisenhower Matrix</h3>
+                <p>Boost your productivity (SDG 4) by categorizing tasks into 'Urgent' and 'Important.' Manage school stress effectively without burning out.</p>
             </div>
 
             <div class="activity-card" data-category="social-awareness">
                 <span class="activity-icon">🌍</span>
                 <span class="activity-category">Social Awareness</span>
-                <h3>Cultural Connections</h3>
-                <p>Explore diverse cultures and build understanding across different communities.</p>
+                <h3>Empathy Mapping</h3>
+                <p>UNESCO framework for understanding different perspectives. Practice seeing the world through the eyes of others to reduce community conflict.</p>
             </div>
 
-            <!-- Relationship Skills Activities -->
+            <div class="activity-card" data-category="social-awareness">
+                <span class="activity-icon">🤝</span>
+                <span class="activity-category">Social Awareness</span>
+                <h3>Active Listening Lab</h3>
+                <p>Learn to listen with your whole body. Focus on verbal and non-verbal cues to build stronger, more empathetic social connections.</p>
+            </div>
+
             <div class="activity-card" data-category="relationship-skills">
                 <span class="activity-icon">💬</span>
                 <span class="activity-category">Relationship Skills</span>
-                <h3>Active Listening Lab</h3>
-                <p>Improve communication by mastering the art of truly listening before responding.</p>
+                <h3>'I' Statements Guide</h3>
+                <p>Navigate conflicts without blame. Practice saying "I feel... when... because..." to express needs clearly and maintain healthy friendships.</p>
             </div>
 
             <div class="activity-card" data-category="relationship-skills">
-                <span class="activity-icon">🤝</span>
+                <span class="activity-icon">🛡️</span>
                 <span class="activity-category">Relationship Skills</span>
-                <h3>Conflict Resolution</h3>
-                <p>Learn healthy ways to handle disagreements and strengthen your relationships.</p>
+                <h3>Peer Pressure Shield</h3>
+                <p>UNICEF-approved roleplay scenarios to practice saying "No" confidently. Develop refusal skills that protect your goals and well-being.</p>
             </div>
 
-            <!-- Decision-Making Activities -->
-            <div class="activity-card" data-category="responsible-decision-making">
-                <span class="activity-icon">🤔</span>
-                <span class="activity-category">Decision-Making</span>
-                <h3>Ethical Dilemmas</h3>
-                <p>Discuss real-life moral choices and explore their consequences through scenarios.</p>
-            </div>
-
-            <div class="activity-card" data-category="responsible-decision-making">
-                <span class="activity-icon">🧩</span>
-                <span class="activity-category">Decision-Making</span>
-                <h3>Problem-Solving Challenge</h3>
-                <p>Develop critical thinking skills to make informed and responsible choices.</p>
-            </div>
-
-            <!-- Sexual Health Activities -->
             <div class="activity-card" data-category="sex-education">
-                <span class="activity-icon">❤️</span>
+                <span class="activity-icon">🛑</span>
                 <span class="activity-category">Sexual Health</span>
-                <h3>Healthy Relationships</h3>
-                <p>Learn about consent, boundaries, and building healthy romantic relationships.</p>
+                <h3>The Consent Contract</h3>
+                <p>UNESCO International Standard: Learn that consent must be Freely given, Reversible, Informed, Enthusiastic, and Specific (FRIES).</p>
             </div>
 
             <div class="activity-card" data-category="sex-education">
                 <span class="activity-icon">🩺</span>
                 <span class="activity-category">Sexual Health</span>
-                <h3>STI Prevention & Safety</h3>
-                <p>Understand STIs, prevention methods, and break down myths about sexual health.</p>
+                <h3>SRHR Basics</h3>
+                <p>UNAIDS-aligned facts on Sexual & Reproductive Health Rights. Understand HIV prevention, contraception, and where to get tested in Ondo State.</p>
             </div>
 
             <div class="activity-card" data-category="sex-education">
-                <span class="activity-icon">💪</span>
+                <span class="activity-icon">⚧️</span>
                 <span class="activity-category">Sexual Health</span>
-                <h3>Body Positivity</h3>
-                <p>Build confidence and learn to appreciate your body during adolescent changes.</p>
+                <h3>Gender Equity Workshop</h3>
+                <p>SDG 5 focus: Challenge gender stereotypes and harmful traditional practices. Promote safety and equality for everyone in your community.</p>
             </div>
 
             <div class="activity-card" data-category="sex-education">
-                <span class="activity-icon">🗣️</span>
+                <span class="activity-icon">📱</span>
                 <span class="activity-category">Sexual Health</span>
-                <h3>Communication & Consent</h3>
-                <p>Practice expressing boundaries and understanding consent in all relationships.</p>
+                <h3>Digital Safety & Sexting</h3>
+                <p>Protect your digital footprint. Learn the legal and emotional risks of sharing intimate images and how to stay safe in the online dating world.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Ondo Youth Connect</h4>
+                <p>Driving Sustainable Development Goals through mental health awareness and digital youth empowerment in Ondo State.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Resource Hub</h4>
+                <ul>
+                    <li><a href="{{ url_for('Resources') }}">E-Library</a></li>
+                    <li><a href="{{ url_for('mental') }}">Self-Assessment</a></li>
+                    <li><a href="#">Emergency Hotlines</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="tel:+234800000">Call a Counselor</a></li>
+                    <li><a href="#">WhatsApp Support</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
             </div>
         </div>
-
-        <!-- CTA Section -->
-        <div class="cta-section">
-            <h2>Need Personal Support?</h2>
-            <p style="color: #666; margin-bottom: 1.5rem; font-size: 1.1rem;">
-                Our trained counselors are here to help you navigate challenges and support your growth
-            </p>
-            <a href="{{ url_for('Register') }}" class="cta-btn">Book Free Consultation</a>
+        <div class="footer-bottom">
+            &copy; 2026 Ondo State Ministry of Health. In partnership with SDG Youth Initiative.
         </div>
-    </div>
-
-    <!-- Modal for Activity Details -->
-    <div class="modal" id="activity-modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <div id="modal-body"></div>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // Slideshow functionality
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
-
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            currentSlide = (n + slides.length) % slides.length;
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
-        }
+        }, 5000);
 
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        // Change slide every 5 seconds
-        setInterval(nextSlide, 5000);
-
-        // Filter functionality
-        const filterDropdown = document.getElementById('activity-filter');
-        const activityCards = document.querySelectorAll('.activity-card');
-
-        filterDropdown.addEventListener('change', function() {
-            const selectedCategory = this.value;
-            
-            activityCards.forEach(card => {
-                if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
-                    card.style.display = 'block';
-                    card.style.animation = 'slideIn 0.5s ease-out';
-                } else {
-                    card.style.display = 'none';
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 80); 
                 }
             });
-        });
+        }, observerOptions);
 
-        // Modal functionality
-        function closeModal() {
-            document.getElementById('activity-modal').style.display = 'none';
-        }
+        document.querySelectorAll('.activity-card').forEach(card => observer.observe(card));
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('activity-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // Add click handlers to cards (optional expansion)
-        activityCards.forEach(card => {
-            card.addEventListener('click', function() {
-                const title = this.querySelector('h3').textContent;
-                const description = this.querySelector('p').textContent;
-                const category = this.querySelector('.activity-category').textContent;
-                
-                document.getElementById('modal-body').innerHTML = `
-                    <span class="activity-category">${category}</span>
-                    <h2 style="margin: 1rem 0;">${title}</h2>
-                    <p style="color: #666; line-height: 1.8;">${description}</p>
-                    <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 10px;">
-                        <h3 style="margin-bottom: 1rem;">How to Get Started</h3>
-                        <p style="color: #666;">This activity helps you develop important life skills. 
-                        To learn more or get personalized guidance, book a session with our counselors!</p>
-                    </div>
-                `;
-                
-                document.getElementById('activity-modal').style.display = 'flex';
+        document.getElementById('activity-filter').addEventListener('change', function(e) {
+            const cat = e.target.value;
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'block' : 'none';
             });
         });
     </script>
