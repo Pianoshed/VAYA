@@ -42,26 +42,96 @@
             70% { box-shadow: 0 0 0 15px rgba(255, 107, 53, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
         }
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
 
         /* --- NAVIGATION HEADER --- */
         nav { 
             background: rgba(26, 26, 46, 0.95); 
             backdrop-filter: blur(15px); 
-            padding: 0.8rem 2rem; 
+            padding: 1rem 2rem; 
             position: fixed; 
             width: 100%; 
             top: 0; 
             z-index: 1000; 
             border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .logo-section { display: flex; align-items: center; }
-        .logo-section img { height: 45px; margin-right: 15px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
+        
+        .logo-section { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+        }
+        
+        .logo-section img { 
+            height: 45px; 
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); 
+        }
+        
+        .nav-links { 
+            display: flex; 
+            gap: 20px; 
+            align-items: center; 
+        }
+        
+        .nav-links a { 
+            color: white; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            transition: all 0.3s ease;
+            padding: 8px 14px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover { 
+            color: var(--primary); 
+            background: rgba(255, 107, 53, 0.1);
+        }
+        
+        .nav-links a i {
+            margin-right: 6px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
 
         /* Progress Bar */
         .progress-sticky { 
@@ -73,8 +143,29 @@
             border-bottom: 4px solid var(--primary); 
             backdrop-filter: blur(10px); 
         }
-        .bar-bg { flex: 1; height: 12px; background: #eee; border-radius: 20px; overflow: hidden; margin: 0 15px; }
-        .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        .progress-container {
+            display: flex; 
+            align-items: center; 
+            max-width: 1200px; 
+            margin: 0 auto;
+        }
+        
+        .bar-bg { 
+            flex: 1; 
+            height: 12px; 
+            background: #eee; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            margin: 0 15px; 
+        }
+        
+        .bar-fill { 
+            height: 100%; 
+            width: 0%; 
+            background: linear-gradient(90deg, var(--secondary), var(--primary)); 
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
 
         /* Main Content Wrapper */
         .main-content { max-width: 850px; margin: 120px auto 50px; padding: 0 1.5rem; flex: 1; }
@@ -84,7 +175,7 @@
         .personal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
         .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--dark); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .form-group input, .form-group select { width: 100%; padding: 1rem; border: 2px solid #f0f0f0; border-radius: 15px; transition: 0.3s; font-family: inherit; font-size: 1rem; }
-        .form-group input:focus { border-color: var(--primary); outline: none; background: #fffaf5; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); outline: none; background: #fffaf5; }
 
         /* Question Block Styling */
         .question-block { 
@@ -139,29 +230,103 @@
             border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.5;
         }
 
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .personal-info, .footer-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            nav {
+                padding: 1rem 1.5rem;
+            }
+            
+            .logo-section img {
+                height: 35px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background: rgba(26, 26, 46, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.1rem;
+                width: 100%;
+                text-align: center;
+                padding: 15px 20px;
+            }
+            
+            .personal-info, .footer-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .form-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .main-content {
+                margin-top: 100px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-section {
+                gap: 8px;
+            }
+            
+            .logo-section img {
+                height: 30px;
+            }
+            
+            .nav-links {
+                width: 85%;
+            }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-section">
-            <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-            <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-            <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-        </div>
-        <div class="nav-links">
-            <a href="/"><i class="fas fa-home"></i> Home</a>
-            <a href="/mental"><i class="fas fa-brain"></i> Mental Health</a>
-            <a href="/Resources"><i class="fas fa-book"></i> Resources</a>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
+                <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+            </div>
+            
+            <div class="nav-links" id="navLinks">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/mental"><i class="fas fa-brain"></i> Mood Tracker</a>
+                <a href="/Resources"><i class="fas fa-book"></i> Resources</a>
+                <a href="/sel_activities"><i class="fas fa-star"></i> SEL Activities</a>
+            </div>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
     <div class="progress-sticky">
-        <div class="nav-container" style="display:flex; align-items: center; max-width:1200px; margin:0 auto;">
+        <div class="progress-container">
             <span style="font-weight: 800; font-size: 0.9rem;">VIBE PROGRESS:</span>
             <div class="bar-bg"><div class="bar-fill" id="progressBar"></div></div>
             <span id="percLabel" style="font-weight: 800; color: var(--primary);">0%</span>
@@ -242,27 +407,72 @@
     </footer>
 
     <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Questions Array - ALIGNED WITH BACKEND SCORING
         const questions = [
+            // q1-q3: Reverse scoring (Never=5, Always=1) - Positive questions
             { text: "Have you felt cheerful and in good spirits?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
             { text: "Have you felt calm and relaxed?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
             { text: "Have you felt active and vigorous lately?", cat: "Energy", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q4-q6: Normal scoring (Never=1, Always=5)
             { text: "Do you wake up feeling fresh and rested? 😴", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
             { text: "Is your daily life filled with things that interest you?", cat: "Life", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
             { text: "Do you feel little interest or pleasure in doing things? 😔", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"] },
+            
+            // q7: Reverse scoring - Positive question
             { text: "Do you feel down, depressed, or hopeless?", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"] },
+            
+            // q8-q9: Normal scoring (Never=1, Always=5) - Negative questions
             { text: "How often do you find it hard to concentrate on school or work?", cat: "Focus", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
             { text: "How often do you feel nervous, anxious, or on edge?", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q10: Reverse scoring - Positive question
             { text: "Do you feel like your emotions are out of control? 🌊", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q11-q14: Normal scoring (4 options)
             { text: "Do you feel safe and respected in your home environment? 🏠", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"] },
-            { text: "Do you have a trusted person to talk to if you're in trouble?", cat: "Support", color: "#d1ffd6", opts: ["No one", "Maybe one person", "Yes, I have a squad"] },
+            { text: "Do you have a trusted person to talk to if you're in trouble?", cat: "Support", color: "#d1ffd6", opts: ["No one", "Maybe one person", "I have someone", "Yes, I have a squad"] },
             { text: "Has anyone physically or emotionally hurt you recently? 🛑", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"] },
             { text: "Do you feel pressured to do things you don't want to do?", cat: "Boundaries", color: "#ffd1d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q15: Reverse scoring - Positive question
             { text: "Do you feel you can say 'No' without being afraid?", cat: "Boundaries", color: "#ffd1d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q16: Normal scoring (4 options)
             { text: "Do you feel like you belong in your community or peer group?", cat: "Social", color: "#e9d1ff", opts: ["Not at all", "A little", "Somewhat", "Very much"] },
+            
+            // q17: Reverse scoring - Positive question (5 options)
             { text: "How often do you feel lonely even when with others?", cat: "Social", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"] },
+            
+            // q18-q20: Normal scoring (4 options)
             { text: "Are you optimistic about what the future holds for you? ✨", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"] },
             { text: "When things go wrong, do you feel you can handle them?", cat: "Resilience", color: "#d1ffd6", opts: ["I give up", "With lots of help", "Mostly", "I'm a survivor"] },
-            { text: "Do you know where to go for help in Ondo if you feel sad?", cat: "Help", color: "#fff4d1", opts: ["No", "I've heard of places", "Yes, I know Youth Connect"] }
+            { text: "Do you know where to go for help in Ondo if you feel sad?", cat: "Help", color: "#fff4d1", opts: ["No", "I've heard of places", "I know some places", "Yes, I know Youth Connect"] }
         ];
 
         const container = document.getElementById("questions-container");
