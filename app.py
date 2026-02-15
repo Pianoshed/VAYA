@@ -46,12 +46,33 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 CSV_FILE = os.path.join(UPLOAD_FOLDER, "responses.csv")
 EXCEL_FILE = os.path.join(UPLOAD_FOLDER, "responses.xlsx")
 
+# Game progress data file
+GAME_PROGRESS_FILE = os.path.join(UPLOAD_FOLDER, 'game_progress.json')
+
 # Admin credentials (hashed password)
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD', 'admin123'))  # Always store hashed passwords
 
 # API Keys
 IPGEO_API_KEY = os.getenv('IPGEO_API_KEY')
+
+# Initialize game progress file if it doesn't exist
+if not os.path.exists(GAME_PROGRESS_FILE):
+    with open(GAME_PROGRESS_FILE, 'w') as f:
+        json.dump([], f)
+
+def load_game_data():
+    """Load game progress data from file"""
+    try:
+        with open(GAME_PROGRESS_FILE, 'r') as f:
+            return json.load(f)
+    except:
+        return []
+
+def save_game_data(data):
+    """Save game progress data to file"""
+    with open(GAME_PROGRESS_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
 
 # Function to load journal entries
 def load_journal_entries():
@@ -760,13 +781,24 @@ def admin_panel():
     total_visits = PageVisit.query.count()
     unique_visitors = db.session.query(func.count(func.distinct(PageVisit.ip_address))).scalar()
     
+    # Get game stats
+    game_data = load_game_data()
+    game_stats = {
+        'total_sessions': len(game_data),
+        'total_glimmers': sum(entry.get('glimmers', 0) for entry in game_data),
+        'average_glimmers': round(sum(entry.get('glimmers', 0) for entry in game_data) / len(game_data), 2) if game_data else 0,
+        'highest_score': max((entry.get('glimmers', 0) for entry in game_data), default=0),
+        'latest_target': game_data[-1].get('target', 10) if game_data else 10
+    }
+    
     return render_template(
         "admin_panel.html",
         assessments=assessments,
         analytics=analytics,
         files=files,
         total_visits=total_visits,
-        unique_visitors=unique_visitors
+        unique_visitors=unique_visitors,
+        game_stats=game_stats
     )
 
 @app.route('/admin/analytics/api')
@@ -798,6 +830,174 @@ def admin_logout():
     session.pop("is_admin", None)
     return redirect(url_for("admin_login"))
 
+@app.route('/runnerapp')
+def runner_app():
+    """Serve the Spark Runner game"""
+    return render_template('runnerapp.html')
+
+# ==================== SPARK RUNNER GAME API ENDPOINTS ====================
+
+@app.route('/api/save_progress', methods=['POST'])
+def save_progress():
+    """Save player's Spark Runner game progress"""
+    try:
+        data = request.get_json()
+        
+        # Validate input
+        if not data or 'glimmers' not in data:
+            return jsonify({
+                'success': False,
+                'message': 'Invalid data - glimmers count required'
+            }), 400
+        
+        # Load existing data
+        progress_data = load_game_data()
+        
+        # Create new progress entry
+        new_entry = {
+            'glimmers': data.get('glimmers', 0),
+            'target': data.get('target', 10),
+            'timestamp': data.get('timestamp', datetime.now().isoformat()),
+            'session_id': len(progress_data) + 1,
+            'user_agent': request.headers.get('User-Agent', 'Unknown'),
+            'ip_address': request.remote_addr
+        }
+        
+        # Add to data
+        progress_data.append(new_entry)
+        
+        # Save to file
+        save_game_data(progress_data)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Progress saved successfully',
+            'data': new_entry
+        }), 200
+        
+    except Exception as e:
+        print(f"Error saving game progress: {e}")
+        return jsonify({
+            'success': False,
+            'message': f'Error saving progress: {str(e)}'
+        }), 500
+
+@app.route('/api/get_progress', methods=['GET'])
+def get_progress():
+    """Get all Spark Runner game progress records"""
+    try:
+        progress_data = load_game_data()
+        
+        return jsonify({
+            'success': True,
+            'total_sessions': len(progress_data),
+            'data': progress_data
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error retrieving progress: {str(e)}'
+        }), 500
+
+@app.route('/api/get_stats', methods=['GET'])
+def get_stats():
+    """Get Spark Runner player statistics"""
+    try:
+        progress_data = load_game_data()
+        
+        if not progress_data:
+            return jsonify({
+                'success': True,
+                'stats': {
+                    'total_sessions': 0,
+                    'total_glimmers': 0,
+                    'average_glimmers': 0,
+                    'highest_score': 0,
+                    'latest_target': 10,
+                    'last_played': None
+                }
+            }), 200
+        
+        total_glimmers = sum(entry.get('glimmers', 0) for entry in progress_data)
+        highest_score = max(entry.get('glimmers', 0) for entry in progress_data)
+        average_glimmers = total_glimmers / len(progress_data) if progress_data else 0
+        latest_target = progress_data[-1].get('target', 10) if progress_data else 10
+        
+        stats = {
+            'total_sessions': len(progress_data),
+            'total_glimmers': total_glimmers,
+            'average_glimmers': round(average_glimmers, 2),
+            'highest_score': highest_score,
+            'latest_target': latest_target,
+            'last_played': progress_data[-1].get('timestamp') if progress_data else None
+        }
+        
+        return jsonify({
+            'success': True,
+            'stats': stats
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error calculating stats: {str(e)}'
+        }), 500
+
+@app.route('/api/reset_progress', methods=['DELETE'])
+def reset_progress():
+    """Reset all Spark Runner game progress (Admin only)"""
+    if not session.get("is_admin"):
+        return jsonify({
+            'success': False,
+            'message': 'Unauthorized - Admin access required'
+        }), 401
+    
+    try:
+        save_game_data([])
+        
+        return jsonify({
+            'success': True,
+            'message': 'All game progress has been reset'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error resetting progress: {str(e)}'
+        }), 500
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'Mental Health Platform with Spark Runner',
+        'timestamp': datetime.now().isoformat(),
+        'version': '2.0'
+    }), 200
+
 ### **RUN FLASK APP**
 if __name__ == "__main__":
+    print("=" * 60)
+    print("Mental Health Platform with Spark Runner Game")
+    print("=" * 60)
+    print("Server running on http://localhost:5000")
+    print("\nAvailable Routes:")
+    print("  Main Site:")
+    print("    /                    - Homepage")
+    print("    /mental              - Mental health resources")
+    print("    /mood_tracker        - Mood tracking")
+    print("    /runnerapp           - Spark Runner Game")
+    print("\n  Game API:")
+    print("    POST   /api/save_progress   - Save game progress")
+    print("    GET    /api/get_progress    - Get all progress")
+    print("    GET    /api/get_stats       - Get player stats")
+    print("    DELETE /api/reset_progress  - Reset progress (admin)")
+    print("    GET    /api/health          - Health check")
+    print("\n  Admin:")
+    print("    /admin/login         - Admin login")
+    print("    /admin/panel         - Admin dashboard")
+    print("=" * 60)
+    
     app.run(debug=True)

@@ -1,0 +1,66 @@
+[
+  {
+    "glimmers": 0,
+    "target": 10,
+    "timestamp": "2026-02-15T10:21:41.783Z",
+    "session_id": 1,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 10,
+    "target": 20,
+    "timestamp": "2026-02-15T10:22:02.806Z",
+    "session_id": 2,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 0,
+    "target": 10,
+    "timestamp": "2026-02-15T10:22:11.951Z",
+    "session_id": 3,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 10,
+    "target": 20,
+    "timestamp": "2026-02-15T10:22:31.259Z",
+    "session_id": 4,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 0,
+    "target": 10,
+    "timestamp": "2026-02-15T10:24:16.235Z",
+    "session_id": 5,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 10,
+    "target": 20,
+    "timestamp": "2026-02-15T10:29:10.305Z",
+    "session_id": 6,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 20,
+    "target": 30,
+    "timestamp": "2026-02-15T10:29:21.405Z",
+    "session_id": 7,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  },
+  {
+    "glimmers": 30,
+    "target": 40,
+    "timestamp": "2026-02-15T10:33:02.772Z",
+    "session_id": 8,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "ip_address": "127.0.0.1"
+  }
+]
