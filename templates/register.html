@@ -265,10 +265,13 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="{{ url_for('index') }}" onclick="toggleMenu()">Home</a></li>
-                <li><a href="{{ url_for('mental') }}" onclick="toggleMenu()">Assessment</a></li>
-                <li><a href="{{ url_for('sel_activities') }}" onclick="toggleMenu()">Toolkit</a></li>
-                <li><a href="{{ url_for('register') }}" onclick="toggleMenu()">Get Help</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
             </ul>
         </div>
     </nav>
