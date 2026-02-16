@@ -2,1194 +2,757 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe Check - Youth Connect Hub</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style>
-        :root {
-            --primary: #FF6B35;
-            --secondary: #F7931E;
-            --dark: #1A1A2E;
-            --success: #2ecc71;
-            --light: #ffffff;
-            --danger: #e74c3c;
-        }
-
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: #000; 
-            color: var(--dark); 
-            overflow-x: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
-        }
-
-        /* Background & Overlay */
-        body::before {
-            content: ''; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background-image: url("{{ url_for('static', filename='you1.jpg') }}");
-            background-size: cover; 
-            background-position: center; 
-            z-index: -2;
-        }
-        
-        body::after {
-            content: ''; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background: linear-gradient(135deg, rgba(26, 26, 46, 0.92) 0%, rgba(157, 78, 221, 0.65) 100%);
-            z-index: -1;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 107, 53, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* --- NAVIGATION HEADER --- */
-        nav { 
-            background: rgba(26, 26, 46, 0.95); 
-            backdrop-filter: blur(15px); 
-            padding: 1rem 1.5rem; 
-            position: fixed; 
-            width: 100%; 
-            top: 0; 
-            z-index: 1000; 
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo-section { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px;
-        }
-        
-        .logo-section img { 
-            height: 35px; 
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); 
-        }
-        
-        .nav-links { 
-            display: flex; 
-            gap: 20px; 
-            align-items: center; 
-        }
-        
-        .nav-links ul {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-            align-items: center;
-        }
-        
-        .nav-links a { 
-            color: white; 
-            text-decoration: none; 
-            font-weight: 600; 
-            font-size: 0.9rem; 
-            transition: all 0.3s ease;
-            padding: 8px 14px;
-            border-radius: 8px;
-            white-space: nowrap;
-        }
-        
-        .nav-links a:hover { 
-            color: var(--primary); 
-            background: rgba(255, 107, 53, 0.1);
-        }
-        
-        .nav-links a i {
-            margin-right: 6px;
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-        
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-        
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Progress Bar */
-        .progress-sticky { 
-            position: sticky; 
-            top: 65px; 
-            z-index: 900; 
-            background: rgba(255,255,255,0.95); 
-            padding: 12px 15px; 
-            border-bottom: 4px solid var(--primary); 
-            backdrop-filter: blur(10px); 
-        }
-        
-        .progress-container {
-            display: flex; 
-            align-items: center; 
-            max-width: 1200px; 
-            margin: 0 auto;
-            gap: 10px;
-        }
-        
-        .progress-label {
-            font-weight: 800;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-        
-        .bar-bg { 
-            flex: 1; 
-            height: 10px; 
-            background: #eee; 
-            border-radius: 20px; 
-            overflow: hidden; 
-        }
-        
-        .bar-fill { 
-            height: 100%; 
-            width: 0%; 
-            background: linear-gradient(90deg, var(--secondary), var(--primary)); 
-            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        
-        .progress-percent {
-            font-weight: 800;
-            color: var(--primary);
-            font-size: 0.85rem;
-            min-width: 35px;
-            text-align: right;
-        }
-
-        /* Main Content Wrapper */
-        .main-content { 
-            max-width: 850px; 
-            margin: 110px auto 30px; 
-            padding: 0 15px; 
-            flex: 1; 
-        }
-        
-        .form-card { 
-            background: white; 
-            border-radius: 20px; 
-            padding: 2rem 1.5rem; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3); 
-            animation: fadeInUp 0.8s ease-out; 
-        }
-        
-        .form-card h2 {
-            font-family: 'Righteous', cursive;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-        
-        .form-card > p {
-            margin-bottom: 1.5rem;
-            opacity: 0.7;
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        /* Confidential Disclaimer */
-        .disclaimer-box {
-            background: linear-gradient(135deg, #fff9e6, #ffe6e6);
-            border: 2px solid var(--danger);
-            border-radius: 15px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.15);
-        }
-
-        .disclaimer-box h3 {
-            color: var(--danger);
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .disclaimer-box p {
-            line-height: 1.6;
-            font-size: 0.85rem;
-            color: #2d3436;
-            margin-bottom: 10px;
-        }
-
-        .emergency-contact {
-            background: rgba(231, 76, 60, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            border-left: 4px solid var(--danger);
-        }
-
-        .emergency-contact strong {
-            color: var(--danger);
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .emergency-contact a {
-            color: var(--danger);
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-block;
-            margin: 3px 0;
-        }
-
-        .emergency-contact a:hover {
-            text-decoration: underline;
-        }
-
-        /* Personal Info Grid */
-        .personal-info { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 1.25rem; 
-            margin-bottom: 2rem; 
-        }
-        
-        .form-group label { 
-            display: block; 
-            font-weight: 700; 
-            margin-bottom: 6px; 
-            color: var(--dark); 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-        }
-        
-        .form-group input, 
-        .form-group select { 
-            width: 100%; 
-            padding: 0.875rem; 
-            border: 2px solid #f0f0f0; 
-            border-radius: 12px; 
-            transition: 0.3s; 
-            font-family: inherit; 
-            font-size: 0.95rem; 
-        }
-        
-        .form-group input:focus, 
-        .form-group select:focus { 
-            border-color: var(--primary); 
-            outline: none; 
-            background: #fffaf5; 
-        }
-
-        /* Question Block Styling */
-        .question-block { 
-            background: #f9f9f9; 
-            padding: 1.25rem; 
-            border-radius: 15px; 
-            margin-bottom: 1.25rem; 
-            border-left: 6px solid #ddd; 
-            transition: 0.4s; 
-            position: relative;
-        }
-        
-        .question-block.answered { 
-            background: #fff; 
-            border-left-color: var(--success); 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05); 
-            transform: scale(1.01);
-        }
-
-        /* Sensitive Question Styling */
-        .question-block.sensitive {
-            border-left: 6px solid var(--danger);
-            border: 2px dashed rgba(231, 76, 60, 0.3);
-            background: linear-gradient(135deg, #fff5f5 0%, #fffaf5 100%);
-        }
-
-        .question-block.sensitive:hover {
-            background: #fff0f0;
-            box-shadow: 0 6px 16px rgba(231, 76, 60, 0.1);
-        }
-
-        .sensitive-badge {
-            background: var(--danger);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            margin-left: 8px;
-            display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .privacy-note {
-            font-size: 0.75rem;
-            color: #636e72;
-            font-style: italic;
-            margin: 6px 0 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .category-tag { 
-            font-size: 0.65rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            padding: 4px 10px; 
-            border-radius: 6px; 
-            margin-bottom: 10px; 
-            display: inline-block; 
-        }
-        
-        .question-text { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            line-height: 1.5; 
-            margin-bottom: 12px; 
-        }
-        
-        .question-block select {
-            width: 100%;
-            padding: 0.875rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            transition: 0.3s;
-            background: white;
-        }
-        
-        .question-block select:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: #fffaf5;
-        }
-
-        /* Support Banner */
-        .support-banner {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            left: 15px;
-            max-width: 400px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, var(--danger), #e17055);
-            color: white;
-            padding: 1.25rem;
-            border-radius: 15px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-            z-index: 9999;
-            animation: slideIn 0.5s ease;
-        }
-
-        .support-banner-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 10px;
-        }
-
-        .support-banner-header h4 {
-            font-size: 1.05rem;
-            font-weight: 800;
-        }
-
-        .close-support {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .close-support:hover {
-            opacity: 1;
-        }
-
-        .support-banner p {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        .support-contacts {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .support-contacts strong {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
-
-        .support-contacts a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin: 4px 0;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .support-contacts a:hover {
-            text-decoration: underline;
-        }
-
-        .submit-btn {
-            width: 100%; 
-            padding: 1.25rem; 
-            border-radius: 50px; 
-            border: none; 
-            background: var(--primary); 
-            color: white;
-            font-weight: 800; 
-            font-size: 1.05rem; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            margin-top: 1.5rem; 
-            animation: pulse 2s infinite; 
-            transition: 0.3s;
-        }
-        
-        .submit-btn:hover { 
-            background: #e85a28; 
-            transform: translateY(-2px); 
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 3rem 1.5rem 1.5rem;
-            margin-top: 40px;
-            border-top: 4px solid var(--primary);
-        }
-        
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        .footer-brand h2 { 
-            font-family: 'Righteous', cursive; 
-            color: var(--primary); 
-            margin-bottom: 0.75rem; 
-            font-size: 1.5rem;
-        }
-        
-        .footer-brand p { 
-            opacity: 0.7; 
-            line-height: 1.6; 
-            font-size: 0.85rem; 
-        }
-        
-        .footer-links h4 { 
-            margin-bottom: 1rem; 
-            font-size: 1rem; 
-            color: var(--secondary); 
-        }
-        
-        .footer-links ul { 
-            list-style: none; 
-        }
-        
-        .footer-links li { 
-            margin-bottom: 0.6rem; 
-        }
-        
-        .footer-links a { 
-            color: rgba(255,255,255,0.6); 
-            text-decoration: none; 
-            transition: 0.3s; 
-            font-size: 0.85rem; 
-        }
-        
-        .footer-links a:hover { 
-            color: white; 
-            padding-left: 5px; 
-        }
-        
-        .social-icons { 
-            display: flex; 
-            gap: 12px; 
-            margin-top: 1.25rem; 
-        }
-        
-        .social-icons a { 
-            width: 38px; 
-            height: 38px; 
-            background: rgba(255,255,255,0.1); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 50%; 
-            color: white; 
-            transition: 0.3s; 
-        }
-        
-        .social-icons a:hover { 
-            background: var(--primary); 
-            transform: translateY(-3px); 
-        }
-        
-        .footer-bottom { 
-            text-align: center; 
-            margin-top: 2rem; 
-            padding-top: 1.5rem; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-            font-size: 0.75rem; 
-            opacity: 0.5;
-        }
-
-        /* Tablet Responsive (481px - 768px) */
-        @media (min-width: 481px) {
-            .logo-section img {
-                height: 40px;
-            }
-            
-            .personal-info {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-            
-            .form-card {
-                padding: 2.5rem 2rem;
-            }
-            
-            .form-card h2 {
-                font-size: 1.75rem;
-            }
-            
-            .question-text {
-                font-size: 1rem;
-            }
-            
-            .support-banner {
-                left: auto;
-                right: 20px;
-                max-width: 380px;
-            }
-        }
-
-        /* Desktop Responsive (769px and up) */
-        @media (min-width: 769px) {
-            nav {
-                padding: 1rem 2rem;
-            }
-            
-            .logo-section {
-                gap: 15px;
-            }
-            
-            .logo-section img {
-                height: 45px;
-            }
-            
-            .progress-sticky {
-                padding: 15px;
-            }
-            
-            .progress-label {
-                font-size: 0.9rem;
-            }
-            
-            .bar-bg {
-                height: 12px;
-            }
-            
-            .main-content {
-                margin: 120px auto 50px;
-                padding: 0 1.5rem;
-            }
-            
-            .form-card {
-                padding: 3rem;
-                border-radius: 30px;
-            }
-            
-            .form-card h2 {
-                font-size: 2rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .form-card > p {
-                font-size: 0.9rem;
-                margin-bottom: 2rem;
-            }
-            
-            .personal-info {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-                margin-bottom: 2.5rem;
-            }
-            
-            .form-group label {
-                font-size: 0.85rem;
-                margin-bottom: 8px;
-            }
-            
-            .form-group input,
-            .form-group select {
-                padding: 1rem;
-                font-size: 1rem;
-            }
-            
-            .disclaimer-box {
-                padding: 1.5rem;
-                border-radius: 20px;
-                margin-bottom: 2rem;
-            }
-            
-            .disclaimer-box h3 {
-                font-size: 1.3rem;
-                margin-bottom: 1rem;
-            }
-            
-            .disclaimer-box p {
-                font-size: 0.95rem;
-            }
-            
-            .emergency-contact {
-                padding: 15px;
-            }
-            
-            .question-block {
-                padding: 2rem;
-                border-radius: 20px;
-                border-left-width: 8px;
-            }
-            
-            .question-text {
-                font-size: 1.1rem;
-                margin-bottom: 15px;
-            }
-            
-            .category-tag {
-                font-size: 0.7rem;
-                padding: 5px 12px;
-                margin-bottom: 12px;
-            }
-            
-            .sensitive-badge {
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-            
-            .privacy-note {
-                font-size: 0.85rem;
-            }
-            
-            .submit-btn {
-                padding: 1.5rem;
-                font-size: 1.2rem;
-                margin-top: 2rem;
-            }
-            
-            .support-banner {
-                padding: 1.5rem;
-                max-width: 400px;
-            }
-            
-            .support-banner-header h4 {
-                font-size: 1.2rem;
-            }
-            
-            .support-banner p {
-                font-size: 0.95rem;
-            }
-            
-            footer {
-                padding: 4rem 2rem 2rem;
-            }
-            
-            .footer-grid {
-                grid-template-columns: 2fr 1fr 1fr;
-                gap: 3rem;
-            }
-            
-            .footer-brand h2 {
-                font-size: 1.75rem;
-            }
-            
-            .footer-brand p {
-                font-size: 0.9rem;
-            }
-            
-            .footer-links h4 {
-                font-size: 1.1rem;
-            }
-            
-            .footer-links a {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Mobile Specific Styles */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                height: 100vh;
-                width: 75%;
-                max-width: 300px;
-                background: rgba(26, 26, 46, 0.98);
-                backdrop-filter: blur(15px);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 0;
-                transition: right 0.4s ease;
-                box-shadow: -5px 0 20px rgba(0,0,0,0.5);
-            }
-            
-            .nav-links ul {
-                flex-direction: column;
-                gap: 0;
-                width: 100%;
-            }
-            
-            .nav-links.active {
-                right: 0;
-            }
-            
-            .nav-links a {
-                font-size: 1rem;
-                width: 100%;
-                text-align: center;
-                padding: 15px 20px;
-                border-radius: 0;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo-section {
-                gap: 6px;
-            }
-            
-            .logo-section img {
-                height: 28px;
-            }
-            
-            .nav-links {
-                width: 85%;
-            }
-            
-            .progress-sticky {
-                top: 60px;
-            }
-            
-            .form-card h2 {
-                font-size: 1.3rem;
-            }
-            
-            .disclaimer-box h3 {
-                font-size: 1rem;
-            }
-            
-            .question-text {
-                font-size: 0.9rem;
-            }
-            
-            .submit-btn {
-                font-size: 0.95rem;
-                padding: 1.1rem;
-            }
-        }
-
-        /* Very Small Screens */
-        @media (max-width: 360px) {
-            .logo-section img {
-                height: 25px;
-            }
-            
-            .form-card {
-                padding: 1.5rem 1rem;
-            }
-            
-            .question-block {
-                padding: 1rem;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Spark Runner: Level Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <nav>
-        <div class="nav-container">
-            <div class="logo-section">
-                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-                <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
-            </div>
-            
-            <div class="nav-links" id="navLinks">
-                <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                    <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                    <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                    <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                    <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                    <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
-                </ul>
-            </div>
-            
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+<div id="game-window">
+    <div id="start-page" class="page">
+        <nav class="main-nav">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/mental" class="nav-link">🧠 Mental Health</a>
+            <a href="/mood_tracker" class="nav-link">📊 Mood Tracker</a>
+            <a href="/Resources" class="nav-link">📚 Resources</a>
+            <a href="/sel_activities" class="nav-link">🎯 Activities</a>
+        </nav>
+        <div class="start-bg">
+            <div class="star-field" id="star-field"></div>
+            <div class="city-silhouette"></div>
         </div>
-    </nav>
-
-    <div class="progress-sticky">
-        <div class="progress-container">
-            <span class="progress-label">PROGRESS:</span>
-            <div class="bar-bg"><div class="bar-fill" id="progressBar"></div></div>
-            <span id="percLabel" class="progress-percent">0%</span>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="form-card">
-            <form id="vibeForm" method="POST" action="{{ url_for('submit_assessment') }}">
-                
-                <h2>Vibe Assessment 🔍</h2>
-                <p>Please provide your basic details so we can tailor your wellness journey results.</p>
-                
-                <div class="personal-info">
-                    <div class="form-group">
-                        <label>Email Address 📧</label>
-                        <input type="email" name="email" placeholder="Required for your results" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number 📱</label>
-                        <input type="tel" name="phone" placeholder="Valid Nigerian Phone No." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Your Age 🎂</label>
-                        <input type="number" name="age" min="10" max="35" placeholder="e.g. 21" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Gender 🌈</label>
-                        <select name="sex" required>
-                            <option value="">Select...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
+        <div class="game-intro">
+            <h1 class="title">🏃 Spark Runner</h1>
+            <p class="subtitle">Collect glimmers of hope on your journey through the world</p>
+            <div class="info-cards">
+                <div class="info-card"><div class="card-icon">🎮</div><div class="card-title">How to Play</div><div class="card-text">Jump to collect glimmers<br>Press SPACE or TAP</div></div>
+                <div class="info-card"><div class="card-icon">⚡</div><div class="card-title">Speed Up</div><div class="card-text">Game gets faster<br>as you collect more!</div></div>
+                <div class="info-card"><div class="card-icon">🌍</div><div class="card-title">World Change</div><div class="card-text">Every 20 streak<br>world transforms!</div></div>
+                <div class="info-card"><div class="card-icon">🦘</div><div class="card-title">Double Jump</div><div class="card-text">Tap twice in air<br>for higher glimmers</div></div>
+            </div>
+            <div class="character-selection">
+                <h2 class="choose-text">Choose Your Runner</h2>
+                <div class="char-buttons">
+                    <button class="btn btn-female" onclick="initGame('female')">🏃‍♀️ Female Runner</button>
+                    <button class="btn btn-male" onclick="initGame('male')">🏃‍♂️ Male Runner</button>
                 </div>
-
-                <!-- Confidential Disclaimer -->
-                <div class="disclaimer-box">
-                    <h3><i class="fas fa-lock"></i> Confidential & Safe Space</h3>
-                    <p>
-                        <strong>Your privacy matters:</strong> This assessment includes sensitive questions about your safety, 
-                        sexual health, and well-being. All responses are completely confidential and will help us provide 
-                        you with the right support and resources.
-                    </p>
-                    <p>
-                        If you indicate you're in danger or need immediate help, your results will include emergency resources 
-                        and support contacts. <strong>You're not alone - help is available.</strong>
-                    </p>
-                    <div class="emergency-contact">
-                        <strong>📞 Emergency Support:</strong>
-                        <a href="tel:112">Nigeria Emergency: 112</a><br>
-                        <a href="tel:08134812419">Youth Connect Hub: 08134812419</a>
-                    </div>
-                </div>
-
-                <div id="questions-container"></div>
-
-                <button type="submit" class="submit-btn">Unlock My Vibe Score 🚀</button>
-            </form>
+            </div>
+            <div class="game-rules">
+                <div class="rule-item">✨ Collect glimmers to increase your score</div>
+                <div class="rule-item">⚠️ Game ends after 5 consecutive misses</div>
+                <div class="rule-item">🌍 Every 20 collected → new world environment!</div>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <h2>Youth Connect Hub</h2>
-                <p>Empowering the youth of Ondo State with the tools, resources, and support needed for a healthy mental and social life. Your vibe matters.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                    <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                    <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                    <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                    <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                    <li><a href="{{ url_for('register') }}">Get Support</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Contact Us</h4>
-                <ul>
-                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Akure, Ondo State</a></li>
-                    <li><a href="tel:08134812419"><i class="fas fa-phone"></i> +234 813 481 2419</a></li>
-                    <li><a href="mailto:support@youthconnect.com"><i class="fas fa-envelope"></i> help@youthhub.ng</a></li>
-                </ul>
+    <div id="game-page" class="page" style="display:none;">
+        <a href="#" class="home-link" onclick="returnHome(); return false;">← Home</a>
+        <div id="sky-base" class="sky-base"></div>
+        <div id="sky-glow" class="sky-glow"></div>
+        <div id="game-stars" class="game-stars"></div>
+        <div id="moon" class="moon"></div>
+        <div id="sun" class="sun" style="display:none;opacity:0"></div>
+        <canvas id="particle-canvas" class="particle-canvas"></canvas>
+        <div id="buildings-far" class="buildings-far">
+            <div class="fb fb1"></div><div class="fb fb2"></div><div class="fb fb3"></div>
+            <div class="fb fb4"></div><div class="fb fb5"></div><div class="fb fb6"></div>
+            <div class="fb fb7"></div><div class="fb fb8"></div>
+        </div>
+        <div class="win-layer far-windows" id="far-windows"></div>
+        <div id="buildings-near" class="buildings-near">
+            <div class="nb nb1"></div><div class="nb nb2"></div><div class="nb nb3"></div>
+            <div class="nb nb4"></div><div class="nb nb5"></div>
+        </div>
+        <div class="win-layer near-windows" id="near-windows"></div>
+        <div id="nature-layer" class="nature-layer"></div>
+        <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+        <div id="ground-fog" class="ground-fog"></div>
+        <div id="street-road" class="street-road"></div>
+        <div id="street-markings" class="street-markings"></div>
+        <div id="sidewalk-strip" class="sidewalk-strip"></div>
+        <div id="sidewalk-tiles" class="sidewalk-tiles"></div>
+        <div class="sl sl1"></div><div class="sl sl2"></div><div class="sl sl3"></div>
+        <div class="tl tl1"></div>
+        <div class="bench bench1"></div>
+        <div class="trash trash1"></div>
+        <div id="theme-banner" class="theme-banner"></div>
+        <div id="stats">
+            <div class="stat-box" id="score-val">✨ 0</div>
+            <div class="stat-box" id="target-val">🎯 10</div>
+            <div class="stat-box" id="miss-val">❌ 0/5</div>
+        </div>
+        <div class="indicators">
+            <div class="indicator-box" id="speed-indicator">⚡ 1.0x</div>
+            <div class="indicator-box theme-ind" id="theme-indicator">🌆 City Night</div>
+        </div>
+        <div class="game-controls">
+            <button class="btn btn-small" onclick="pauseGame()" id="pause-btn">⏸ Pause</button>
+        </div>
+        <div id="player"></div>
+        <div class="instructions">🎮 SPACE or TAP • Double Jump!</div>
+    </div>
+
+    <div id="levelup-page" class="page" style="display:none;">
+        <div class="overlay-bg"></div>
+        <div class="modal-card">
+            <h1 class="modal-title">✨ Moment of Reflection ✨</h1>
+            <p id="quote-box" class="quote">"Small steps are still progress."</p>
+            <div class="modal-btns">
+                <button class="btn btn-continue" onclick="returnToGame()">Continue →</button>
+                <button class="btn btn-home2" onclick="returnHome()">🏠 Home</button>
             </div>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 Youth Connect Hub | Developed for Ondo State Ministry of Health
+    </div>
+
+    <div id="gameover-page" class="page" style="display:none;">
+        <div class="overlay-bg red-overlay"></div>
+        <div class="modal-card">
+            <h1 class="modal-title go-title">💔 Game Over</h1>
+            <p class="go-sub">You missed 5 glimmers in a row!</p>
+            <p id="final-score" class="go-score">Score: 0 ✨</p>
+            <div class="modal-btns">
+                <button class="btn btn-retry" onclick="tryAgain()">🔄 Try Again</button>
+                <button class="btn btn-home2" onclick="returnHome()">🏠 Home</button>
+            </div>
         </div>
-    </footer>
+    </div>
+</div>
+<style>
+:root{--gold:#ffd166;--danger:#ef476f;--player-left-pct:8%;--game-height:580px;--tt:1.8s}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020510;font-family:'Nunito',sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden}
+#game-window{position:relative;width:100%;max-width:1000px;height:var(--game-height);border-radius:18px;box-shadow:0 0 80px rgba(76,201,240,0.15),0 0 200px rgba(0,0,0,0.9);overflow:hidden;border:2px solid rgba(76,201,240,0.2)}
+.page{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;overflow-x:hidden}
+#start-page{background:linear-gradient(180deg,#050d1a,#0d1f3c 50%,#1a2d50);z-index:100;justify-content:flex-start}
+.start-bg{position:absolute;inset:0;pointer-events:none}
+.star-field{position:absolute;inset:0}
+.city-silhouette{position:absolute;bottom:0;width:100%;height:160px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 160'%3E%3Crect x='0' y='60' width='80' height='100' fill='%23060e1c'/%3E%3Crect x='90' y='80' width='60' height='80' fill='%23060e1c'/%3E%3Crect x='160' y='20' width='100' height='140' fill='%23060e1c'/%3E%3Crect x='270' y='50' width='70' height='110' fill='%23060e1c'/%3E%3Crect x='410' y='10' width='120' height='150' fill='%23060e1c'/%3E%3Crect x='540' y='60' width='80' height='100' fill='%23060e1c'/%3E%3Crect x='630' y='30' width='90' height='130' fill='%23060e1c'/%3E%3Crect x='800' y='0' width='110' height='160' fill='%23060e1c'/%3E%3Crect x='920' y='40' width='80' height='120' fill='%23060e1c'/%3E%3C/svg%3E") bottom/cover no-repeat;opacity:0.8}
+.main-nav{position:relative;z-index:10;width:100%;background:rgba(5,13,26,0.85);backdrop-filter:blur(20px);padding:12px 18px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;border-bottom:1px solid rgba(76,201,240,0.25)}
+.nav-link{color:rgba(255,255,255,0.85);text-decoration:none;padding:7px 12px;border-radius:8px;font-weight:700;font-size:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);transition:all 0.25s}
+.nav-link:hover{background:rgba(76,201,240,0.2);border-color:rgba(76,201,240,0.5);color:#fff;transform:translateY(-2px)}
+.game-intro{position:relative;z-index:5;width:100%;padding:22px 22px 18px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.title{font-family:'Bebas Neue',sans-serif;font-size:62px;letter-spacing:4px;background:linear-gradient(135deg,#4cc9f0,#ffd166,#ff7043);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;filter:drop-shadow(0 0 30px rgba(76,201,240,0.4))}
+.subtitle{font-size:14px;color:rgba(255,255,255,0.7);font-weight:600;margin-top:-6px}
+.info-cards{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.info-card{background:linear-gradient(135deg,rgba(76,201,240,0.08),rgba(255,113,67,0.06));border:1px solid rgba(76,201,240,0.25);border-radius:14px;padding:12px 14px;width:148px;text-align:center;backdrop-filter:blur(12px);transition:all 0.3s}
+.info-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(76,201,240,0.2);border-color:rgba(76,201,240,0.5)}
+.card-icon{font-size:28px;margin-bottom:5px}.card-title{font-size:13px;font-weight:900;color:#4cc9f0;margin-bottom:3px}.card-text{font-size:10px;opacity:0.8;line-height:1.6}
+.character-selection{text-align:center;padding:14px 20px;background:rgba(0,0,0,0.35);border-radius:16px;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(12px);width:100%;max-width:480px}
+.choose-text{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#ffd166;margin-bottom:12px}
+.char-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:13px 26px;border:none;border-radius:12px;cursor:pointer;font-weight:900;font-family:'Nunito',sans-serif;font-size:14px;color:white;transition:all 0.2s}
+.btn:hover{transform:translateY(-3px)}.btn:active{transform:translateY(0)}
+.btn-female{background:linear-gradient(135deg,#f72585,#b5179e);box-shadow:0 4px 20px rgba(247,37,133,0.4)}
+.btn-male{background:linear-gradient(135deg,#4cc9f0,#3a86ff);box-shadow:0 4px 20px rgba(76,201,240,0.4)}
+.btn-small{padding:8px 16px;font-size:12px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.25)}
+.btn-continue{background:linear-gradient(135deg,#4cc9f0,#3a86ff)}
+.btn-retry{background:linear-gradient(135deg,#ffd166,#ff9500);color:#000}
+.btn-home2{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25)}
+.game-rules{display:flex;flex-direction:column;gap:6px;width:100%;max-width:480px}
+.rule-item{background:rgba(0,0,0,0.4);padding:8px 14px;border-radius:10px;border-left:3px solid var(--gold);font-size:12px;font-weight:600;backdrop-filter:blur(8px);color:rgba(255,255,255,0.9)}
 
-    <script>
-        // Hamburger Menu Toggle
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
+/* GAME PAGE */
+#game-page{z-index:50;overflow:hidden}
+.sky-base,.sky-glow{position:absolute;inset:0;transition:background var(--tt) ease;pointer-events:none}
+.particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.game-stars{position:absolute;inset:0;pointer-events:none;transition:opacity 1.5s ease}
+.moon{position:absolute;top:30px;right:120px;width:50px;height:50px;background:radial-gradient(circle at 38% 38%,#fffde0,#fce97e 40%,#e8c84a 100%);border-radius:50%;box-shadow:0 0 0 3px rgba(252,233,126,0.15),0 0 30px rgba(252,233,126,0.5),0 0 80px rgba(252,200,60,0.25);overflow:hidden;transition:opacity 1.5s ease,background 1.5s ease,box-shadow 1.5s ease}
+.moon::before{content:'';position:absolute;top:8px;left:14px;width:12px;height:10px;background:rgba(200,170,40,0.35);border-radius:50%}
+.moon::after{content:'';position:absolute;top:24px;left:26px;width:8px;height:7px;background:rgba(200,170,40,0.25);border-radius:50%}
+.sun{position:absolute;top:28px;right:100px;width:55px;height:55px;border-radius:50%;transition:opacity 1.5s ease}
+.buildings-far{position:absolute;bottom:138px;width:100%;height:220px;pointer-events:none}
+.fb{position:absolute;bottom:0;transition:background var(--tt) ease}
+.fb1{left:0;width:8%;height:100px}.fb2{left:7%;width:10%;height:160px}.fb3{left:16%;width:7%;height:120px}.fb4{left:24%;width:13%;height:200px}
+.fb5{left:38%;width:9%;height:140px}.fb6{left:50%;width:14%;height:220px}.fb7{left:67%;width:11%;height:170px}.fb8{left:82%;width:18%;height:190px}
+.win-layer{position:absolute;width:100%;pointer-events:none}
+.far-windows{bottom:138px;height:220px}.near-windows{bottom:138px;height:280px}
+.buildings-near{position:absolute;bottom:138px;width:100%;height:280px;pointer-events:none}
+.nb{position:absolute;bottom:0;transition:background var(--tt) ease,border-color var(--tt) ease}
+.nb1{left:2%;width:14%;height:180px;border-top:2px solid #1e3050}
+.nb2{left:20%;width:10%;height:140px;border-top:2px solid #243d58}
+.nb3{left:44%;width:16%;height:250px;border-top:2px solid #1b2e45}
+.nb4{left:63%;width:12%;height:200px;border-top:2px solid #203654}
+.nb5{left:80%;width:18%;height:160px;border-top:2px solid #28405c}
+.nature-layer{position:absolute;bottom:138px;width:100%;height:120px;pointer-events:none;transition:opacity 1s ease}
+.cloud{position:absolute;border-radius:100px;filter:blur(8px);transition:background 1.5s ease}
+.c1{width:140px;height:40px;top:55px;animation:cloud-drift 40s linear infinite}
+.c2{width:90px;height:28px;top:90px;animation:cloud-drift 55s linear infinite 8s}
+.c3{width:170px;height:50px;top:35px;animation:cloud-drift 48s linear infinite 20s}
+@keyframes cloud-drift{from{left:-200px}to{left:1100px}}
+.ground-fog{position:absolute;bottom:130px;width:100%;height:40px;filter:blur(6px);transition:background 1.5s ease;pointer-events:none}
+.street-road{position:absolute;bottom:0;width:100%;height:140px;transition:background var(--tt) ease,border-top-color 1.5s ease}
+.street-markings{position:absolute;bottom:60px;width:100%;height:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,0.6) 0px,rgba(255,255,255,0.6) 40px,transparent 40px,transparent 90px)}
+.sidewalk-strip{position:absolute;bottom:0;width:100%;height:38px;transition:background var(--tt) ease,border-top-color 1.5s ease}
+.sidewalk-tiles{position:absolute;bottom:0;width:100%;height:38px;background:repeating-linear-gradient(90deg,transparent 0px,transparent 59px,rgba(255,255,255,0.05) 59px,rgba(255,255,255,0.05) 61px)}
+.sl{position:absolute;bottom:38px;width:5px;height:110px;background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border-radius:3px;transition:opacity 1s ease}
+.sl::before{content:'';position:absolute;top:0;left:-15px;width:35px;height:12px;background:linear-gradient(90deg,#3a3a3a,#5a5a5a);border-radius:6px 6px 0 0}
+.sl::after{content:'';position:absolute;top:-4px;left:-5px;width:15px;height:18px;background:#fffbe0;border-radius:4px;box-shadow:0 0 18px 8px rgba(255,245,180,0.8),0 0 60px 20px rgba(255,220,100,0.4)}
+.sl1{left:18%}.sl2{left:48%}.sl3{left:78%}
+.tl{position:absolute;bottom:100px;width:14px;height:38px;background:#222;border-radius:5px;border:2px solid #333;transition:opacity 1s ease}
+.tl::before{content:'';position:absolute;top:5px;left:3px;width:8px;height:8px;background:#ff4444;border-radius:50%;box-shadow:0 0 8px #ff4444;animation:tl-blink 3s ease-in-out infinite}
+.tl::after{content:'';position:absolute;top:22px;left:3px;width:8px;height:8px;background:#44ff55;border-radius:50%;box-shadow:0 0 8px #44ff55;animation:tl-blink2 3s ease-in-out infinite}
+@keyframes tl-blink{0%,45%{opacity:1}50%,100%{opacity:0.1}}
+@keyframes tl-blink2{0%,45%{opacity:0.1}50%,100%{opacity:1}}
+.tl1{left:35%}
+.bench{position:absolute;bottom:38px;width:50px;height:22px;background:#4a3728;border-radius:4px;border-top:3px solid #6b5040;transition:opacity 1s ease}
+.bench::before{content:'';position:absolute;bottom:-12px;left:5px;width:5px;height:12px;background:#3a2a1e;border-radius:2px;box-shadow:33px 0 0 #3a2a1e}
+.bench1{left:65%}
+.trash{position:absolute;bottom:38px;width:16px;height:24px;background:linear-gradient(180deg,#3a3a3a,#222);border-radius:2px 2px 4px 4px;border-top:3px solid #555;transition:opacity 1s ease}
+.trash1{left:72%}
 
-        // Track high-risk responses
-        let highRiskDetected = false;
-        const riskIndicators = {
-            q12: [3, 4], // Sexual abuse
-            q13: [3, 4], // Physical/emotional abuse
-            q14: [3, 4], // Sexual pressure
-            q15: [1, 2], // Can't say no
-            q17: [1, 2]  // Urgent SRH needs
-        };
+/* THEME BANNER */
+.theme-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.6);background:rgba(0,0,0,0.88);border-radius:20px;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;text-align:center;z-index:200;backdrop-filter:blur(20px);border:2px solid rgba(255,255,255,0.2);opacity:0;pointer-events:none;white-space:nowrap;transition:none}
+.theme-banner.show{animation:banner-pop 2.8s ease forwards}
+@keyframes banner-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}25%{transform:translate(-50%,-50%) scale(1.0)}70%{opacity:1;transform:translate(-50%,-50%) scale(1.0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.0)}}
 
-        // Questions Array - INTEGRATED WITH BACKEND q1-q20 STRUCTURE
-        const questions = [
-            // q1-q5: Mental Health & Well-being
-            { text: "Have you felt cheerful and in good spirits?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Have you felt calm and relaxed?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Have you felt active and vigorous lately?", cat: "Energy", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you wake up feeling fresh and rested? 😴", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Is your daily life filled with things that interest you?", cat: "Life", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            
-            // q6-q10: Emotional Health
-            { text: "Do you feel little interest or pleasure in doing things? 😔", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
-            { text: "Do you feel down, depressed, or hopeless?", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
-            { text: "How often do you find it hard to concentrate on school or work?", cat: "Focus", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "How often do you feel nervous, anxious, or on edge?", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you feel like your emotions are out of control? 🌊", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            
-            // q11: Home Safety
-            { text: "Do you feel safe and respected in your home environment? 🏠", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"], sensitive: false },
-            
-            // q12: SEXUAL ABUSE DETECTION (Sensitive)
-            { text: "Has anyone touched you inappropriately or forced you into unwanted sexual activity? 🛑", cat: "Sexual Safety", color: "#ffcccc", opts: ["Never", "This happened once", "This happens sometimes", "This is happening now"], sensitive: true },
-            
-            // q13: Physical/Emotional Abuse (Sensitive)
-            { text: "Has anyone physically or emotionally hurt you recently? 🛑", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"], sensitive: true },
-            
-            // q14: SEXUAL PRESSURE (Sensitive)
-            { text: "Do you feel pressured by anyone (partner, family, peers) to engage in sexual activities you're not comfortable with?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Often"], sensitive: true },
-            
-            // q15: Sexual Autonomy (Sensitive)
-            { text: "Do you feel you can say 'No' to sexual advances without fear or consequences?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Always"], sensitive: true },
-            
-            // q16: SRH Access (Sensitive)
-            { text: "Do you have access to accurate information about sexual and reproductive health?", cat: "SRH Access", color: "#d1fff0", opts: ["No access", "Limited access", "Some access", "Full access"], sensitive: true },
-            
-            // q17: SRH Urgent Needs (Sensitive)
-            { text: "Have you experienced unwanted pregnancy, STI concerns, or need contraception advice but don't know where to get help?", cat: "SRH Needs", color: "#d1fff0", opts: ["Yes, urgently", "Yes, but not urgent", "Maybe in future", "No"], sensitive: true },
-            
-            // q18: Future Outlook
-            { text: "Are you optimistic about what the future holds for you? ✨", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"], sensitive: false },
-            
-            // q19: SRH Support (Sensitive)
-            { text: "Do you have a trusted adult or healthcare provider you can talk to about sexual health concerns?", cat: "SRH Support", color: "#d1fff0", opts: ["No one", "Maybe one person", "Yes, I have someone", "Yes, multiple trusted sources"], sensitive: true },
-            
-            // q20: Help Access (Sensitive)
-            { text: "When you feel unsafe or need help with sexual health issues, do you know where to go for confidential support in Ondo?", cat: "Help Access", color: "#fff4d1", opts: ["No idea", "I've heard of places", "I know some places", "Yes, I know Youth Connect & clinics"], sensitive: true }
-        ];
+/* HUD - IMPROVED VISIBILITY */
+#stats{position:absolute;top:12px;width:100%;display:flex;justify-content:center;gap:10px;font-size:15px;font-weight:900;z-index:100;padding:0 14px}
+.stat-box{
+    background:rgba(0,0,0,0.88);
+    padding:7px 16px;
+    border-radius:12px;
+    border:2px solid rgba(255,255,255,0.35);
+    backdrop-filter:blur(12px);
+    letter-spacing:0.5px;
+    color:#ffffff;
+    text-shadow:0 1px 3px rgba(0,0,0,0.8),0 0 8px rgba(255,255,255,0.3);
+    box-shadow:0 2px 8px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.stat-box.danger{
+    border-color:var(--danger);
+    background:rgba(239,71,111,0.25);
+    animation:pulse-danger 0.7s infinite;
+}
+@keyframes pulse-danger{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.indicators{position:absolute;top:58px;left:14px;z-index:100;display:flex;flex-direction:column;gap:5px}
+.indicator-box{
+    background:rgba(0,0,0,0.88);
+    padding:6px 14px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:800;
+    border:2px solid rgba(255,209,102,0.5);
+    color:#ffffff;
+    text-shadow:0 1px 2px rgba(0,0,0,0.8);
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+.theme-ind{
+    border-color:rgba(120,220,120,0.6);
+    font-size:11px;
+    transition:border-color 1s ease,color 1s ease;
+}
+.game-controls{position:absolute;top:12px;right:14px;z-index:100}
+.home-link{
+    position:absolute;
+    top:58px;
+    right:14px;
+    padding:7px 14px;
+    background:rgba(0,0,0,0.88);
+    color:#ffffff;
+    text-decoration:none;
+    border-radius:10px;
+    border:2px solid rgba(255,255,255,0.3);
+    z-index:200;
+    font-size:12px;
+    font-weight:700;
+    backdrop-filter:blur(8px);
+    text-shadow:0 1px 2px rgba(0,0,0,0.8);
+}
+.instructions{
+    position:absolute;
+    bottom:48px;
+    right:14px;
+    background:rgba(0,0,0,0.88);
+    padding:7px 16px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:700;
+    z-index:100;
+    border:2px solid rgba(255,255,255,0.25);
+    color:#ffffff;
+    text-shadow:0 1px 2px rgba(0,0,0,0.8);
+}
+#player{position:absolute;width:55px;height:95px;left:var(--player-left-pct);z-index:60;filter:drop-shadow(0 6px 16px rgba(0,0,0,0.7));transition:transform 0.1s ease}
+#player.jumping{transform:rotate(-12deg) scale(1.07);filter:drop-shadow(0 6px 20px rgba(76,201,240,0.5))}
+.glimmer{position:absolute;padding:11px 20px;background:linear-gradient(135deg,#ffd166,#ff9500 50%,#ff4500 100%);border:2.5px solid rgba(255,255,255,0.8);border-radius:30px;color:#000;font-weight:900;font-family:'Nunito',sans-serif;font-size:14px;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.9),0 0 60px rgba(255,140,0,0.6);animation:glimmer-float 1.2s ease-in-out infinite;user-select:none;pointer-events:none}
+@keyframes glimmer-float{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.12) rotate(3deg)}}
+.glimmer::before,.glimmer::after{content:'✨';position:absolute;top:50%;font-size:17px;animation:sparkle 1.5s ease-in-out infinite}
+.glimmer::before{left:-17px}.glimmer::after{right:-17px}
+@keyframes sparkle{0%,100%{opacity:0.3;transform:translateY(-50%) scale(0.6)}50%{opacity:1;transform:translateY(-50%) scale(1.3)}}
+.overlay-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(10,20,50,0.92),rgba(5,8,20,0.97));backdrop-filter:blur(6px)}
+.red-overlay{background:radial-gradient(ellipse at 50% 50%,rgba(50,5,15,0.92),rgba(5,8,20,0.97))}
+.modal-card{position:relative;z-index:5;text-align:center;padding:34px 42px;background:rgba(255,255,255,0.04);border-radius:20px;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(20px);max-width:90%}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;color:var(--gold)}
+.go-title{color:var(--danger)}.go-sub{font-size:16px;opacity:0.8;margin:10px 0}.go-score{font-size:24px;color:var(--gold);font-weight:900;margin:8px 0 16px}
+.quote{font-style:italic;font-size:20px;color:#4cc9f0;margin:16px 0 24px;line-height:1.6;max-width:360px}
+.modal-btns{display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
+@keyframes win-flicker{0%,100%{opacity:1}45%{opacity:0.2}55%{opacity:1}}
+@keyframes star-twinkle{0%,100%{opacity:0.4;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
 
-        const container = document.getElementById("questions-container");
-        
-        questions.forEach((q, i) => {
-            const div = document.createElement("div");
-            div.className = "question-block" + (q.sensitive ? " sensitive" : "");
-            div.id = `block-q${i+1}`;
-            
-            let html = `<span class="category-tag" style="background:${q.color}">${q.cat}</span>`;
-            
-            if (q.sensitive) {
-                html += `<span class="sensitive-badge"><i class="fas fa-lock"></i> CONFIDENTIAL</span>`;
-            }
-            
-            html += `<p class="question-text">${i+1}. ${q.text}</p>`;
-            
-            if (q.sensitive) {
-                html += `<p class="privacy-note"><i class="fas fa-shield-alt"></i> This response is private and secure</p>`;
-            }
-            
-            html += `
-                <select name="q${i+1}" required onchange="updateBlockStatus(${i+1})">
-                    <option value="">Choose an answer...</option>
-                    ${q.opts.map((o, idx) => `<option value="${idx+1}">${o}</option>`).join('')}
-                </select>
-            `;
-            
-            div.innerHTML = html;
-            container.appendChild(div);
-        });
+@media(max-width:600px){
+    :root{--player-left-pct:4%;--game-height:100vh}
+    #game-window{border-radius:0;height:100vh;height:100dvh;max-width:100%;border:none}
+    .title{font-size:42px}.info-cards{gap:8px}.info-card{width:126px;padding:10px 10px}
+    .card-icon{font-size:24px}.card-title{font-size:11px}.card-text{font-size:9px}
+    .game-intro{padding:16px 12px 12px;gap:11px}
+    #player{width:40px;height:72px}
+    .glimmer{font-size:11px;padding:8px 13px}
+    .main-nav{padding:8px 10px;gap:4px}.nav-link{padding:5px 7px;font-size:10px}
+    #stats{gap:4px;font-size:12px}.stat-box{padding:5px 9px}
+    .instructions{right:5px;bottom:38px;font-size:10px;padding:5px 9px}
+    .home-link{top:48px;right:5px;padding:5px 9px;font-size:10px}
+    .modal-card{padding:22px 18px}.modal-title{font-size:30px}.quote{font-size:15px}
+    .theme-banner{font-size:24px;padding:12px 24px}
+}
+@media(max-width:380px){:root{--player-left-pct:2%}#player{width:36px;height:63px}.title{font-size:32px}}
+</style>
+<script>
+/* ═══════════ HAPTIC FEEDBACK ═══════════ */
+function haptic(type){
+  if(!navigator.vibrate)return;
+  const patterns={
+    light:[10],
+    medium:[30],
+    heavy:[50],
+    double:[30,50,30],
+    triple:[20,50,20,50,20],
+    gameOver:[100,50,100,50,200],
+    collect:[15],
+    miss:[40],
+    levelUp:[20,30,20,30,50]
+  };
+  navigator.vibrate(patterns[type]||patterns.medium);
+}
 
-        function updateBlockStatus(id) {
-            const select = document.querySelector(`select[name="q${id}"]`);
-            const block = document.getElementById(`block-q${id}`);
-            
-            if (select.value !== "") {
-                block.classList.add('answered');
-                
-                // Check for high-risk responses
-                if (riskIndicators[`q${id}`] && riskIndicators[`q${id}`].includes(parseInt(select.value))) {
-                    if (!highRiskDetected) {
-                        highRiskDetected = true;
-                        showSupportMessage();
-                    }
-                }
-            } else {
-                block.classList.remove('answered');
-            }
-            updateProgress();
-        }
+/* ═══════════ THEMES ═══════════ */
+const THEMES = [
+  { id:'city-night', name:'🌆 City Night', banner:'🌆 CITY NIGHT', bc:'#4cc9f0',
+    sky:'linear-gradient(180deg,#02060f 0%,#050d1e 20%,#0a1a35 40%,#152240 55%,#1e2e4a 65%,#2b3a52 72%,#3d3060 78%,#7b3f3f 85%,#c4622d 91%,#e8853d 95%,#f5a55a 100%)',
+    glow:'radial-gradient(ellipse 80% 60% at 60% 100%,rgba(255,120,40,0.35),transparent 70%)',
+    stars:true,moon:true,sun:false,
+    moonBg:'radial-gradient(circle at 38% 38%,#fffde0,#fce97e 40%,#e8c84a 100%)',moonShadow:'0 0 0 3px rgba(252,233,126,0.15),0 0 30px rgba(252,233,126,0.5),0 0 80px rgba(252,200,60,0.25)',
+    clouds:'rgba(255,255,255,0.06)',
+    fog:'linear-gradient(180deg,transparent,rgba(255,160,80,0.12) 50%,rgba(255,100,40,0.08))',
+    road:'linear-gradient(180deg,#1c1c1c,#141414 40%,#0e0e0e)',roadBorder:'#f5a55a',
+    sw:'linear-gradient(180deg,#2e2e2e,#252525)',swBorder:'#3f3f3f',
+    fb:'linear-gradient(180deg,#0d1a2e,#091220)',
+    nb:['linear-gradient(180deg,#152338,#0c1824)','linear-gradient(180deg,#1a2b42,#0e1e30)','linear-gradient(180deg,#132031,#0a1520)','linear-gradient(180deg,#162540,#0d1a2e)','linear-gradient(180deg,#1c2d45,#111d2d)'],
+    nbb:['#1e3050','#243d58','#1b2e45','#203654','#28405c'],
+    wc:['rgba(255,240,180,0.85)','rgba(255,220,120,0.9)','rgba(200,230,255,0.7)','rgba(255,255,200,0.8)'],
+    sl:true,tl:true,bench:true,trash:true, particles:null, nature:null },
 
-        function showSupportMessage() {
-            // Create support banner
-            const banner = document.createElement('div');
-            banner.className = 'support-banner';
-            banner.innerHTML = `
-                <div class="support-banner-header">
-                    <h4><i class="fas fa-hands-helping"></i> We're Here to Help</h4>
-                    <button class="close-support" onclick="this.parentElement.parentElement.remove()">&times;</button>
-                </div>
-                <p>
-                    You've indicated you may need support. Remember, you're not alone and help is available.
-                </p>
-                <div class="support-contacts">
-                    <strong>📞 24/7 Support Lines:</strong>
-                    <a href="tel:08134812419"><i class="fas fa-phone"></i> Youth Connect: 08134812419</a>
-                    <a href="tel:112"><i class="fas fa-phone"></i> Nigeria Emergency: 112</a>
-                </div>
-                <p style="font-size: 0.8rem; opacity: 0.95;">
-                    Your assessment results will include specific resources for your situation.
-                </p>
-            `;
-            document.body.appendChild(banner);
-            
-            // Auto-dismiss after 15 seconds
-            setTimeout(() => {
-                if (banner.parentNode) {
-                    banner.style.animation = 'slideIn 0.5s ease reverse';
-                    setTimeout(() => banner.remove(), 500);
-                }
-            }, 15000);
-        }
+  { id:'rainy-dusk', name:'🌧️ Rainy Dusk', banner:'🌧️ RAINY DUSK', bc:'#74b9ff',
+    sky:'linear-gradient(180deg,#0a0a14,#111525 20%,#1a1f35 45%,#263044 65%,#2f3a50 78%,#3a4060 88%,#404255)',
+    glow:'radial-gradient(ellipse 80% 50% at 50% 100%,rgba(60,80,140,0.4),transparent 70%)',
+    stars:false,moon:true,sun:false,
+    moonBg:'radial-gradient(circle at 38% 38%,#c8d8f0,#a0b4cc 50%,#7090b0 100%)',moonShadow:'0 0 20px rgba(160,180,220,0.3)',
+    clouds:'rgba(100,120,180,0.25)',
+    fog:'linear-gradient(180deg,transparent,rgba(80,100,160,0.25) 60%,rgba(60,80,140,0.15))',
+    road:'linear-gradient(180deg,#181c22,#101318)',roadBorder:'#4a5a7a',
+    sw:'linear-gradient(180deg,#252830,#1c1f28)',swBorder:'#303540',
+    fb:'linear-gradient(180deg,#0e1422,#090e18)',
+    nb:['linear-gradient(180deg,#111828,#0a1020)','linear-gradient(180deg,#141c30,#0c1224)','linear-gradient(180deg,#0f1622,#090e18)','linear-gradient(180deg,#121a2c,#0b1122)','linear-gradient(180deg,#161e30,#0e1426)'],
+    nbb:['#1a2438','#1e2a40','#162030','#1c2840','#202e48'],
+    wc:['rgba(180,200,255,0.5)','rgba(160,190,240,0.45)','rgba(200,220,255,0.55)','rgba(140,170,220,0.4)'],
+    sl:true,tl:true,bench:true,trash:true, particles:'rain', nature:null },
 
-        function updateProgress() {
-            const selects = document.querySelectorAll('select[name^="q"]');
-            const answered = Array.from(selects).filter(s => s.value !== "").length;
-            const perc = Math.round((answered / questions.length) * 100);
-            document.getElementById('progressBar').style.width = perc + '%';
-            document.getElementById('percLabel').innerText = perc + '%';
-        }
-    </script>
+  { id:'snowy-morning', name:'❄️ Snowy Morning', banner:'❄️ SNOWY MORNING', bc:'#a8d8ff',
+    sky:'linear-gradient(180deg,#b8d4ee,#c8dff5 25%,#daeafc 55%,#e8f2ff 80%,#f0f6ff)',
+    glow:'radial-gradient(ellipse 70% 40% at 40% 0%,rgba(255,240,200,0.6),transparent 60%)',
+    stars:false,moon:false,sun:true,
+    sunBg:'radial-gradient(circle,#fff9d0,#ffe878 40%,#ffd040 70%)',sunTop:'22px',sunRight:'160px',sunW:'45px',sunShadow:'0 0 0 8px rgba(255,220,100,0.15),0 0 40px rgba(255,210,80,0.5)',
+    clouds:'rgba(255,255,255,0.7)',
+    fog:'linear-gradient(180deg,transparent,rgba(200,220,255,0.3) 60%,rgba(180,210,255,0.2))',
+    road:'linear-gradient(180deg,#c8d4e0,#a0b0c0)',roadBorder:'#e0eaf5',
+    sw:'linear-gradient(180deg,#d0dce8,#b8cad8)',swBorder:'#e8f0f8',
+    fb:'linear-gradient(180deg,#8090a0,#607080)',
+    nb:['linear-gradient(180deg,#6a7e90,#506070)','linear-gradient(180deg,#728090,#587080)','linear-gradient(180deg,#607080,#48606e)','linear-gradient(180deg,#6e8092,#546878)','linear-gradient(180deg,#788494,#607280)'],
+    nbb:['#90a8bc','#98b0c4','#8098ac','#8aa0b4','#96aebc'],
+    wc:['rgba(255,245,200,0.9)','rgba(255,240,180,0.8)','rgba(255,250,220,0.85)','rgba(240,230,160,0.75)'],
+    sl:true,tl:false,bench:true,trash:false, particles:'snow', nature:'snow-trees' },
+
+  { id:'desert-noon', name:'🏜️ Desert Noon', banner:'🏜️ DESERT NOON', bc:'#ffd166',
+    sky:'linear-gradient(180deg,#3ba0d8,#62b8e8 20%,#94d0f4 45%,#f0c060 70%,#f0a030 85%,#e88020)',
+    glow:'radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,220,100,0.5),transparent 60%)',
+    stars:false,moon:false,sun:true,
+    sunBg:'radial-gradient(circle,#ffffff,#fffac0 30%,#ffd040 60%)',sunTop:'16px',sunRight:'120px',sunW:'64px',sunShadow:'0 0 0 12px rgba(255,230,100,0.25),0 0 60px rgba(255,220,80,0.8),0 0 140px rgba(255,180,40,0.5)',
+    clouds:'rgba(255,255,255,0.15)',
+    fog:'linear-gradient(180deg,transparent,rgba(255,180,60,0.3) 60%,rgba(240,150,40,0.2))',
+    road:'linear-gradient(180deg,#c8a060,#a07840)',roadBorder:'#e8c080',
+    sw:'linear-gradient(180deg,#d0a868,#b08848)',swBorder:'#e8c880',
+    fb:'linear-gradient(180deg,#9c7040,#784e28)',
+    nb:['linear-gradient(180deg,#a07840,#806030)','linear-gradient(180deg,#a88048,#886038)','linear-gradient(180deg,#987038,#785030)','linear-gradient(180deg,#a07840,#806030)','linear-gradient(180deg,#b08848,#906840)'],
+    nbb:['#c09050','#c8a060','#b88848','#c09050','#d0a860'],
+    wc:['rgba(255,240,160,0.8)','rgba(255,200,80,0.7)','rgba(255,230,140,0.85)','rgba(240,210,120,0.75)'],
+    sl:false,tl:false,bench:false,trash:false, particles:'dust', nature:'cacti' },
+
+  { id:'jungle-twilight', name:'🌴 Jungle Twilight', banner:'🌴 JUNGLE TWILIGHT', bc:'#55efc4',
+    sky:'linear-gradient(180deg,#0a1a10,#0d2218 20%,#102a1e 45%,#1a3828 65%,#244832 80%,#305840 90%,#406040)',
+    glow:'radial-gradient(ellipse 70% 50% at 40% 100%,rgba(60,180,80,0.25),transparent 70%)',
+    stars:true,moon:true,sun:false,
+    moonBg:'radial-gradient(circle at 38% 38%,#e0ffe8,#b0f0c0 40%,#80d0a0 100%)',moonShadow:'0 0 20px rgba(100,220,140,0.4),0 0 60px rgba(60,180,100,0.2)',
+    clouds:'rgba(40,80,40,0.35)',
+    fog:'linear-gradient(180deg,transparent,rgba(40,120,60,0.3) 60%,rgba(30,100,50,0.2))',
+    road:'linear-gradient(180deg,#1a2a18,#101c10)',roadBorder:'#3a6030',
+    sw:'linear-gradient(180deg,#243820,#1a2a18)',swBorder:'#384830',
+    fb:'linear-gradient(180deg,#0e2010,#081408)',
+    nb:['linear-gradient(180deg,#162418,#0e1810)','linear-gradient(180deg,#1a2c1c,#101e12)','linear-gradient(180deg,#122014,#0c160e)','linear-gradient(180deg,#162618,#0e1a10)','linear-gradient(180deg,#1a2e1c,#102012)'],
+    nbb:['#243c20','#284228','#1e3018','#243e22','#284428'],
+    wc:['rgba(150,255,150,0.5)','rgba(100,220,120,0.45)','rgba(180,255,180,0.55)','rgba(120,200,140,0.4)'],
+    sl:false,tl:false,bench:false,trash:false, particles:'fireflies', nature:'jungle-trees' },
+
+  { id:'volcanic-dawn', name:'🌋 Volcanic Dawn', banner:'🌋 VOLCANIC DAWN', bc:'#ff7043',
+    sky:'linear-gradient(180deg,#0a0200,#1a0500 20%,#2e0800 40%,#520e00 60%,#8a1c00 75%,#c43000 87%,#ff5400 94%,#ff8c00)',
+    glow:'radial-gradient(ellipse 80% 60% at 50% 100%,rgba(255,80,20,0.6),rgba(200,40,0,0.3) 50%,transparent 70%)',
+    stars:false,moon:false,sun:true,
+    sunBg:'radial-gradient(circle,#ffcc00,#ff8800 40%,#ff4400 70%)',sunTop:'25px',sunRight:'130px',sunW:'55px',sunShadow:'0 0 0 10px rgba(255,100,20,0.3),0 0 50px rgba(255,80,0,0.8),0 0 120px rgba(200,40,0,0.5)',
+    clouds:'rgba(60,20,10,0.5)',
+    fog:'linear-gradient(180deg,transparent,rgba(200,60,20,0.35) 60%,rgba(160,40,10,0.25))',
+    road:'linear-gradient(180deg,#1a0800,#100500)',roadBorder:'#ff5400',
+    sw:'linear-gradient(180deg,#220a00,#180600)',swBorder:'#3a1000',
+    fb:'linear-gradient(180deg,#1a0400,#100200)',
+    nb:['linear-gradient(180deg,#200600,#140300)','linear-gradient(180deg,#280800,#180400)','linear-gradient(180deg,#1c0500,#100200)','linear-gradient(180deg,#240700,#160300)','linear-gradient(180deg,#2c0900,#1a0400)'],
+    nbb:['#380a00','#440e00','#300800','#3c0c00','#481200'],
+    wc:['rgba(255,120,20,0.8)','rgba(255,80,0,0.75)','rgba(255,160,40,0.7)','rgba(255,60,10,0.85)'],
+    sl:false,tl:false,bench:false,trash:false, particles:'embers', nature:'volcanic-rocks' },
+];
+
+/* ═══════════ PARTICLES ═══════════ */
+let pCtx=null,pArr=[],pType=null,pAnim=null;
+function initParticles(){
+  const c=document.getElementById('particle-canvas');
+  if(!c)return;
+  c.width=c.offsetWidth||1000; c.height=c.offsetHeight||580;
+  pCtx=c.getContext('2d');
+}
+function mkP(type,W,H){
+  if(type==='rain')    return{x:Math.random()*W,y:-20,vx:-1.5,vy:14+Math.random()*8,len:12+Math.random()*8,a:0.3+Math.random()*0.4};
+  if(type==='snow')    return{x:Math.random()*W,y:-8,vx:(Math.random()-0.5)*0.8,vy:0.8+Math.random()*1.8,r:2+Math.random()*3,a:0.5+Math.random()*0.5,w:Math.random()*Math.PI*2};
+  if(type==='dust')    return{x:W+10,y:H*0.4+Math.random()*H*0.5,vx:-2-Math.random()*3,vy:(Math.random()-0.5)*0.5,r:3+Math.random()*12,a:0.04+Math.random()*0.1};
+  if(type==='embers')  return{x:Math.random()*W,y:H,vx:(Math.random()-0.5)*2,vy:-2-Math.random()*4,r:1.5+Math.random()*2.5,a:0.9,life:1,decay:0.006+Math.random()*0.01};
+  if(type==='fireflies')return{x:Math.random()*W,y:Math.random()*(H*0.7),vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.4,r:2+Math.random()*2,a:0,ph:Math.random()*Math.PI*2,fr:0.02+Math.random()*0.03};
+}
+function drawP(type,W,H){
+  if(!pCtx)return;
+  pCtx.clearRect(0,0,W,H);
+  const rates={rain:6,snow:2,dust:0.8,embers:3,fireflies:0.3};
+  const maxes={rain:200,snow:110,dust:45,embers:75,fireflies:32};
+  if(Math.random()<(rates[type]||1)/10&&pArr.length<(maxes[type]||100))pArr.push(mkP(type,W,H));
+  for(let i=pArr.length-1;i>=0;i--){
+    const p=pArr[i];let dead=false;
+    if(type==='rain'){
+      p.x+=p.vx;p.y+=p.vy;
+      pCtx.save();pCtx.globalAlpha=p.a;pCtx.strokeStyle='#a8c8f0';pCtx.lineWidth=1;
+      pCtx.beginPath();pCtx.moveTo(p.x,p.y);pCtx.lineTo(p.x+p.vx*0.6,p.y+p.len);pCtx.stroke();pCtx.restore();
+      if(p.y>H+20)dead=true;
+    }else if(type==='snow'){
+      p.w+=0.04;p.x+=p.vx+Math.sin(p.w)*0.3;p.y+=p.vy;
+      pCtx.save();pCtx.globalAlpha=p.a;pCtx.fillStyle='#ddeeff';
+      pCtx.beginPath();pCtx.arc(p.x,p.y,p.r,0,Math.PI*2);pCtx.fill();pCtx.restore();
+      if(p.y>H+10)dead=true;
+    }else if(type==='dust'){
+      p.x+=p.vx;p.y+=p.vy;
+      pCtx.save();pCtx.globalAlpha=p.a;
+      const g=pCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      g.addColorStop(0,'rgba(240,190,80,0.5)');g.addColorStop(1,'rgba(200,140,40,0)');
+      pCtx.fillStyle=g;pCtx.beginPath();pCtx.arc(p.x,p.y,p.r,0,Math.PI*2);pCtx.fill();pCtx.restore();
+      if(p.x<-p.r*2)dead=true;
+    }else if(type==='embers'){
+      p.x+=p.vx+(Math.random()-0.5)*0.4;p.y+=p.vy;p.life-=p.decay;p.vy*=0.99;
+      pCtx.save();pCtx.globalAlpha=p.a*p.life;
+      const ec=['#ff6600','#ff4400','#ffaa00','#ff2200'];
+      pCtx.fillStyle=ec[Math.floor(Math.random()*ec.length)];
+      pCtx.shadowColor='#ff4400';pCtx.shadowBlur=6;
+      pCtx.beginPath();pCtx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);pCtx.fill();pCtx.restore();
+      if(p.life<=0||p.y<-10)dead=true;
+    }else if(type==='fireflies'){
+      p.x+=p.vx+Math.sin(p.ph*1.5)*0.3;p.y+=p.vy+Math.cos(p.ph)*0.2;p.ph+=p.fr;
+      p.a=(Math.sin(p.ph*3)*0.5+0.5)*0.9;
+      pCtx.save();pCtx.globalAlpha=p.a;pCtx.shadowColor='#80ff80';pCtx.shadowBlur=10;
+      pCtx.fillStyle='#aaffaa';pCtx.beginPath();pCtx.arc(p.x,p.y,p.r,0,Math.PI*2);pCtx.fill();pCtx.restore();
+      if(p.x<-10||p.x>W+10||p.y<-10||p.y>H+10)dead=true;
+    }
+    if(dead)pArr.splice(i,1);
+  }
+}
+function startParticles(type){
+  stopParticles();pType=type;pArr=[];
+  if(!type)return;
+  const c=document.getElementById('particle-canvas');if(!c)return;
+  const W=c.width||1000,H=c.height||580;
+  function loop(){drawP(pType,W,H);pAnim=requestAnimationFrame(loop);}
+  loop();
+}
+function stopParticles(){
+  if(pAnim){cancelAnimationFrame(pAnim);pAnim=null;}
+  if(pCtx)pCtx.clearRect(0,0,9999,9999);
+  pType=null;pArr=[];
+}
+
+/* ═══════════ NATURE LAYER ═══════════ */
+function buildNature(type){
+  const layer=document.getElementById('nature-layer');
+  layer.innerHTML='';if(!type)return;
+  if(type==='snow-trees'){
+    [5,14,28,40,55,68,80,90].forEach(l=>{
+      const h=60+Math.random()*40,t=document.createElement('div');
+      t.style.cssText=`position:absolute;bottom:0;left:${l}%;transform:translateX(-50%)`;
+      let html=`<div style="width:8px;height:${h*0.25}px;background:#5a4030;margin:0 auto;border-radius:2px"></div>`;
+      [1,0.8,0.65].forEach((sc,i)=>{
+        const w=Math.floor(44*sc),ht=Math.floor(32*sc),b=Math.floor(-ht*0.3);
+        html+=`<div style="width:0;height:0;border-left:${w}px solid transparent;border-right:${w}px solid transparent;border-bottom:${ht+8}px solid #2d6030;margin:${b}px auto 0;position:relative"><div style="position:absolute;top:4px;left:-${w-4}px;width:0;height:0;border-left:${w-4}px solid transparent;border-right:${w-4}px solid transparent;border-bottom:${ht+2}px solid rgba(220,240,255,0.5)"></div></div>`;
+      });
+      t.innerHTML=html;layer.appendChild(t);
+    });
+  }else if(type==='cacti'){
+    [8,22,38,55,70,84].forEach(l=>{
+      const h=50+Math.random()*40,c=document.createElement('div');
+      c.style.cssText=`position:absolute;bottom:0;left:${l}%`;
+      c.innerHTML=`<div style="position:relative;width:14px;margin:0 auto"><div style="width:14px;height:${h}px;background:linear-gradient(180deg,#5a8a40,#3a6420);border-radius:7px 7px 4px 4px;margin:0 auto"></div><div style="position:absolute;top:${h*0.35}px;left:-14px;width:18px;height:8px;background:#508030;border-radius:8px 0 0 8px"></div><div style="position:absolute;top:${h*0.35}px;left:-14px;width:10px;height:20px;background:#508030;border-radius:6px 0 0 6px"></div><div style="position:absolute;top:${h*0.5}px;right:-14px;width:18px;height:8px;background:#508030;border-radius:0 8px 8px 0"></div><div style="position:absolute;top:${h*0.5}px;right:-14px;width:10px;height:20px;background:#508030;border-radius:0 6px 6px 0"></div></div>`;
+      layer.appendChild(c);
+    });
+  }else if(type==='jungle-trees'){
+    [2,10,20,30,45,58,70,82,92].forEach(l=>{
+      const h=70+Math.random()*50,t=document.createElement('div');
+      t.style.cssText=`position:absolute;bottom:0;left:${l}%`;
+      const n=3+Math.floor(Math.random()*3);let lv='';
+      for(let i=0;i<n;i++){const lw=28+Math.random()*28,lh=18+Math.random()*18,lx=(Math.random()-0.5)*38,ly=Math.random()*h*0.5+h*0.4,rot=(Math.random()-0.5)*60;
+        lv+=`<div style="position:absolute;bottom:${ly}px;left:calc(50% + ${lx}px - ${lw/2}px);width:${lw}px;height:${lh}px;background:radial-gradient(ellipse,#2a8040,#1a5028);border-radius:50%;transform:rotate(${rot}deg)"></div>`;}
+      t.innerHTML=`<div style="position:relative;width:10px;height:${h}px;background:linear-gradient(180deg,#3a2010,#5a3820);margin:0 auto;border-radius:3px">${lv}</div>`;
+      layer.appendChild(t);
+    });
+  }else if(type==='volcanic-rocks'){
+    [5,18,32,48,62,76,88].forEach(l=>{
+      const r=document.createElement('div');
+      const w=20+Math.random()*28,h=14+Math.random()*18;
+      r.style.cssText=`position:absolute;bottom:0;left:${l}%;width:${w}px;height:${h}px;background:linear-gradient(180deg,#3a1a10,#1a0a08);border-radius:${w*0.5}px ${w*0.5}px 8px 8px;box-shadow:0 0 8px rgba(255,80,20,0.2)`;
+      const gl=document.createElement('div');
+      gl.style.cssText=`position:absolute;bottom:-2px;left:10%;width:80%;height:4px;background:rgba(255,60,0,0.5);border-radius:50%;filter:blur(3px)`;
+      r.appendChild(gl);layer.appendChild(r);
+    });
+  }
+}
+
+/* ═══════════ APPLY THEME ═══════════ */
+let curThemeIdx=0;
+function applyTheme(idx,showBanner){
+  const t=THEMES[idx%THEMES.length];
+  curThemeIdx=idx%THEMES.length;
+  document.getElementById('sky-base').style.background=t.sky;
+  document.getElementById('sky-glow').style.background=t.glow;
+  document.getElementById('game-stars').style.opacity=t.stars?'1':'0';
+  const moon=document.getElementById('moon'),sun=document.getElementById('sun');
+  if(t.moon){moon.style.display='block';moon.style.opacity='1';moon.style.background=t.moonBg;moon.style.boxShadow=t.moonShadow;}
+  else{moon.style.opacity='0';setTimeout(()=>moon.style.display='none',1600);}
+  if(t.sun){
+    sun.style.display='block';sun.style.opacity='1';sun.style.background=t.sunBg;
+    sun.style.top=t.sunTop;sun.style.right=t.sunRight;sun.style.width=t.sunW;sun.style.height=t.sunW;sun.style.boxShadow=t.sunShadow;
+  }else{sun.style.opacity='0';setTimeout(()=>sun.style.display='none',1600);}
+  document.querySelectorAll('.cloud').forEach(c=>c.style.background=t.clouds);
+  document.getElementById('ground-fog').style.background=t.fog;
+  const road=document.getElementById('street-road');road.style.background=t.road;road.style.borderTop=`3px solid ${t.roadBorder}`;
+  const sw=document.getElementById('sidewalk-strip');sw.style.background=t.sw;sw.style.borderTop=`3px solid ${t.swBorder}`;
+  document.querySelectorAll('.fb').forEach(b=>b.style.background=t.fb);
+  document.querySelectorAll('.nb').forEach((nb,i)=>{if(t.nb[i]){nb.style.background=t.nb[i];nb.style.borderTopColor=t.nbb[i];}});
+  regenWindows(t.wc);
+  document.querySelectorAll('.sl').forEach(s=>s.style.opacity=t.sl?'1':'0');
+  document.querySelectorAll('.tl').forEach(s=>s.style.opacity=t.tl?'1':'0');
+  document.querySelectorAll('.bench').forEach(s=>s.style.opacity=t.bench?'1':'0');
+  document.querySelectorAll('.trash').forEach(s=>s.style.opacity=t.trash?'1':'0');
+  buildNature(t.nature);
+  startParticles(t.particles);
+  const ind=document.getElementById('theme-indicator');
+  ind.innerText=t.name;ind.style.borderColor=t.bc+'aa';ind.style.color=t.bc;
+  if(showBanner){
+    showThemeBanner(t.banner,t.bc);
+    haptic('levelUp');
+  }
+}
+function showThemeBanner(text,color){
+  const b=document.getElementById('theme-banner');
+  b.innerHTML=`<span style="color:${color}">${text}</span><br><span style="font-size:14px;opacity:0.7;letter-spacing:1px;font-family:Nunito,sans-serif;font-weight:700">WORLD CHANGED!</span>`;
+  b.classList.remove('show');void b.offsetWidth;b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'),3000);
+}
+
+/* ═══════════ WINDOWS ═══════════ */
+function generateStars(id,count,maxSz){
+  const c=document.getElementById(id);if(!c)return;c.innerHTML='';
+  for(let i=0;i<count;i++){const s=document.createElement('div');const sz=Math.random()*maxSz+0.5;
+    s.style.cssText=`position:absolute;left:${Math.random()*100}%;top:${Math.random()*65}%;width:${sz}px;height:${sz}px;background:#fff;border-radius:50%;opacity:${Math.random()*0.7+0.2};animation:star-twinkle ${Math.random()*3+2}s ease-in-out infinite;animation-delay:${Math.random()*4}s`;
+    c.appendChild(s);}
+}
+function regenWindows(colors){
+  ['far-windows','near-windows'].forEach(id=>{
+    const c=document.getElementById(id);if(!c)return;c.innerHTML='';
+    const isFar=id==='far-windows';
+    const bd=isFar?[{l:0,w:8,h:100},{l:7,w:10,h:160},{l:16,w:7,h:120},{l:24,w:13,h:200},{l:38,w:9,h:140},{l:50,w:14,h:220},{l:67,w:11,h:170},{l:82,w:18,h:190}]:[{l:2,w:14,h:180},{l:20,w:10,h:140},{l:44,w:16,h:250},{l:63,w:12,h:200},{l:80,w:18,h:160}];
+    const cH=isFar?220:280;
+    bd.forEach(b=>{
+      const cols=Math.max(2,Math.floor(b.w*(isFar?8:10)/18));
+      const rows=Math.max(3,Math.floor(b.h/(isFar?28:35)));
+      for(let r=0;r<rows;r++)for(let cl=0;cl<cols;cl++){
+        if(Math.random()>0.55)continue;
+        const w=document.createElement('div');
+        const wW=isFar?5:7,wH=isFar?4:6;
+        const cs=(b.w*10)/(cols+1),rs=b.h/(rows+1);
+        const lx=b.l+((cl+1)*cs)/10,ty=cH-b.h+(r+1)*rs-rs*0.5;
+        const col=colors[Math.floor(Math.random()*colors.length)];
+        w.style.cssText=`position:absolute;left:${lx}%;top:${ty}px;width:${wW}px;height:${wH}px;background:${col};border-radius:1px;box-shadow:0 0 ${isFar?4:7}px ${col};${Math.random()>0.88?'animation:win-flicker 4s ease-in-out infinite;':''}animation-delay:${Math.random()*5}s`;
+        c.appendChild(w);
+      }
+    });
+  });
+}
+
+/* ═══════════ GAME STATE ═══════════ */
+const GS={
+  score:0,active:false,paused:false,playerY:0,velocity:0,glimmers:[],
+  target:10,isJumping:false,canDoubleJump:false,hasDoubleJumped:false,
+  baseSpeed:6,currentSpeed:6,speedMultiplier:1.0,
+  consecutiveMisses:0,maxMisses:5,lastSpawnTime:0,minSpawnInterval:900,
+  savedGender:'male',groundY:0,
+  totalCollected:0,lastThemeAt:0,
+  words:["Hope","Joy","Peace","Love","Dream","Smile","Light","Brave","Strong","Faith","Trust","Grace","Kind","Calm","Happy","Shine","Rise","Grow","Heal","Believe","Wonder","Magic","Soul","Heart","Spirit","Life","Free","Zen","Flow","Bliss"],
+  quotes:["You are doing better than you think.","This feeling is temporary. You are strong.","Progress is not always a straight line.","You deserve peace of mind.","You have survived 100% of your bad days."],
+};
+
+const FEMALE_SVG=`<svg viewBox="0 0 80 130" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="20" r="12" fill="#f4c2a5"/><ellipse cx="48" cy="17" rx="9" ry="7" fill="#3d2817"/><circle cx="37" cy="20" r="1.5" fill="#1a0a00"/><circle cx="43" cy="20" r="1.5" fill="#1a0a00"/><ellipse cx="40" cy="50" rx="14" ry="22" fill="#f72585"/><rect x="26" y="38" width="28" height="16" fill="#f72585" rx="3"/><ellipse cx="27" cy="47" rx="5" ry="17" fill="#f4c2a5" transform="rotate(-35 27 47)"/><ellipse cx="53" cy="51" rx="5" ry="17" fill="#f4c2a5" transform="rotate(25 53 51)"/><ellipse cx="43" cy="88" rx="6" ry="27" fill="#c9184a" transform="rotate(-15 43 88)"/><ellipse cx="46" cy="110" rx="5" ry="12" fill="#f4c2a5" transform="rotate(-18 46 110)"/><ellipse cx="35" cy="82" rx="6" ry="23" fill="#c9184a" transform="rotate(22 35 82)"/><ellipse cx="47" cy="118" rx="8" ry="4" fill="#fff" transform="rotate(-15 47 118)"/></svg>`;
+const MALE_SVG=`<svg viewBox="0 0 80 130" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="20" r="13" fill="#f1c27d"/><path d="M 27 17 Q 32 10 40 9 Q 48 10 53 17" fill="#3d2817"/><circle cx="36" cy="21" r="1.5" fill="#1a0a00"/><circle cx="44" cy="21" r="1.5" fill="#1a0a00"/><ellipse cx="40" cy="52" rx="16" ry="23" fill="#3a86ff"/><rect x="24" y="39" width="32" height="17" fill="#3a86ff" rx="4"/><ellipse cx="25" cy="49" rx="6" ry="19" fill="#f1c27d" transform="rotate(-40 25 49)"/><ellipse cx="55" cy="53" rx="6" ry="19" fill="#f1c27d" transform="rotate(30 55 53)"/><ellipse cx="44" cy="90" rx="7" ry="28" fill="#1d3557" transform="rotate(-12 44 90)"/><ellipse cx="48" cy="113" rx="6" ry="13" fill="#f1c27d" transform="rotate(-16 48 113)"/><ellipse cx="50" cy="122" rx="9" ry="5" fill="#212121" transform="rotate(-12 50 122)"/></svg>`;
+
+/* ═══════════ HELPERS ═══════════ */
+function switchPage(id){['start-page','game-page','levelup-page','gameover-page'].forEach(p=>{const e=document.getElementById(p);if(e)e.style.display='none';});const t=document.getElementById(id);if(t)t.style.display='flex';}
+function getGroundY(){return(document.getElementById('game-page').offsetHeight||580)-38-95-8;}
+function getGameW(){return document.getElementById('game-page').offsetWidth||1000;}
+function getPlayerX(){return Math.floor(getGameW()*8/100);}
+
+/* ═══════════ GAME FLOW ═══════════ */
+function initGame(gender){
+  haptic('medium');
+  const gnd=getGroundY();
+  Object.assign(GS,{score:0,active:true,paused:false,playerY:gnd,velocity:0,glimmers:[],
+    isJumping:false,canDoubleJump:false,hasDoubleJumped:false,
+    currentSpeed:GS.baseSpeed,speedMultiplier:1.0,consecutiveMisses:0,
+    lastSpawnTime:Date.now(),savedGender:gender,groundY:gnd,totalCollected:0,lastThemeAt:0});
+  switchPage('game-page');
+  document.getElementById('score-val').innerText='✨ 0';
+  document.getElementById('target-val').innerText='🎯 '+GS.target;
+  document.getElementById('miss-val').innerText='❌ 0/5';
+  document.getElementById('miss-val').classList.remove('danger');
+  document.getElementById('speed-indicator').innerText='⚡ 1.0x';
+  document.getElementById('player').innerHTML=gender==='female'?FEMALE_SVG:MALE_SVG;
+  document.getElementById('player').style.top=gnd+'px';
+  document.querySelectorAll('.glimmer').forEach(g=>g.remove());
+  applyTheme(0,false);
+  initParticles();
+  gameLoop();
+}
+function tryAgain(){haptic('medium');initGame(GS.savedGender);}
+function returnHome(){haptic('light');GS.active=false;stopParticles();switchPage('start-page');document.querySelectorAll('.glimmer').forEach(g=>g.remove());}
+function pauseGame(){
+  haptic('light');
+  GS.paused=!GS.paused;
+  document.getElementById('pause-btn').innerText=GS.paused?'▶ Resume':'⏸ Pause';
+  if(!GS.paused)gameLoop();
+}
+function returnToGame(){haptic('medium');GS.active=true;GS.paused=false;GS.groundY=getGroundY();switchPage('game-page');gameLoop();}
+function jump(e){
+  if(e)e.preventDefault();
+  if(!GS.active||GS.paused)return;
+  if(!GS.isJumping){
+    haptic('light');
+    GS.velocity=-14;GS.isJumping=true;GS.canDoubleJump=true;GS.hasDoubleJumped=false;
+  }else if(GS.canDoubleJump&&!GS.hasDoubleJumped){
+    haptic('light');
+    GS.velocity=-13;GS.hasDoubleJumped=true;
+  }
+}
+function gameOver(){
+  haptic('gameOver');
+  GS.active=false;
+  stopParticles();
+  document.getElementById('final-score').innerText=`Score: ${GS.score} ✨`;
+  switchPage('gameover-page');
+}
+function levelUp(){
+  haptic('levelUp');
+  GS.active=false;
+  document.getElementById('quote-box').innerText=`"${GS.quotes[Math.floor(Math.random()*GS.quotes.length)]}"`;
+  switchPage('levelup-page');
+  GS.target+=10;
+  GS.consecutiveMisses=0;
+}
+function updateSpeed(){const si=Math.floor(GS.score/5)*0.15;GS.speedMultiplier=1.0+si;GS.currentSpeed=GS.baseSpeed*GS.speedMultiplier;document.getElementById('speed-indicator').innerText=`⚡ ${GS.speedMultiplier.toFixed(1)}x`;}
+function updateMiss(){
+  const m=document.getElementById('miss-val');
+  m.innerText=`❌ ${GS.consecutiveMisses}/5`;
+  m.classList.toggle('danger',GS.consecutiveMisses>=3);
+  if(GS.consecutiveMisses>=3)haptic('miss');
+}
+function checkTheme(){
+  const thresh=Math.floor(GS.totalCollected/20);
+  if(thresh>GS.lastThemeAt){GS.lastThemeAt=thresh;applyTheme(thresh%THEMES.length,true);}
+}
+
+/* ═══════════ GAME LOOP ═══════════ */
+function gameLoop(){
+  if(!GS.active||GS.paused)return;
+  GS.velocity+=0.55;GS.playerY+=GS.velocity;
+  const gnd=GS.groundY;
+  if(GS.playerY>=gnd){GS.playerY=gnd;GS.velocity=0;GS.isJumping=false;GS.canDoubleJump=false;GS.hasDoubleJumped=false;}
+  if(GS.playerY<0){GS.playerY=0;GS.velocity=0;}
+  const p=document.getElementById('player');
+  if(p){p.style.top=Math.round(GS.playerY)+'px';p.className=GS.isJumping?'jumping':'';}
+  const now=Date.now(),gw=getGameW();
+  const interval=Math.max(500,GS.minSpawnInterval/GS.speedMultiplier);
+  if(now-GS.lastSpawnTime>interval&&Math.random()<0.045){
+    const word=GS.words[Math.floor(Math.random()*GS.words.length)];
+    const gid='g-'+now+'-'+Math.floor(Math.random()*9999);
+    const gel=document.createElement('div');
+    gel.className='glimmer';gel.id=gid;gel.innerText=word;gel.style.left=gw+'px';
+    const yo=[gnd-10,gnd-60,gnd-130,gnd-200,gnd-250,gnd-30,gnd-90,gnd-160];
+    const yp=yo[Math.floor(Math.random()*yo.length)];
+    gel.style.top=Math.max(60,yp)+'px';
+    document.getElementById('game-page').appendChild(gel);
+    GS.glimmers.push({id:gid,x:gw,y:yp,missed:false});
+    GS.lastSpawnTime=now;
+  }
+  const px=getPlayerX();
+  for(let i=GS.glimmers.length-1;i>=0;i--){
+    const g=GS.glimmers[i];
+    g.x-=GS.currentSpeed;
+    const el=document.getElementById(g.id);
+    if(!el){GS.glimmers.splice(i,1);continue;}
+    el.style.left=Math.round(g.x)+'px';
+    const py=GS.playerY+47,gy=g.y+18,ppx=px+27,gx=g.x+50;
+    if(Math.abs(ppx-gx)<65&&Math.abs(py-gy)<55){
+      haptic('collect');
+      GS.score++;GS.totalCollected++;GS.consecutiveMisses=0;
+      document.getElementById('score-val').innerText='✨ '+GS.score;
+      updateMiss();updateSpeed();checkTheme();
+      el.style.transition='all 0.3s ease';el.style.transform='scale(2) rotate(360deg)';el.style.opacity='0';
+      setTimeout(()=>{if(el.parentNode)el.remove();},300);
+      GS.glimmers.splice(i,1);
+      if(GS.score>=GS.target){levelUp();return;}
+    }else if(g.x<-120){
+      if(!g.missed){g.missed=true;GS.consecutiveMisses++;updateMiss();if(GS.consecutiveMisses>=GS.maxMisses){gameOver();return;}}
+      el.remove();GS.glimmers.splice(i,1);
+    }
+  }
+  requestAnimationFrame(gameLoop);
+}
+
+/* ═══════════ INPUT ═══════════ */
+document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump(e);}});
+document.addEventListener('click',e=>{const t=e.target.tagName;if(t==='BUTTON'||t==='A')return;if(GS.active&&!GS.paused)jump(e);});
+document.addEventListener('touchstart',e=>{const t=e.target.tagName;if(t==='BUTTON'||t==='A')return;if(GS.active&&!GS.paused){e.preventDefault();jump(e);}},{passive:false});
+
+/* ═══════════ INIT ═══════════ */
+window.addEventListener('load',()=>{
+  generateStars('star-field',120,2.5);
+  generateStars('game-stars',80,2);
+  regenWindows(['rgba(255,240,180,0.85)','rgba(255,220,120,0.9)','rgba(200,230,255,0.7)','rgba(255,255,200,0.8)']);
+});
+console.log('🏃 Spark Runner: World Edition Loaded! ✨');
+</script>
 </body>
 </html>
