@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe Check - Youth Connect Hub</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -42,7 +41,7 @@
             left: 0; 
             width: 100%; 
             height: 100%;
-            background-image: url("{{ url_for('static', filename='you1.jpg') }}");
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-size: cover; 
             background-position: center; 
             z-index: -2;
@@ -146,6 +145,7 @@
             flex-direction: column;
             cursor: pointer;
             z-index: 1001;
+            padding: 5px;
         }
         
         .hamburger span {
@@ -792,7 +792,7 @@
             }
         }
 
-        /* Mobile Specific Styles */
+        /* Mobile Specific Styles - IMPROVED */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -803,22 +803,25 @@
                 top: 0;
                 right: -100%;
                 height: 100vh;
-                width: 75%;
-                max-width: 300px;
-                background: rgba(26, 26, 46, 0.98);
-                backdrop-filter: blur(15px);
+                width: 280px;
+                max-width: 85%;
+                background: linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(42, 42, 66, 0.98) 100%);
+                backdrop-filter: blur(20px);
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                justify-content: flex-start;
+                padding-top: 80px;
                 gap: 0;
-                transition: right 0.4s ease;
-                box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.6);
+                z-index: 999;
+                overflow-y: auto;
             }
             
             .nav-links ul {
                 flex-direction: column;
                 gap: 0;
                 width: 100%;
+                padding: 20px 0;
             }
             
             .nav-links.active {
@@ -826,11 +829,53 @@
             }
             
             .nav-links a {
-                font-size: 1rem;
+                font-size: 1.05rem;
                 width: 100%;
-                text-align: center;
-                padding: 15px 20px;
+                text-align: left;
+                padding: 16px 30px;
                 border-radius: 0;
+                border-left: 4px solid transparent;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: all 0.3s ease;
+            }
+            
+            .nav-links a:hover,
+            .nav-links a:active {
+                background: rgba(255, 107, 53, 0.15);
+                border-left-color: var(--primary);
+                padding-left: 35px;
+            }
+            
+            .nav-links a i {
+                width: 20px;
+                text-align: center;
+            }
+            
+            /* Mobile overlay when menu is open */
+            .nav-links.active::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 280px;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: -1;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            /* Highlight active page on mobile */
+            .nav-links a.active-page {
+                background: rgba(255, 107, 53, 0.2);
+                border-left-color: var(--primary);
+                color: var(--primary);
             }
         }
         
@@ -844,28 +889,83 @@
             }
             
             .nav-links {
-                width: 85%;
+                width: 260px;
+                max-width: 90%;
+                padding-top: 70px;
+            }
+            
+            .nav-links a {
+                font-size: 0.95rem;
+                padding: 14px 25px;
+            }
+            
+            .nav-links a:hover {
+                padding-left: 30px;
             }
             
             .progress-sticky {
                 top: 60px;
+                padding: 10px 12px;
+            }
+            
+            .progress-label {
+                font-size: 0.7rem;
+            }
+            
+            .bar-bg {
+                height: 8px;
+            }
+            
+            .progress-percent {
+                font-size: 0.75rem;
+                min-width: 30px;
             }
             
             .form-card h2 {
                 font-size: 1.3rem;
             }
             
+            .disclaimer-box {
+                padding: 1rem;
+            }
+            
             .disclaimer-box h3 {
                 font-size: 1rem;
+            }
+            
+            .disclaimer-box p {
+                font-size: 0.8rem;
+            }
+            
+            .emergency-contact {
+                padding: 10px;
             }
             
             .question-text {
                 font-size: 0.9rem;
             }
             
+            .category-tag {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            
             .submit-btn {
                 font-size: 0.95rem;
                 padding: 1.1rem;
+            }
+            
+            .support-banner {
+                max-width: calc(100% - 20px);
+                padding: 1rem;
+            }
+            
+            .support-banner-header h4 {
+                font-size: 0.95rem;
+            }
+            
+            .support-banner p {
+                font-size: 0.8rem;
             }
         }
 
@@ -875,12 +975,41 @@
                 height: 25px;
             }
             
+            .nav-links {
+                width: 240px;
+                padding-top: 65px;
+            }
+            
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 12px 20px;
+            }
+            
             .form-card {
                 padding: 1.5rem 1rem;
             }
             
             .question-block {
                 padding: 1rem;
+            }
+            
+            .support-banner {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: calc(100% - 20px);
+            }
+        }
+
+        /* Landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .nav-links {
+                padding-top: 60px;
+            }
+            
+            .nav-links a {
+                padding: 10px 25px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -890,20 +1019,20 @@
     <nav>
         <div class="nav-container">
             <div class="logo-section">
-                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo 1">
-                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Logo 2">
-                <img src="{{ url_for('static', filename='AYFHS.png') }}" alt="Logo 3">
+                <div style="width: 35px; height: 35px; background: var(--primary); border-radius: 50%;"></div>
+                <div style="width: 35px; height: 35px; background: var(--secondary); border-radius: 50%;"></div>
+                <div style="width: 35px; height: 35px; background: var(--success); border-radius: 50%;"></div>
             </div>
             
             <div class="nav-links" id="navLinks">
                 <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                    <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                    <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                    <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                    <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                    <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+                    <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="/resources"><i class="fas fa-book"></i>Resources</a></li>
+                    <li><a href="/activities"><i class="fas fa-gamepad"></i>SEL Activities</a></li>
+                    <li><a href="/assessment"><i class="fas fa-brain"></i>Assessment</a></li>
+                    <li><a href="/mood"><i class="fas fa-chart-line"></i>Mood Tracker</a></li>
+                    <li><a href="/runner"><i class="fas fa-running"></i>Spark Runner</a></li>
+                    <li><a href="/support" style="color: var(--primary);"><i class="fas fa-heart"></i>Get Support</a></li>
                 </ul>
             </div>
             
@@ -925,7 +1054,7 @@
 
     <div class="main-content">
         <div class="form-card">
-            <form id="vibeForm" method="POST" action="{{ url_for('submit_assessment') }}">
+            <form id="vibeForm">
                 
                 <h2>Vibe Assessment 🔍</h2>
                 <p>Please provide your basic details so we can tailor your wellness journey results.</p>
@@ -995,13 +1124,13 @@
             <div class="footer-links">
                 <h4>Quick Links</h4>
                 <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                    <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                    <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                    <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                    <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                    <li><a href="{{ url_for('register') }}">Get Support</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/resources">Resources</a></li>
+                    <li><a href="/activities">SEL Activities</a></li>
+                    <li><a href="/assessment">Assessment</a></li>
+                    <li><a href="/mood">Mood Tracker</a></li>
+                    <li><a href="/runner">Spark Runner</a></li>
+                    <li><a href="/support">Get Support</a></li>
                 </ul>
             </div>
             <div class="footer-links">
@@ -1009,7 +1138,7 @@
                 <ul>
                     <li><a href="#"><i class="fas fa-map-marker-alt"></i> Akure, Ondo State</a></li>
                     <li><a href="tel:08134812419"><i class="fas fa-phone"></i> +234 813 481 2419</a></li>
-                    <li><a href="mailto:support@youthconnect.com"><i class="fas fa-envelope"></i> help@youthhub.ng</a></li>
+                    <li><a href="mailto:help@youthhub.ng"><i class="fas fa-envelope"></i> help@youthhub.ng</a></li>
                 </ul>
             </div>
         </div>
@@ -1047,57 +1176,33 @@
         // Track high-risk responses
         let highRiskDetected = false;
         const riskIndicators = {
-            q12: [3, 4], // Sexual abuse
-            q13: [3, 4], // Physical/emotional abuse
-            q14: [3, 4], // Sexual pressure
-            q15: [1, 2], // Can't say no
-            q17: [1, 2]  // Urgent SRH needs
+            q12: [3, 4],
+            q13: [3, 4],
+            q14: [3, 4],
+            q15: [1, 2],
+            q17: [1, 2]
         };
 
-        // Questions Array - INTEGRATED WITH BACKEND q1-q20 STRUCTURE
         const questions = [
-            // q1-q5: Mental Health & Well-being
             { text: "Have you felt cheerful and in good spirits?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Have you felt calm and relaxed?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Have you felt active and vigorous lately?", cat: "Energy", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Do you wake up feeling fresh and rested? 😴", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Is your daily life filled with things that interest you?", cat: "Life", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            
-            // q6-q10: Emotional Health
             { text: "Do you feel little interest or pleasure in doing things? 😔", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
             { text: "Do you feel down, depressed, or hopeless?", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
             { text: "How often do you find it hard to concentrate on school or work?", cat: "Focus", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "How often do you feel nervous, anxious, or on edge?", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Do you feel like your emotions are out of control? 🌊", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            
-            // q11: Home Safety
             { text: "Do you feel safe and respected in your home environment? 🏠", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"], sensitive: false },
-            
-            // q12: SEXUAL ABUSE DETECTION (Sensitive)
             { text: "Has anyone touched you inappropriately or forced you into unwanted sexual activity? 🛑", cat: "Sexual Safety", color: "#ffcccc", opts: ["Never", "This happened once", "This happens sometimes", "This is happening now"], sensitive: true },
-            
-            // q13: Physical/Emotional Abuse (Sensitive)
             { text: "Has anyone physically or emotionally hurt you recently? 🛑", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"], sensitive: true },
-            
-            // q14: SEXUAL PRESSURE (Sensitive)
             { text: "Do you feel pressured by anyone (partner, family, peers) to engage in sexual activities you're not comfortable with?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Often"], sensitive: true },
-            
-            // q15: Sexual Autonomy (Sensitive)
             { text: "Do you feel you can say 'No' to sexual advances without fear or consequences?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Always"], sensitive: true },
-            
-            // q16: SRH Access (Sensitive)
             { text: "Do you have access to accurate information about sexual and reproductive health?", cat: "SRH Access", color: "#d1fff0", opts: ["No access", "Limited access", "Some access", "Full access"], sensitive: true },
-            
-            // q17: SRH Urgent Needs (Sensitive)
             { text: "Have you experienced unwanted pregnancy, STI concerns, or need contraception advice but don't know where to get help?", cat: "SRH Needs", color: "#d1fff0", opts: ["Yes, urgently", "Yes, but not urgent", "Maybe in future", "No"], sensitive: true },
-            
-            // q18: Future Outlook
             { text: "Are you optimistic about what the future holds for you? ✨", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"], sensitive: false },
-            
-            // q19: SRH Support (Sensitive)
             { text: "Do you have a trusted adult or healthcare provider you can talk to about sexual health concerns?", cat: "SRH Support", color: "#d1fff0", opts: ["No one", "Maybe one person", "Yes, I have someone", "Yes, multiple trusted sources"], sensitive: true },
-            
-            // q20: Help Access (Sensitive)
             { text: "When you feel unsafe or need help with sexual health issues, do you know where to go for confidential support in Ondo?", cat: "Help Access", color: "#fff4d1", opts: ["No idea", "I've heard of places", "I know some places", "Yes, I know Youth Connect & clinics"], sensitive: true }
         ];
 
@@ -1138,7 +1243,6 @@
             if (select.value !== "") {
                 block.classList.add('answered');
                 
-                // Check for high-risk responses
                 if (riskIndicators[`q${id}`] && riskIndicators[`q${id}`].includes(parseInt(select.value))) {
                     if (!highRiskDetected) {
                         highRiskDetected = true;
@@ -1152,7 +1256,6 @@
         }
 
         function showSupportMessage() {
-            // Create support banner
             const banner = document.createElement('div');
             banner.className = 'support-banner';
             banner.innerHTML = `
@@ -1174,7 +1277,6 @@
             `;
             document.body.appendChild(banner);
             
-            // Auto-dismiss after 15 seconds
             setTimeout(() => {
                 if (banner.parentNode) {
                     banner.style.animation = 'slideIn 0.5s ease reverse';
