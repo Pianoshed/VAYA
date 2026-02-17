@@ -108,11 +108,11 @@
     </div>
 
     <div id="gameover-page" class="page" style="display:none;">
-        <div class="overlay-bg red-overlay"></div>
+        <div class="overlay-bg gentle-overlay"></div>
         <div class="modal-card">
-            <h1 class="modal-title go-title">💔 Game Over</h1>
-            <p class="go-sub">You missed 5 glimmers in a row!</p>
-            <p id="final-score" class="go-score">Score: 0 ✨</p>
+            <h1 class="modal-title encourage-title">✨ Keep Going!</h1>
+            <p id="encourage-quote" class="encourage-quote">"Every attempt makes you stronger."</p>
+            <p id="final-score" class="go-score">You collected: 0 ✨</p>
             <div class="modal-btns">
                 <button class="btn btn-retry" onclick="tryAgain()">🔄 Try Again</button>
                 <button class="btn btn-home2" onclick="returnHome()">🏠 Home</button>
@@ -338,9 +338,12 @@ body{background:#020510;font-family:'Nunito',sans-serif;display:flex;justify-con
 
 .overlay-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(10,20,50,0.92),rgba(5,8,20,0.97));backdrop-filter:blur(6px)}
 .red-overlay{background:radial-gradient(ellipse at 50% 50%,rgba(50,5,15,0.92),rgba(5,8,20,0.97))}
+.gentle-overlay{background:radial-gradient(ellipse at 50% 50%,rgba(20,35,60,0.92),rgba(5,8,20,0.97))}
 .modal-card{position:relative;z-index:5;text-align:center;padding:34px 42px;background:rgba(255,255,255,0.04);border-radius:20px;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(20px);max-width:90%}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;color:var(--gold)}
-.go-title{color:var(--danger)}.go-sub{font-size:16px;opacity:0.8;margin:10px 0}.go-score{font-size:24px;color:var(--gold);font-weight:900;margin:8px 0 16px}
+.go-title{color:var(--danger)}
+.encourage-title{color:#4cc9f0}
+.encourage-quote{font-style:italic;font-size:18px;color:#ffd166;margin:12px 0 16px;line-height:1.6;max-width:360px}.go-sub{font-size:16px;opacity:0.8;margin:10px 0}.go-score{font-size:24px;color:var(--gold);font-weight:900;margin:8px 0 16px}
 .quote{font-style:italic;font-size:20px;color:#4cc9f0;margin:16px 0 24px;line-height:1.6;max-width:360px}
 .modal-btns{display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
 
@@ -362,23 +365,50 @@ body{background:#020510;font-family:'Nunito',sans-serif;display:flex;justify-con
 @keyframes star-twinkle{0%,100%{opacity:0.4;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
 
 @media(max-width:600px){
-    :root{--player-left-pct:4%;--game-height:100vh}
+    :root{--player-left-pct:6%;--game-height:100vh}
     #game-window{border-radius:0;height:100vh;height:100dvh;max-width:100%;border:none}
     .title{font-size:42px}.info-cards{gap:8px}.info-card{width:126px;padding:10px 10px}
     .card-icon{font-size:24px}.card-title{font-size:11px}.card-text{font-size:9px}
     .game-intro{padding:16px 12px 12px;gap:11px}
-    #player{width:45px;height:85px}
-    .glimmer{font-size:11px;padding:8px 13px}
-    .powerup{width:32px;height:32px;font-size:18px}
+    
+    /* Better mobile character scaling */
+    #player{width:52px;height:92px}
+    
+    /* Proportional glimmer sizing */
+    .glimmer{font-size:10px;padding:7px 11px;letter-spacing:0.5px}
+    .glimmer::before,.glimmer::after{font-size:14px;left:-14px}
+    .glimmer::after{left:auto;right:-14px}
+    
+    /* Better powerup visibility */
+    .powerup{width:36px;height:36px;font-size:20px;border-width:2.5px}
+    
     .main-nav{padding:8px 10px;gap:4px}.nav-link{padding:5px 7px;font-size:10px}
-    #stats{gap:4px;font-size:12px}.stat-box{padding:5px 9px}
-    .instructions{right:5px;bottom:38px;font-size:10px;padding:5px 9px}
-    .home-link{top:90px;right:5px;padding:5px 9px;font-size:10px}
-    .modal-card{padding:22px 18px}.modal-title{font-size:30px}.quote{font-size:15px}
-    .theme-banner{font-size:24px;padding:12px 24px}
-    .powerup-status{right:5px;top:48px}
+    #stats{gap:5px;font-size:13px}.stat-box{padding:6px 10px;font-size:12px}
+    .indicators{left:8px;top:52px}
+    .indicator-box{padding:5px 10px;font-size:11px}
+    .instructions{right:8px;bottom:42px;font-size:10px;padding:6px 10px}
+    .home-link{top:92px;right:8px;padding:6px 11px;font-size:11px}
+    .modal-card{padding:24px 20px}.modal-title{font-size:32px}.quote{font-size:16px}
+    .theme-banner{font-size:26px;padding:14px 28px}
+    .powerup-banner{font-size:22px;padding:10px 24px}
+    .powerup-status{right:8px;top:52px}
+    .powerup-active{font-size:10px;padding:4px 9px}
+    
+    /* Adjust ground elements for mobile */
+    .street-road{height:120px}
+    .street-markings{bottom:50px}
+    .buildings-far{bottom:118px;height:180px}
+    .buildings-near{bottom:118px;height:220px}
+    .nature-layer{bottom:118px;height:100px}
 }
-@media(max-width:380px){:root{--player-left-pct:2%}#player{width:40px;height:75px}.title{font-size:32px}}
+@media(max-width:380px){
+    :root{--player-left-pct:4%}
+    #player{width:46px;height:84px}
+    .glimmer{font-size:9px;padding:6px 9px}
+    .powerup{width:32px;height:32px;font-size:18px}
+    .title{font-size:32px}
+    #stats{font-size:11px}.stat-box{padding:5px 8px;font-size:11px}
+}
 </style>
 <script>
 /* ═══════════ HAPTIC FEEDBACK ═══════════ */
@@ -770,8 +800,39 @@ const GS={
   totalCollected:0,lastThemeAt:0,
   powerups:[], lastPowerupSpawn:0, powerupSpawnInterval:15000,
   activePowerups:{}, speedBoost:1.0, scoreMultiplier:1, jumpBoost:1.0,
-  words:["Hope","Joy","Peace","Love","Dream","Smile","Light","Brave","Strong","Faith","Trust","Grace","Kind","Calm","Happy","Shine","Rise","Grow","Heal","Believe","Wonder","Magic","Soul","Heart","Spirit","Life","Free","Zen","Flow","Bliss"],
-  quotes:["You are doing better than you think.","This feeling is temporary. You are strong.","Progress is not always a straight line.","You deserve peace of mind.","You have survived 100% of your bad days."],
+  words:[
+    "Hope","Joy","Peace","Love","Dream","Smile","Light","Brave","Strong","Faith",
+    "Trust","Grace","Kind","Calm","Happy","Shine","Rise","Grow","Heal","Believe",
+    "Wonder","Magic","Soul","Heart","Spirit","Life","Free","Zen","Flow","Bliss",
+    "Courage","Gentle","Warm","Safe","Rest","Breathe","Present","Grateful","Worthy",
+    "Enough","Compassion","Serene","Patient","Mindful","Resilient","Hopeful","Radiant",
+    "Vibrant","Alive","Renewal","Balance","Harmony","Joy","Thrive","Flourish","Empower",
+    "Clarity","Focus","Ground","Center","Uplift","Inspire","Restore","Comfort","Ease",
+    "Grace","Beauty","Truth","Kindness","Support","Connect","Tender","Nurture","Care",
+    "Acceptance","Release","Forgive","Transform","Evolve","Pause","Reflect","Celebrate"
+  ],
+  quotes:[
+    "You are doing better than you think.",
+    "This feeling is temporary. You are strong.",
+    "Progress is not always a straight line.",
+    "You deserve peace of mind.",
+    "You have survived 100% of your bad days.",
+    "Every small step forward is a victory.",
+    "You are worthy of rest and healing.",
+    "Your journey matters, even on difficult days.",
+    "Be gentle with yourself. You're doing your best.",
+    "The light always returns, even after the darkest night.",
+    "Take a deep breath. You've got this.",
+    "It's okay to take things one moment at a time.",
+    "You are stronger than you realize.",
+    "Your feelings are valid, and so is your growth.",
+    "Even tiny progress is still progress.",
+    "You don't have to be perfect to be amazing.",
+    "Rest is productive. You deserve to pause.",
+    "Every sunrise is a new opportunity.",
+    "You are capable of beautiful things.",
+    "Your story isn't over yet."
+  ],
 };
 
 /* ═══════════ IMPROVED REALISTIC CHARACTERS ═══════════ */
@@ -888,7 +949,28 @@ function gameOver(){
   GS.active=false;
   stopParticles();
   clearAllPowerups();
-  document.getElementById('final-score').innerText=`Score: ${GS.score} ✨`;
+  
+  // Show encouragement instead of "game over"
+  const encouragements = [
+    "Every attempt makes you stronger.",
+    "You're building resilience with each try.",
+    "Progress isn't perfect, and that's okay.",
+    "You made it this far—that's worth celebrating!",
+    "Each game teaches you something new.",
+    "Keep going. You've got this!",
+    "Your persistence is admirable.",
+    "Every run is practice for the next victory.",
+    "You're doing great. Try again when ready!",
+    "Small setbacks lead to big comebacks."
+  ];
+  
+  const quote = encouragements[Math.floor(Math.random() * encouragements.length)];
+  const quoteEl = document.getElementById('encourage-quote');
+  if(quoteEl) quoteEl.innerText = `"${quote}"`;
+  
+  const scoreEl = document.getElementById('final-score');
+  if(scoreEl) scoreEl.innerText = `You collected: ${GS.score} ✨`;
+  
   switchPage('gameover-page');
 }
 function levelUp(){
