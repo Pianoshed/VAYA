@@ -8,6 +8,9 @@
     <meta name="description" content="Ondo Youth Connect Hub is a dedicated digital safe space for youth in Ondo State. Access mental health assessments, mood tracking, SEL toolkits, and professional counseling.">
     <meta name="keywords" content="Ondo Youth, Mental Health Nigeria, SEL Toolkit, Mood Tracker, Youth Counseling, Ondo State Health">
     
+    <!-- ✅ PERF: Preload the hero background image so browser fetches it in parallel -->
+    <link rel="preload" as="image" href="{{ url_for('static', filename='you1.jpg') }}">
+    
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
     
@@ -22,7 +25,6 @@
             --purple: #9D4EDD;
             --blue: #00B4D8;
             --pink: #FF006E;
-            --glass: rgba(255, 255, 255, 0.9);
         }
 
         * {
@@ -36,25 +38,43 @@
             font-family: 'Poppins', sans-serif;
             color: var(--dark);
             overflow-x: hidden;
-            background: #000;
+            /* ✅ PERF: Instant dark fallback colour so page isn't blank while image loads */
+            background: #1A1A2E;
         }
 
-        /* Fixed Background Strategy */
-        body::before {
-            content: '';
+        /*
+         * ✅ PERF: Replaced body::before fixed bg-image with a dedicated #bg div.
+         * body::before with background-image blocks first paint on slow connections.
+         * #bg starts as a gradient (instant), then JS swaps in the real image
+         * after it has fully downloaded — no blank white flash, no layout shift.
+         */
+        #bg {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            inset: 0;
+            z-index: -2;
+            /* Instant gradient shown while image downloads */
+            background: linear-gradient(135deg, #1A1A2E 0%, #2d1b4e 100%);
+        }
+
+        #bg.loaded {
             background-image: url('/static/you1.jpg');
             background-size: cover;
-            background-position: center;
-            z-index: -2;
+            background-position: center top;
+            /* Smooth fade-in once image is ready */
+            animation: bgFadeIn 0.8s ease both;
         }
 
+        @keyframes bgFadeIn {
+            from { opacity: 0.4; }
+            to   { opacity: 1; }
+        }
+
+        /* Dark overlay — always on top of #bg */
         body::after {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(157, 78, 221, 0.4) 100%);
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.82) 0%, rgba(157, 78, 221, 0.45) 100%);
             z-index: -1;
         }
 
@@ -79,7 +99,8 @@
         }
 
         .logo-section { display: flex; gap: 0.8rem; align-items: center; }
-        .logo-section img { height: 32px; transition: 0.3s; }
+        /* ✅ PERF: Explicit width/height prevents Cumulative Layout Shift (CLS) */
+        .logo-section img { height: 32px; width: auto; transition: 0.3s; }
 
         .nav-links {
             display: flex;
@@ -109,7 +130,7 @@
 
         /* Hero */
         .hero {
-            height: 85vh;
+            min-height: 85vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -126,6 +147,12 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             max-width: 800px;
             color: white;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 1rem; }
@@ -139,12 +166,25 @@
             display: inline-block;
             transition: 0.3s;
             border: none;
+            cursor: pointer;
         }
 
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(255,107,53,0.3); }
-        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-left: 10px; }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(255,107,53,0.3);
+        }
+        .btn-primary:hover { background: #e85a28; transform: translateY(-2px); }
 
-        /* Transparent White Sections */
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+        /* White sections */
         .white-section {
             background: rgba(255, 255, 255, 0.94);
             padding: 5rem 1.5rem;
@@ -156,7 +196,7 @@
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
@@ -166,13 +206,13 @@
             background: white;
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+        .f-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+        .f-card h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
 
-        .f-card:hover { transform: translateY(-10px); }
-
-        /* SEL Toolkit with Animation */
+        /* SEL Section */
         .sel-section {
             background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(157, 78, 221, 0.8));
             padding: 5rem 1.5rem;
@@ -195,6 +235,8 @@
             text-align: center;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .sel-box:hover { background: rgba(255,255,255,0.2); transform: translateY(-5px); }
+        .sel-box p { font-size: 0.82rem; opacity: 0.8; margin-top: 0.5rem; }
 
         /* Back to Top */
         #scrollTop {
@@ -212,9 +254,12 @@
             cursor: pointer;
             z-index: 2000;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+            transition: 0.3s;
         }
+        #scrollTop:hover { background: #e85a28; transform: translateY(-3px); }
 
-        /* Robust Footer */
+        /* Footer */
         footer {
             background: var(--dark);
             color: white;
@@ -232,46 +277,55 @@
         }
 
         .footer-col h4 { margin-bottom: 1.5rem; color: var(--primary); font-size: 1.2rem; }
+        .footer-col p { color: #ccc; font-size: 0.9rem; line-height: 1.6; }
         .footer-col ul { list-style: none; }
         .footer-col ul li { margin-bottom: 0.8rem; }
-        .footer-col ul li a { color: #ccc; text-decoration: none; transition: 0.3s; }
+        .footer-col ul li a { color: #ccc; text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
         .footer-col ul li a:hover { color: white; padding-left: 5px; }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0.6;
         }
 
-        /* Mobile Adjustments */
+        /* Mobile */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
+
             .nav-links {
                 position: fixed;
                 top: 0; left: -100%;
                 width: 70%; height: 100vh;
                 background: var(--dark);
                 flex-direction: column;
-                padding: 6rem 2rem;
+                padding: 6rem 2rem 2rem;
                 transition: 0.4s;
                 box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+                gap: 0;
+                overflow-y: auto;
+                z-index: 999;
             }
+            .nav-links li { border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .nav-links a { display: block; padding: 1rem 0; font-size: 1rem; opacity: 1; }
             .nav-links.active { left: 0; }
-            
-            .btn-secondary { margin-left: 0; margin-top: 10px; width: 100%; }
-            .btn-primary { width: 100%; }
 
-            /* Horizontal Scroll Animation for SEL */
+            .btn-secondary { margin-left: 0; margin-top: 10px; }
+            .hero-card { padding: 2rem 1.25rem; }
+            .hero p { font-size: 1rem; }
+
             .sel-container {
                 display: flex;
                 overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
                 padding-bottom: 20px;
-                gap: 20px;
+                gap: 15px;
                 scroll-snap-type: x mandatory;
+                grid-template-columns: unset;
             }
             .sel-box {
-                min-width: 250px;
+                min-width: 200px;
                 scroll-snap-align: center;
                 opacity: 0;
                 transform: translateX(30px);
@@ -286,15 +340,24 @@
         @keyframes slideIn {
             to { opacity: 1; transform: translateX(0); }
         }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            #scrollTop { bottom: 20px; right: 15px; width: 42px; height: 42px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ✅ PERF: Dedicated BG div — starts as gradient, JS swaps in real image after load -->
+    <div id="bg"></div>
+
     <nav>
         <div class="nav-container">
             <div class="logo-section">
-                <img src="{{ url_for('static', filename='log1.png') }}" alt="Ondo Youth Logo">
-                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="ODMOH">
+                <!-- ✅ PERF: fetchpriority=high tells browser to prioritise these above-fold images -->
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="Ondo Youth Logo" height="32" fetchpriority="high">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="ODMOH" height="32" fetchpriority="high">
             </div>
             <ul class="nav-links" id="navMenu">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
@@ -305,7 +368,7 @@
                 <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
                 <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
             </ul>
-            <button class="menu-toggle" onclick="toggleNav()">☰</button>
+            <button class="menu-toggle" onclick="toggleNav()" aria-label="Toggle navigation">☰</button>
         </div>
     </nav>
 
@@ -326,9 +389,18 @@
             <p>A comprehensive toolkit designed to help you navigate life's challenges with confidence.</p>
         </div>
         <div class="feature-grid">
-            <div class="f-card"><h3>🧠 Wellness Scan</h3><p>Deep insights into your mental state with professional-grade assessments.</p></div>
-            <div class="f-card"><h3>📅 Mood Analytics</h3><p>Visualize your emotional patterns and identify triggers effectively.</p></div>
-            <div class="f-card"><h3>🤝 Live Support</h3><p>Direct access to counseling and peer support groups across Ondo.</p></div>
+            <div class="f-card">
+                <h3>🧠 Wellness Scan</h3>
+                <p>Deep insights into your mental state with professional-grade assessments.</p>
+            </div>
+            <div class="f-card">
+                <h3>📅 Mood Analytics</h3>
+                <p>Visualize your emotional patterns and identify triggers effectively.</p>
+            </div>
+            <div class="f-card">
+                <h3>🤝 Live Support</h3>
+                <p>Direct access to counseling and peer support groups across Ondo.</p>
+            </div>
         </div>
     </section>
 
@@ -338,11 +410,11 @@
             <p style="color: rgba(255,255,255,0.8);">Essential skills for modern life success.</p>
         </div>
         <div class="sel-container">
-            <div class="sel-box"><h4>Self-Awareness</h4></div>
-            <div class="sel-box"><h4>Self-Management</h4></div>
-            <div class="sel-box"><h4>Social Awareness</h4></div>
-            <div class="sel-box"><h4>Relationships</h4></div>
-            <div class="sel-box"><h4>Responsibility</h4></div>
+            <div class="sel-box"><h4>🌟 Self-Awareness</h4><p>Know yourself deeply</p></div>
+            <div class="sel-box"><h4>⚡ Self-Management</h4><p>Control your responses</p></div>
+            <div class="sel-box"><h4>👁️ Social Awareness</h4><p>Understand others</p></div>
+            <div class="sel-box"><h4>🤝 Relationships</h4><p>Build meaningful bonds</p></div>
+            <div class="sel-box"><h4>✅ Responsibility</h4><p>Own your choices</p></div>
         </div>
     </section>
 
@@ -366,38 +438,61 @@
                 <ul>
                     <li><a href="tel:+2348051234567">Support: +234 805 123 4567</a></li>
                     <li><a href="mailto:sascp@ondostate.gov.ng">Email Support</a></li>
-                    <li><a href="https://www.ondostatemoh.gov.ng/">State Portal</a></li>
+                    <li><a href="https://www.ondostatemoh.gov.ng/" target="_blank" rel="noopener">State Portal</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2024 Ondo Youth Connect Hub. Ministry of Health Collaboration.
+            &copy; 2026 Ondo Youth Connect Hub. Ministry of Health Collaboration.
         </div>
     </footer>
 
-    <div id="scrollTop" onclick="toTop()">↑</div>
+    <div id="scrollTop" onclick="toTop()" title="Back to top">↑</div>
 
     <script>
+        /*
+         * ✅ PERF: Deferred background image loading.
+         *
+         * The old approach (body::before with background-image) caused the browser
+         * to block rendering until you1.jpg was downloaded — hence the "small image"
+         * / slow load you were seeing on Render's free tier.
+         *
+         * New approach:
+         *  1. Page paints instantly with a dark gradient (#bg div).
+         *  2. We create an off-screen Image() object to download you1.jpg.
+         *  3. Once downloaded (onload fires), we add class .loaded to #bg which
+         *     applies the real background-image with a smooth fade-in.
+         *
+         * The <link rel="preload"> in <head> tells the browser to start
+         * fetching the image in parallel with HTML parsing, so it's usually
+         * ready by the time onload fires — giving the fastest possible result.
+         */
+        (function () {
+            var img = new Image();
+            img.onload = function () {
+                document.getElementById('bg').classList.add('loaded');
+            };
+            img.src = '/static/you1.jpg';
+        })();
+
         function toggleNav() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
+            document.getElementById('navMenu').classList.toggle('active');
         }
 
-        window.onscroll = function() {
-            const btn = document.getElementById("scrollTop");
-            if (document.documentElement.scrollTop > 400) {
-                btn.style.display = "flex";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-
-        function toTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
-
-        // Close menu on click
-        document.querySelectorAll('.nav-links a').forEach(l => {
-            l.addEventListener('click', () => document.getElementById('navMenu').classList.remove('active'));
+        // Close nav when a link is clicked (mobile)
+        document.querySelectorAll('.nav-links a').forEach(function (l) {
+            l.addEventListener('click', function () {
+                document.getElementById('navMenu').classList.remove('active');
+            });
         });
+
+        // Scroll-to-top button
+        window.addEventListener('scroll', function () {
+            var btn = document.getElementById('scrollTop');
+            btn.style.display = document.documentElement.scrollTop > 400 ? 'flex' : 'none';
+        }, { passive: true }); // passive: true = no scroll jank
+
+        function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     </script>
 </body>
 </html>
