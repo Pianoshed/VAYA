@@ -3,41 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Mental Health Resources & Crisis Support | Ondo Youth Connect Hub</title>
-    <meta name="description" content="Access the Ondo Youth Connect Resource Bank. Find emergency hotlines, self-help tools, mindfulness guides, and free counseling services for youth mental well-being.">
-    <meta name="keywords" content="Mental Health Nigeria, Crisis Hotline Ondo, Suicide Prevention Nigeria, Mindfulness Resources, Free Counseling Youth">
+    <title>Resource Bank | Ondo Youth Connect Hub</title>
+    <meta name="description" content="Comprehensive mental health, SRH and wellbeing resources for Ondo youth — curated from WHO, UNICEF, UNESCO, UNAIDS and more.">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='odmoh.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --primary: #FF3B3B; /* Emergency Red */
-            --secondary: #00c8ff;
-            --dark: #1A1A2E;
-            --deep-blue: #16213E;
-            --glass: rgba(22, 33, 62, 0.85);
+            --ink:      #0D1117;
+            --paper:    #F5F1EB;
+            --cream:    #EDE8DF;
+            --red:      #C8382A;
+            --amber:    #E07B28;
+            --teal:     #1B7F74;
+            --blue:     #1B5B8A;
+            --purple:   #5C3D8F;
+            --gold:     #C9972B;
+            --sage:     #4A7A5A;
+            --muted:    rgba(13,17,23,0.45);
+            --border:   rgba(13,17,23,0.12);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: url('{{ url_for("static", filename="men2.jpg") }}') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Nav synced with index */
+        /* ── NAV ── */
         nav {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 0.7rem 1.5rem;
+            background: var(--ink);
+            padding: 0.75rem 1.5rem;
             position: fixed;
             width: 100%; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-container {
@@ -48,119 +51,506 @@
             align-items: center;
         }
 
-        .logo-section img { height: 35px; margin-right: 10px; }
+        .logo-section { display: flex; align-items: center; gap: 8px; }
+        .logo-section img { height: 32px; }
 
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links { display: flex; gap: 1.75rem; list-style: none; }
         .nav-links a {
-            color: white; text-decoration: none; font-weight: 600;
-            font-size: 0.9rem; transition: 0.3s;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
         }
-        .nav-links a:hover { color: var(--secondary); }
+        .nav-links a:hover { color: white; }
+        .nav-links .nav-cta { color: #f9a340; font-weight: 700; }
 
-        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-        /* Header Section */
-        header {
-            padding: 120px 20px 60px;
-            text-align: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
-        }
-
-        header h1 { font-family: 'Righteous', cursive; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 15px; }
-        header p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 25px; opacity: 0.9; }
-
-        .cta-btn {
-            display: inline-block;
-            background: var(--primary);
+        /* ── HERO ── */
+        .hero {
+            padding: 130px 20px 70px;
+            background: var(--ink);
             color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 80% at 80% 50%, rgba(28,127,116,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 10% 80%, rgba(200,56,42,0.12) 0%, transparent 60%);
+        }
+
+        .hero-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.01em;
+        }
+
+        .hero h1 em { font-style: italic; color: #f9a340; }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.65);
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .btn-crisis {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--red);
+            color: white;
+            padding: 13px 26px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 700;
-            box-shadow: 0 10px 20px rgba(255, 59, 59, 0.3);
-            transition: 0.3s;
+            font-size: 0.9rem;
+            transition: 0.2s;
         }
-        .cta-btn:hover { transform: scale(1.05); background: #d62d2d; }
+        .btn-crisis:hover { background: #a82e22; transform: translateY(-1px); }
 
-        /* Resource Content */
-        .container {
-            max-width: 900px;
-            margin: 0 auto 5rem;
-            padding: 0 20px;
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 13px 26px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
         }
+        .btn-ghost:hover { background: rgba(255,255,255,0.14); }
 
-        .resource-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            /* Animation state */
-            opacity: 0;
-            transform: translateY(30px);
-            transition: 0.6s ease-out;
-        }
-
-        .resource-card.visible { opacity: 1; transform: translateY(0); }
-
-        .resource-card h2 { color: var(--secondary); margin-bottom: 20px; font-family: 'Righteous'; }
-
-        ul { list-style: none; }
-        ul li {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        /* Hero stats strip */
+        .hero-stats {
             display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+            margin-top: 3.5rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 2rem;
+        }
+
+        .hero-stat {
+            flex: 1;
+            min-width: 150px;
+            padding: 0 1.5rem 0 0;
+        }
+
+        .hero-stat:not(:first-child) { border-left: 1px solid rgba(255,255,255,0.08); padding-left: 1.5rem; }
+
+        .hero-stat-val {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.2rem;
+            color: #f9a340;
+        }
+
+        .hero-stat-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            background: var(--cream);
+            border-bottom: 1px solid var(--border);
+            padding: 0.875rem 1.5rem;
+            position: sticky;
+            top: 58px;
+            z-index: 100;
+        }
+
+        .filter-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
             align-items: center;
         }
-               
-        ul li a { color: #ffcc00; text-decoration: none; font-weight: 600; transition: 0.3s; }
-        ul li a:hover { color: white; }
 
-        /* Floating Chat */
-        .chat-btn {
-            position: fixed;
-            bottom: 30px; right: 30px;
-            background: #00cc66;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
+        .filter-inner::-webkit-scrollbar { display: none; }
+
+        .filter-label {
+            font-size: 0.72rem;
             font-weight: 700;
-            box-shadow: 0 10px 20px rgba(0, 204, 102, 0.3);
-            z-index: 100;
-            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            white-space: nowrap;
+            margin-right: 4px;
         }
-        .chat-btn:hover { transform: translateY(-5px); }
 
-        /* Footer */
-        footer { background: var(--dark); color: white; padding: 4rem 1.5rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1.5px solid var(--border);
+            background: white;
+            color: var(--ink);
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover { border-color: var(--teal); color: var(--teal); }
+        .filter-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+        /* ── MAIN GRID ── */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        /* ── CATEGORY SECTION ── */
+        .cat-section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: 0.6s ease-out;
+        }
+        .cat-section.vis { opacity: 1; transform: translateY(0); }
+
+        .cat-header {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid;
+        }
+
+        .cat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .cat-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 3px;
+        }
+
+        .cat-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            line-height: 1.1;
+        }
+
+        .cat-count {
+            margin-left: auto;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* Resource grid */
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+        }
+
+        .res-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .res-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--card-accent, var(--teal));
+        }
+
+        .res-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(13,17,23,0.1);
+            border-color: rgba(13,17,23,0.2);
+        }
+
+        .res-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .res-org {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--card-accent, var(--teal));
+            flex: 1;
+        }
+
+        .res-type {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 7px;
+            border-radius: 4px;
+            background: var(--cream);
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .res-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            line-height: 1.4;
+            color: var(--ink);
+        }
+
+        .res-desc {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .res-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .res-lang {
+            font-size: 0.68rem;
+            color: var(--muted);
+        }
+
+        .res-arrow {
+            font-size: 0.75rem;
+            color: var(--card-accent, var(--teal));
+            font-weight: 700;
+        }
+
+        /* Featured resource (spans 2 cols) */
+        .res-card.featured {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--ink);
+            color: white;
+            border-color: transparent;
+        }
+
+        .res-card.featured::before { width: 4px; background: var(--card-accent, var(--gold)); }
+        .res-card.featured .res-org { color: var(--card-accent, var(--gold)); }
+        .res-card.featured .res-title { font-size: 1.05rem; color: white; }
+        .res-card.featured .res-desc { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+        .res-card.featured .res-arrow { color: var(--card-accent, var(--gold)); }
+        .res-card.featured .res-footer { border-top-color: rgba(255,255,255,0.08); }
+        .res-card.featured .res-lang { color: rgba(255,255,255,0.4); }
+        .res-card.featured .res-type { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+
+        .featured-badge {
+            background: var(--card-accent, var(--gold));
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ── CRISIS RIBBON ── */
+        .crisis-ribbon {
+            background: var(--red);
+            color: white;
+            border-radius: 14px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .crisis-ribbon-icon {
+            width: 50px; height: 50px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .crisis-ribbon-text h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+        .crisis-ribbon-text p { font-size: 0.82rem; opacity: 0.8; margin-top: 3px; }
+
+        .crisis-numbers {
+            margin-left: auto;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .crisis-num {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: background 0.2s;
+        }
+        .crisis-num:hover { background: rgba(255,255,255,0.25); }
+        .crisis-num span { display: block; font-size: 0.65rem; font-weight: 400; opacity: 0.75; margin-bottom: 2px; }
+
+        /* ── FLOATING HELP ── */
+        .float-help {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 200;
+        }
+
+        .float-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .float-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
+        .float-btn.whatsapp { background: #25D366; }
+        .float-btn.counsel  { background: var(--red); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--ink);
+            color: white;
+            padding: 4rem 1.5rem 2rem;
+        }
         .footer-grid {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem;
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3rem;
+            margin-bottom: 2.5rem;
         }
-        .footer-col h4 { color: var(--secondary); margin-bottom: 1.5rem; }
-        .footer-col a { color: #ccc; text-decoration: none; display: block; margin-bottom: 10px; }
+        .footer-col h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; color: #f9a340; margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; display: block; margin-bottom: 8px; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-col a:hover { color: white; }
+        .footer-col p { color: rgba(255,255,255,0.45); font-size: 0.82rem; line-height: 1.7; }
+        .footer-bottom { text-align: center; color: rgba(255,255,255,0.3); font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.5rem; }
 
-        /* Mobile */
+        /* ── MOBILE ── */
+        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links {
-                position: fixed; top: 0; left: -100%; width: 75%; height: 100vh;
-                background: var(--dark); flex-direction: column; padding: 5rem 2rem;
-                transition: 0.4s;
+                position: fixed; top: 0; left: -100%; width: 78%; height: 100vh;
+                background: var(--ink); flex-direction: column; padding: 5rem 2rem;
+                transition: 0.35s; gap: 1rem;
             }
             .nav-links.active { left: 0; }
+            .hero { padding: 110px 20px 50px; }
+            .hero-stats { gap: 1rem; }
+            .hero-stat:not(:first-child) { border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; }
+            .crisis-numbers { margin-left: 0; }
+            .res-card.featured { flex-direction: column; }
+            .float-help { bottom: 16px; right: 16px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- NAV -->
     <nav>
         <div class="nav-container">
             <div class="logo-section">
-                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo">
-                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="Ministry">
+                <img src="{{ url_for('static', filename='log1.png') }}" alt="YCH Logo">
+                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="ODMOH">
             </div>
             <ul class="nav-links" id="navMenu">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
@@ -169,67 +559,960 @@
                 <li><a href="{{ url_for('mental') }}">Assessment</a></li>
                 <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
                 <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+                <li><a href="{{ url_for('register') }}" class="nav-cta">Get Support</a></li>
             </ul>
-            <button class="menu-toggle" onclick="toggleNav()">☰</button>
+            <button class="menu-toggle" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
-    <header>
-        <h1>Mental Health Resource Bank</h1>
-        <p>A curated collection of professional tools, crisis hotlines, and self-help guides for every step of your wellness journey.</p>
-        <a href="{{ url_for('register') }}" class="cta-btn">🚨 Reach a Counselor Now</a>
-    </header>
-
-    <div class="container">
-        <div class="resource-card">
-            <h2>📌 Crisis & Emergency</h2>
-            <ul>
-                <li><a href="https://findahelpline.com" target="_blank">Global Helpline Finder</a></li>
-                <li><strong>Nigeria Suicide Hotline:</strong> 0800 1111 113</li>
-                <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">WHO Mental Health Portal</a></li>
-            </ul>
-        </div>
-
-        <div class="resource-card">
-            <h2>🧘 Self-Care & Mindfulness</h2>
-            <ul>
-                <li><a href="https://www.headspace.com" target="_blank">Headspace – Mindfulness Exercises</a></li>
-                <li><a href="https://www.calm.com" target="_blank">Calm – Sleep & Meditation</a></li>
-                <li><a href="https://www.moodgym.com.au" target="_blank">MoodGym – CBT Skills Training</a></li>
-            </ul>
-        </div>
-
-        <div class="resource-card">
-            <h2>💬 Peer Support & Counseling</h2>
-            <ul>
-                <li><a href="https://www.7cups.com" target="_blank">7 Cups – Listeners & Online Therapy</a></li>
-                <li><a href="https://www.icallhelpline.org" target="_blank">iCall Helpline – Professional Support</a></li>
-            </ul>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-eyebrow">
+                <i class="fas fa-bookmark"></i> Curated Resource Bank — Updated 2025
+            </div>
+            <h1>Your Guide to <em>Mental Wellness</em><br>& Healthy Living</h1>
+            <p>Handpicked resources from the world's leading health bodies — WHO, UNICEF, UNESCO, UNAIDS and more — to support every young person's journey.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('register') }}" class="btn-crisis"><i class="fas fa-phone-alt"></i> Reach a Counselor</a>
+                <a href="#resources" class="btn-ghost"><i class="fas fa-arrow-down"></i> Browse Resources</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-val">40+</div>
+                    <div class="hero-stat-label">Curated resources from trusted global bodies</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-val">8</div>
+                    <div class="hero-stat-label">Topic categories covered</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-val">Free</div>
+                    <div class="hero-stat-label">All resources are freely accessible</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-val">🇳🇬</div>
+                    <div class="hero-stat-label">Nigeria-relevant guidance included</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬 WhatsApp Support</a>
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <div class="filter-inner">
+            <span class="filter-label">Filter:</span>
+            <button class="filter-chip active" onclick="filterResources('all', this)">
+                <i class="fas fa-th-large"></i> All
+            </button>
+            <button class="filter-chip" onclick="filterResources('crisis', this)">
+                <i class="fas fa-exclamation-triangle"></i> Crisis
+            </button>
+            <button class="filter-chip" onclick="filterResources('mental', this)">
+                <i class="fas fa-brain"></i> Mental Health
+            </button>
+            <button class="filter-chip" onclick="filterResources('srh', this)">
+                <i class="fas fa-heartbeat"></i> SRH
+            </button>
+            <button class="filter-chip" onclick="filterResources('abuse', this)">
+                <i class="fas fa-shield-alt"></i> Abuse & Safety
+            </button>
+            <button class="filter-chip" onclick="filterResources('nutrition', this)">
+                <i class="fas fa-apple-alt"></i> Nutrition
+            </button>
+            <button class="filter-chip" onclick="filterResources('selfcare', this)">
+                <i class="fas fa-spa"></i> Self-Care
+            </button>
+            <button class="filter-chip" onclick="filterResources('education', this)">
+                <i class="fas fa-graduation-cap"></i> Life Skills
+            </button>
+            <button class="filter-chip" onclick="filterResources('hiv', this)">
+                <i class="fas fa-ribbon"></i> HIV / AIDS
+            </button>
+        </div>
+    </div>
 
+    <!-- MAIN CONTENT -->
+    <main class="main" id="resources">
+
+        <!-- CRISIS RIBBON -->
+        <div class="crisis-ribbon cat-section" data-cat="crisis">
+            <div class="crisis-ribbon-icon"><i class="fas fa-phone-alt"></i></div>
+            <div class="crisis-ribbon-text">
+                <h3>24/7 Crisis Lines — Call Now If You Need Help</h3>
+                <p>If you are in immediate danger or experiencing a mental health crisis, please reach out right now.</p>
+            </div>
+            <div class="crisis-numbers">
+                <a href="tel:08001111113" class="crisis-num">
+                    <span>Nigeria Crisis Line</span>
+                    0800 1111 113
+                </a>
+                <a href="tel:08022291773" class="crisis-num">
+                    <span>NACA Helpline</span>
+                    08022291773
+                </a>
+                <a href="https://findahelpline.com/countries/ng" target="_blank" class="crisis-num">
+                    <span>Find more lines</span>
+                    findahelpline.com
+                </a>
+            </div>
+        </div>
+
+        <!-- ══ 1. MENTAL HEALTH FOUNDATIONS ══ -->
+        <div class="cat-section" data-cat="mental">
+            <div class="cat-header" style="border-color: var(--teal);">
+                <div class="cat-icon" style="background: rgba(27,127,116,0.1); color: var(--teal);">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--teal);">Category 01</div>
+                    <div class="cat-title">Mental Health Foundations</div>
+                </div>
+                <span class="cat-count" style="background: rgba(27,127,116,0.1); color: var(--teal);">9 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.who.int/health-topics/mental-health" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--teal);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">WHO</span>
+                            <span class="featured-badge">⭐ Featured</span>
+                            <span class="res-type">Portal</span>
+                        </div>
+                        <div class="res-title">WHO Mental Health Portal</div>
+                        <div class="res-desc">The World Health Organization's comprehensive hub covering mental health conditions, global data, policies and strategies including the WHO World Mental Health Action Plan 2013–2030.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • French • Arabic</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/mental-health" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">Mental Health & Wellbeing for Children</div>
+                    <div class="res-desc">UNICEF's flagship mental health hub featuring toolkits, parenting resources, and youth guides specific to low-income settings.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/reports/state-worlds-children-2021" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Report</span>
+                    </div>
+                    <div class="res-title">State of the World's Children 2021 — On My Mind</div>
+                    <div class="res-desc">Landmark UNICEF report on children and young people's mental health globally, with Africa-specific data and recommendations.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • French</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/publications/i/item/9789240031784" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Report</span>
+                    </div>
+                    <div class="res-title">World Mental Health Report 2022</div>
+                    <div class="res-desc">Transforming Mental Health for All — the most comprehensive global call to action, with systemic recommendations for low- and middle-income countries.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Free PDF</span>
+                        <span class="res-arrow">Download →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/teams/mental-health-and-substance-use/promotion-prevention/mental-health-gap-action-programme" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Programme</span>
+                    </div>
+                    <div class="res-title">mhGAP — Mental Health Gap Action Programme</div>
+                    <div class="res-desc">WHO's flagship programme to scale up mental health services in resource-limited settings. Includes training materials and Nigeria-specific guides.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Français</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.paho.org/en/topics/mental-health" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">PAHO / WHO AFRO</span>
+                        <span class="res-type">Hub</span>
+                    </div>
+                    <div class="res-title">Regional Mental Health Resources</div>
+                    <div class="res-desc">Africa-focused mental health frameworks, policy briefs and community guides aligned with the WHO African Regional Office's priorities.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.headspace.com/mindfulness" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">Headspace</span>
+                        <span class="res-type">Tool</span>
+                    </div>
+                    <div class="res-title">Mindfulness & Meditation Exercises</div>
+                    <div class="res-desc">Free beginner-friendly guided meditations, breathing exercises, and sleep soundscapes designed for young people.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Try it →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.moodgym.com.au" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">MoodGym</span>
+                        <span class="res-type">CBT Tool</span>
+                    </div>
+                    <div class="res-title">MoodGym — CBT Self-Help Training</div>
+                    <div class="res-desc">An evidence-based online Cognitive Behavioural Therapy programme to help prevent and manage anxiety and depression.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Start →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.7cups.com" target="_blank" class="res-card" style="--card-accent: var(--teal);">
+                    <div class="res-card-top">
+                        <span class="res-org">7 Cups</span>
+                        <span class="res-type">Support</span>
+                    </div>
+                    <div class="res-title">7 Cups — Free Online Emotional Support</div>
+                    <div class="res-desc">Free text-based emotional support with trained listeners. Includes self-help guides and an active youth community.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Multi-language</span>
+                        <span class="res-arrow">Chat →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 2. SEXUAL & REPRODUCTIVE HEALTH ══ -->
+        <div class="cat-section" data-cat="srh">
+            <div class="cat-header" style="border-color: var(--purple);">
+                <div class="cat-icon" style="background: rgba(92,61,143,0.1); color: var(--purple);">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--purple);">Category 02</div>
+                    <div class="cat-title">Sexual & Reproductive Health</div>
+                </div>
+                <span class="cat-count" style="background: rgba(92,61,143,0.1); color: var(--purple);">7 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.unfpa.org/srhr" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--purple);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">UNFPA</span>
+                            <span class="featured-badge" style="background: var(--purple);">⭐ Featured</span>
+                            <span class="res-type">Hub</span>
+                        </div>
+                        <div class="res-title">UNFPA Sexual & Reproductive Health & Rights</div>
+                        <div class="res-desc">UNFPA's comprehensive SRH hub — the United Nations population fund's definitive resource on reproductive rights, family planning, and adolescent health in Africa.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • French • Arabic • Spanish</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/health-topics/sexual-health" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">WHO Sexual Health Topic Page</div>
+                    <div class="res-desc">Definitive WHO resource on sexual health including STI prevention, contraception, and gender-based violence frameworks.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/sexual-violence-against-children" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Report</span>
+                    </div>
+                    <div class="res-title">Protecting Children from Sexual Violence</div>
+                    <div class="res-desc">UNICEF's evidence base on child sexual abuse prevention, survivor support, and reporting frameworks across Sub-Saharan Africa.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.ippf.org/resource/young-peoples-guide-sexual-health" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">IPPF</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">Young People's Guide to Sexual Health</div>
+                    <div class="res-desc">International Planned Parenthood Federation's comprehensive, youth-friendly guide to reproductive health written for and with young people.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/publications/i/item/9789241549929" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Tool</span>
+                    </div>
+                    <div class="res-title">Comprehensive Sexuality Education Standards</div>
+                    <div class="res-desc">WHO/UNESCO joint framework for comprehensive sexuality education — the gold standard used across Nigerian school curricula.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Free PDF</span>
+                        <span class="res-arrow">Download →</span>
+                    </div>
+                </a>
+
+                <a href="https://africayouthmentalhealth.org" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">AYMH</span>
+                        <span class="res-type">Organisation</span>
+                    </div>
+                    <div class="res-title">Africa Youth Mental Health (AYMH)</div>
+                    <div class="res-desc">Pan-African organisation building mental and reproductive health capacity for young Africans, including Nigeria-specific programmes and peer support.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.globalfundforwomen.org" target="_blank" class="res-card" style="--card-accent: var(--purple);">
+                    <div class="res-card-top">
+                        <span class="res-org">Global Fund for Women</span>
+                        <span class="res-type">Advocacy</span>
+                    </div>
+                    <div class="res-title">Women's Health Rights & Advocacy</div>
+                    <div class="res-desc">Gender-responsive health resources, advocacy toolkits, and feminist SRH frameworks for young women and girls.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 3. ABUSE, SAFETY & SAFEGUARDING ══ -->
+        <div class="cat-section" data-cat="abuse">
+            <div class="cat-header" style="border-color: var(--red);">
+                <div class="cat-icon" style="background: rgba(200,56,42,0.1); color: var(--red);">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--red);">Category 03</div>
+                    <div class="cat-title">Abuse, Safety & Safeguarding</div>
+                </div>
+                <span class="cat-count" style="background: rgba(200,56,42,0.1); color: var(--red);">6 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.unicef.org/protection/violence-against-children" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--red);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">UNICEF</span>
+                            <span class="featured-badge" style="background: var(--red);">⭐ Featured</span>
+                            <span class="res-type">Portal</span>
+                        </div>
+                        <div class="res-title">UNICEF Violence Against Children — Protection Hub</div>
+                        <div class="res-desc">UNICEF's definitive safeguarding resource including child protection frameworks, survivor guides, and data dashboards on violence against children in Africa.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • French • Spanish</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/teams/social-determinants-of-health/violence-prevention" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">WHO Violence Prevention Programme</div>
+                    <div class="res-desc">Global evidence-based strategies for preventing interpersonal violence — including sexual, intimate partner, and child abuse prevention.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.ohchr.org/en/special-procedures/sr-violence-against-women" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">OHCHR / UN</span>
+                        <span class="res-type">Rights</span>
+                    </div>
+                    <div class="res-title">UN Special Rapporteur on Violence Against Women</div>
+                    <div class="res-desc">Official UN mandate tracking violence against women and girls globally — country reports, legal frameworks, and survivor rights documentation.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • French • Arabic</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.endvawnow.org" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">UN Women / UNFPA</span>
+                        <span class="res-type">Toolkit</span>
+                    </div>
+                    <div class="res-title">End Violence Against Women — Programme Guide</div>
+                    <div class="res-desc">UN Women's evidence-based toolkit for ending gender-based violence including community response strategies and policy recommendations.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.safetynet.org.ng" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">Safety Net Nigeria</span>
+                        <span class="res-type">Local</span>
+                    </div>
+                    <div class="res-title">Safety Net Africa — Nigeria</div>
+                    <div class="res-desc">Nigeria-focused child safeguarding network providing local reporting pathways, social work referrals, and community protection resources.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🇳🇬 English / Yoruba</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.rapecrisiscenter.org" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">Rape Crisis Centre</span>
+                        <span class="res-type">Support</span>
+                    </div>
+                    <div class="res-title">Sexual Violence Survivor Support</div>
+                    <div class="res-desc">Trauma-informed support resources for sexual abuse survivors, including immediate steps, medical guidance, and psychological first aid.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 4. HIV / AIDS & INFECTIOUS DISEASE ══ -->
+        <div class="cat-section" data-cat="hiv">
+            <div class="cat-header" style="border-color: var(--amber);">
+                <div class="cat-icon" style="background: rgba(224,123,40,0.1); color: var(--amber);">
+                    <i class="fas fa-ribbon"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--amber);">Category 04</div>
+                    <div class="cat-title">HIV, AIDS & Infectious Disease</div>
+                </div>
+                <span class="cat-count" style="background: rgba(224,123,40,0.1); color: var(--amber);">6 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.unaids.org/en/resources" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--amber);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">UNAIDS</span>
+                            <span class="featured-badge" style="background: var(--amber);">⭐ Featured</span>
+                            <span class="res-type">Hub</span>
+                        </div>
+                        <div class="res-title">UNAIDS Global Resources & Data Hub</div>
+                        <div class="res-desc">The Joint UN Programme on HIV/AIDS — comprehensive resources on prevention, treatment, stigma reduction, and the rights of people living with HIV, including Nigeria country profiles.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • French • Russian • Arabic</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.unaids.org/en/regionscountries/countries/nigeria" target="_blank" class="res-card" style="--card-accent: var(--amber);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNAIDS</span>
+                        <span class="res-type">Country</span>
+                    </div>
+                    <div class="res-title">UNAIDS Nigeria Country Profile</div>
+                    <div class="res-desc">Nigeria-specific HIV data, epidemiological updates, government response overview, and treatment access information.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🇳🇬 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://naca.gov.ng" target="_blank" class="res-card" style="--card-accent: var(--amber);">
+                    <div class="res-card-top">
+                        <span class="res-org">NACA Nigeria</span>
+                        <span class="res-type">National</span>
+                    </div>
+                    <div class="res-title">National Agency for the Control of AIDS (NACA)</div>
+                    <div class="res-desc">Official Nigerian government agency for HIV/AIDS response. Find testing centres, ARV access points, and youth prevention programmes across Ondo State.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🇳🇬 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/health-topics/hiv-aids" target="_blank" class="res-card" style="--card-accent: var(--amber);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">WHO HIV/AIDS Topic Hub</div>
+                    <div class="res-desc">Clinical guidelines, prevention protocols, and global epidemiology reports. Includes WHO consolidated HIV guidelines for Nigeria's national programme.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/hiv" target="_blank" class="res-card" style="--card-accent: var(--amber);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Youth Guide</span>
+                    </div>
+                    <div class="res-title">UNICEF HIV for Children & Adolescents</div>
+                    <div class="res-desc">Youth-focused HIV prevention and treatment resources from UNICEF, including materials for adolescents living with HIV.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.avert.org/professionals/hiv-around-world/sub-saharan-africa/nigeria" target="_blank" class="res-card" style="--card-accent: var(--amber);">
+                    <div class="res-card-top">
+                        <span class="res-org">AVERT</span>
+                        <span class="res-type">Education</span>
+                    </div>
+                    <div class="res-title">HIV in Nigeria — Facts & Prevention Guide</div>
+                    <div class="res-desc">Clear, evidence-based HIV education resources for young Nigerians — transmission facts, stigma busting, and local testing guide.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🇳🇬 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 5. LIFE SKILLS & EDUCATION ══ -->
+        <div class="cat-section" data-cat="education">
+            <div class="cat-header" style="border-color: var(--blue);">
+                <div class="cat-icon" style="background: rgba(27,91,138,0.1); color: var(--blue);">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--blue);">Category 05</div>
+                    <div class="cat-title">Life Skills, Education & SEL</div>
+                </div>
+                <span class="cat-count" style="background: rgba(27,91,138,0.1); color: var(--blue);">6 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.unicef.org/education/life-skills" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--blue);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">UNICEF</span>
+                            <span class="featured-badge" style="background: var(--blue);">⭐ Featured</span>
+                            <span class="res-type">Framework</span>
+                        </div>
+                        <div class="res-title">UNICEF Life Skills & Citizenship Education</div>
+                        <div class="res-desc">UNICEF's framework for building young people's cognitive, social, and emotional skills — used in Nigerian schools and community programmes.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • Arabic • French</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://en.unesco.org/themes/education/global-citizenship" target="_blank" class="res-card" style="--card-accent: var(--blue);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNESCO</span>
+                        <span class="res-type">Framework</span>
+                    </div>
+                    <div class="res-title">UNESCO Global Citizenship Education (GCED)</div>
+                    <div class="res-desc">UNESCO's flagship education framework developing critical thinking, empathy, and civic participation skills in young people worldwide.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • French • Spanish</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.unesco.org/en/health-education" target="_blank" class="res-card" style="--card-accent: var(--blue);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNESCO</span>
+                        <span class="res-type">Programme</span>
+                    </div>
+                    <div class="res-title">UNESCO Health & Education Programme</div>
+                    <div class="res-desc">Comprehensive sexuality education and school health resources from UNESCO, including Africa-specific curriculum guides.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • French</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/docs/default-source/mental-health/stress-management-guide.pdf" target="_blank" class="res-card" style="--card-accent: var(--blue);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">PDF Guide</span>
+                    </div>
+                    <div class="res-title">Doing What Matters in Times of Stress</div>
+                    <div class="res-desc">WHO's illustrated stress-management guide for youth and communities — evidence-based techniques that can be done independently in any setting.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Free PDF</span>
+                        <span class="res-arrow">Download →</span>
+                    </div>
+                </a>
+
+                <a href="https://casel.org/fundamentals-of-sel/" target="_blank" class="res-card" style="--card-accent: var(--blue);">
+                    <div class="res-card-top">
+                        <span class="res-org">CASEL</span>
+                        <span class="res-type">Framework</span>
+                    </div>
+                    <div class="res-title">CASEL — Social-Emotional Learning Framework</div>
+                    <div class="res-desc">The world's most widely adopted SEL framework — covering self-awareness, self-management, responsible decision making, and relationship skills.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.ilo.org/global/topics/youth-employment/lang--en/index.htm" target="_blank" class="res-card" style="--card-accent: var(--blue);">
+                    <div class="res-card-top">
+                        <span class="res-org">ILO</span>
+                        <span class="res-type">Skills</span>
+                    </div>
+                    <div class="res-title">ILO Youth Employment & Life Skills</div>
+                    <div class="res-desc">International Labour Organization's youth employment guides, vocational training tools, and entrepreneurship resources relevant to Nigerian youth.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 6. NUTRITION & PHYSICAL HEALTH ══ -->
+        <div class="cat-section" data-cat="nutrition">
+            <div class="cat-header" style="border-color: var(--sage);">
+                <div class="cat-icon" style="background: rgba(74,122,90,0.1); color: var(--sage);">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--sage);">Category 06</div>
+                    <div class="cat-title">Nutrition & Physical Health</div>
+                </div>
+                <span class="cat-count" style="background: rgba(74,122,90,0.1); color: var(--sage);">5 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.who.int/health-topics/adolescent-health" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--sage);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">WHO</span>
+                            <span class="featured-badge" style="background: var(--sage);">⭐ Featured</span>
+                            <span class="res-type">Hub</span>
+                        </div>
+                        <div class="res-title">WHO Adolescent Health Hub</div>
+                        <div class="res-desc">Comprehensive WHO resource on adolescent physical and mental health — nutrition, physical activity, substance use, and puberty guidance.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English</span>
+                            <span class="res-arrow">Visit →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/nutrition" target="_blank" class="res-card" style="--card-accent: var(--sage);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">UNICEF Nutrition for Children & Adolescents</div>
+                    <div class="res-desc">Evidence-based nutrition guides for young Africans, including food security resources and Nigeria's malnutrition response programmes.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/docs/default-source/physical-activity/physical-activity-and-young-people-recommendations.pdf" target="_blank" class="res-card" style="--card-accent: var(--sage);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">PDF</span>
+                    </div>
+                    <div class="res-title">WHO Physical Activity Guidelines for Youth</div>
+                    <div class="res-desc">Recommended physical activity levels for 5–17 year olds — with simple, practical guidance for low-resource settings.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Free</span>
+                        <span class="res-arrow">Download →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.who.int/health-topics/sleep" target="_blank" class="res-card" style="--card-accent: var(--sage);">
+                    <div class="res-card-top">
+                        <span class="res-org">WHO</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">Sleep Health for Adolescents</div>
+                    <div class="res-desc">Evidence-based guidance on healthy sleep for young people — why it matters for mental health, growth, and academic performance.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.fao.org/nutrition/policies-programmes/en" target="_blank" class="res-card" style="--card-accent: var(--sage);">
+                    <div class="res-card-top">
+                        <span class="res-org">FAO / UN</span>
+                        <span class="res-type">Policy</span>
+                    </div>
+                    <div class="res-title">FAO Nutrition for Africa — Policy & Programmes</div>
+                    <div class="res-desc">UN Food and Agriculture Organization's Africa nutrition programmes — food systems, dietary diversity, and school feeding resources for Nigeria.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • French</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 7. SELF-CARE & EMOTIONAL WELLNESS ══ -->
+        <div class="cat-section" data-cat="selfcare">
+            <div class="cat-header" style="border-color: var(--gold);">
+                <div class="cat-icon" style="background: rgba(201,151,43,0.1); color: var(--gold);">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--gold);">Category 07</div>
+                    <div class="cat-title">Self-Care & Emotional Wellness</div>
+                </div>
+                <span class="cat-count" style="background: rgba(201,151,43,0.1); color: var(--gold);">5 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.who.int/campaigns/connecting-the-world-to-combat-coronavirus/healthyathome/healthyathome---mental-health" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--gold);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">WHO</span>
+                            <span class="featured-badge" style="background: var(--gold);">⭐ Featured</span>
+                            <span class="res-type">Tool</span>
+                        </div>
+                        <div class="res-title">WHO Healthy at Home — Mental Health Tools</div>
+                        <div class="res-desc">WHO's practical mental health toolkit with grounding exercises, breathing techniques, and daily wellbeing habits — designed for young people in any setting.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • French • Arabic</span>
+                            <span class="res-arrow">Try it →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.calm.com/blog" target="_blank" class="res-card" style="--card-accent: var(--gold);">
+                    <div class="res-card-top">
+                        <span class="res-org">Calm</span>
+                        <span class="res-type">App / Blog</span>
+                    </div>
+                    <div class="res-title">Calm — Meditation, Sleep & Anxiety Guide</div>
+                    <div class="res-desc">Free blog resources on sleep hygiene, anxiety management, breathing exercises, and mindfulness from one of the world's leading wellness platforms.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Explore →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.icallhelpline.org" target="_blank" class="res-card" style="--card-accent: var(--gold);">
+                    <div class="res-card-top">
+                        <span class="res-org">iCall</span>
+                        <span class="res-type">Counseling</span>
+                    </div>
+                    <div class="res-title">iCall — Professional Psychological Helpline</div>
+                    <div class="res-desc">Low-cost professional psychological counseling, with free resources for students and young people including self-help worksheets and video guides.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English • Hindi</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.mind.org.uk/information-support/tips-for-everyday-living/wellbeing/wellbeing" target="_blank" class="res-card" style="--card-accent: var(--gold);">
+                    <div class="res-card-top">
+                        <span class="res-org">Mind UK</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">5 Ways to Wellbeing — Practical Guide</div>
+                    <div class="res-desc">Research-backed 5 simple steps to wellbeing used by mental health professionals globally — connect, be active, take notice, keep learning, give.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.youngminds.org.uk/young-person/coping-with-life/looking-after-yourself" target="_blank" class="res-card" style="--card-accent: var(--gold);">
+                    <div class="res-card-top">
+                        <span class="res-org">YoungMinds</span>
+                        <span class="res-type">Youth Guide</span>
+                    </div>
+                    <div class="res-title">Looking After Yourself — Young Person's Guide</div>
+                    <div class="res-desc">Practical self-care guide written for young people by young people — coping strategies, journaling prompts, and everyday wellness habits.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ══ 8. CRISIS & EMERGENCY DEEP RESOURCES ══ -->
+        <div class="cat-section" data-cat="crisis">
+            <div class="cat-header" style="border-color: var(--red);">
+                <div class="cat-icon" style="background: rgba(200,56,42,0.1); color: var(--red);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <div class="cat-label" style="color: var(--red);">Category 08</div>
+                    <div class="cat-title">Crisis, Suicide Prevention & Emergency Support</div>
+                </div>
+                <span class="cat-count" style="background: rgba(200,56,42,0.1); color: var(--red);">5 resources</span>
+            </div>
+
+            <div class="res-grid">
+
+                <a href="https://www.who.int/publications/i/item/9789241564779" target="_blank" class="res-card featured"
+                   style="--card-accent: var(--red);">
+                    <div style="flex:1;">
+                        <div class="res-card-top">
+                            <span class="res-org">WHO</span>
+                            <span class="featured-badge" style="background: var(--red);">⭐ Featured</span>
+                            <span class="res-type">Guide</span>
+                        </div>
+                        <div class="res-title">WHO LIVE LIFE — Suicide Prevention Guide</div>
+                        <div class="res-desc">WHO's global implementation guide for suicide prevention — trusted by governments and health workers across Africa for community-level crisis response.</div>
+                        <div class="res-footer">
+                            <span class="res-lang">🌍 English • Free PDF</span>
+                            <span class="res-arrow">Download →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://findahelpline.com/countries/ng" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">Find A Helpline</span>
+                        <span class="res-type">Directory</span>
+                    </div>
+                    <div class="res-title">Nigeria Helpline Directory</div>
+                    <div class="res-desc">Verified directory of all active crisis helplines in Nigeria — mental health, suicide prevention, sexual violence, and substance abuse lines.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🇳🇬 English</span>
+                        <span class="res-arrow">Find help →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.befrienders.org" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">Befrienders Worldwide</span>
+                        <span class="res-type">Support</span>
+                    </div>
+                    <div class="res-title">Befrienders — Global Emotional Support</div>
+                    <div class="res-desc">International network of crisis listening volunteers. Find nearest local Befrienders centre and access online emotional support in crisis situations.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 Multi-language</span>
+                        <span class="res-arrow">Visit →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.iasp.info/resources/Crisis_Centres" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">IASP</span>
+                        <span class="res-type">Directory</span>
+                    </div>
+                    <div class="res-title">IASP — International Crisis Centre Finder</div>
+                    <div class="res-desc">International Association for Suicide Prevention's verified global directory of crisis centres, searchable by country.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Search →</span>
+                    </div>
+                </a>
+
+                <a href="https://www.unicef.org/mental-health/stories/how-talk-your-children-about-mental-health" target="_blank" class="res-card" style="--card-accent: var(--red);">
+                    <div class="res-card-top">
+                        <span class="res-org">UNICEF</span>
+                        <span class="res-type">Guide</span>
+                    </div>
+                    <div class="res-title">How to Talk About Mental Health — Youth Guide</div>
+                    <div class="res-desc">UNICEF's practical guide for young people on how to open up about mental health struggles, ask for help, and support friends in crisis.</div>
+                    <div class="res-footer">
+                        <span class="res-lang">🌍 English</span>
+                        <span class="res-arrow">Read →</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FLOATING BUTTONS -->
+    <div class="float-help">
+        <a href="https://wa.me/2348134812419" class="float-btn whatsapp" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp Support
+        </a>
+        <a href="{{ url_for('register') }}" class="float-btn counsel">
+            <i class="fas fa-phone-alt"></i> Get Counseling
+        </a>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <h4>Ondo Youth Connect</h4>
-                <p>Ensuring no youth in Ondo State faces mental health challenges alone.</p>
+                <h4>Ondo Youth Connect Hub</h4>
+                <p>Ensuring no young person in Ondo State faces mental health challenges alone. A programme of the Ondo State Ministry of Health.</p>
             </div>
             <div class="footer-col">
                 <h4>Quick Links</h4>
                 <a href="{{ url_for('index') }}">Home</a>
-                <a href="{{ url_for('mental') }}">Assessment</a>
-                <a href="#">Privacy Policy</a>
+                <a href="{{ url_for('mental') }}">Mental Health Assessment</a>
+                <a href="{{ url_for('sel_activities') }}">SEL Activities</a>
+                <a href="{{ url_for('mood_tracker') }}">Mood Tracker</a>
             </div>
             <div class="footer-col">
                 <h4>Support</h4>
-                <a href="mailto:support@ondoyouth.gov.ng">Email Support</a>
-                <a href="tel:+234800000">Crisis Line</a>
+                <a href="{{ url_for('register') }}">Get a Counselor</a>
+                <a href="mailto:support@ondoyouth.gov.ng">Email Us</a>
+                <a href="tel:08001111113">Crisis Line: 0800 1111 113</a>
+            </div>
+            <div class="footer-col">
+                <h4>Global Partners</h4>
+                <a href="https://www.who.int" target="_blank">World Health Organization</a>
+                <a href="https://www.unicef.org" target="_blank">UNICEF</a>
+                <a href="https://www.unaids.org" target="_blank">UNAIDS</a>
+                <a href="https://www.unfpa.org" target="_blank">UNFPA</a>
+                <a href="https://en.unesco.org" target="_blank">UNESCO</a>
             </div>
         </div>
-        <p style="text-align: center; margin-top: 2rem; opacity: 0.5;">&copy; 2026 Ondo State Ministry of Health.</p>
+        <div class="footer-bottom">&copy; 2026 Ondo State Ministry of Health · Youth Connect Hub · All resources link to external verified organisations.</div>
     </footer>
 
     <script>
@@ -237,18 +1520,38 @@
             document.getElementById('navMenu').classList.toggle('active');
         }
 
-        // Staggered Scroll Animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 150);
+        // ── Filter ──
+        function filterResources(cat, btn) {
+            // Update chips
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Show/hide sections
+            document.querySelectorAll('.cat-section').forEach(sec => {
+                if (cat === 'all') {
+                    sec.style.display = '';
+                } else {
+                    sec.style.display = sec.dataset.cat === cat ? '' : 'none';
                 }
             });
-        }, { threshold: 0.1 });
+        }
 
-        document.querySelectorAll('.resource-card').forEach(card => observer.observe(card));
+        // ── Scroll animations ──
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('vis');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.07 });
+
+        document.querySelectorAll('.cat-section').forEach(el => obs.observe(el));
+
+        // Stagger resource cards on first paint
+        document.querySelectorAll('.res-card').forEach((card, i) => {
+            card.style.animationDelay = `${(i % 4) * 80}ms`;
+        });
     </script>
 </body>
 </html>
