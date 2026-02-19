@@ -491,68 +491,161 @@ def index():
 
     return resp
 
+# ============================================================
+# PASTE THIS OVER THE EXISTING submit_assessment() IN app.py
+# ============================================================
+#
+# MAX POSSIBLE SCORE = 70  (mix of 4-opt and 5-opt questions)
+#   Q1-Q5,Q8-Q10 → 5 options, max 5 pts each  = 40 pts
+#   Q6,Q7,Q11-Q20 → 4 options, max 4 pts each = 36 pts  (but 2 of those are negative so max stays 4)
+#   True max = (5×8) + (4×12) = 40 + 48 = 88 pts
+#
+# Score bands (out of 88):
+#   70-88  → Excellent / Thriving
+#   52-69  → Good / Mostly Well
+#   35-51  → Moderate / Needs Attention
+#   18-34  → High Risk / Struggling
+#   0-17   → Critical / Urgent Help Needed
+# ============================================================
+
 @app.route('/submit-assessment', methods=['POST'])
 def submit_assessment():
     total_score = 0
     unanswered_questions = 0
-    
-    # 1. Capture Personal Info
+
+    # ── Personal Info ──────────────────────────────────────────
     email = request.form.get("email")
     phone = request.form.get("phone")
-    age = request.form.get("age")
-    sex = request.form.get("sex")
+    age   = request.form.get("age")
+    sex   = request.form.get("sex")
 
-    # 2. Scoring Map (Ensure exactly 20 items)
-    # 1-5 represents the value of the option selected
+    # ── Corrected Score Mappings ───────────────────────────────
+    #
+    # Key   = the integer value submitted by the form (1-indexed option position)
+    # Value = wellness points awarded (higher = better mental health outcome)
+    #
+    # POSITIVE questions (more = better):  map low→low, high→high
+    # NEGATIVE questions (more = worse):   map low→high, high→low
+    #
+    # Questions with only 4 options only define keys 1-4.
+    # Questions with 5 options define keys 1-5.
+    #
     score_mappings = [
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, # q1, q2
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q3, q4
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q5, q6
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q7, q8
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, # q9, q10
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q11, q12
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q13, q14
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q15, q16
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, # q17, q18
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}  # q19, q20
+        # Q1  Well-being: "Felt cheerful?" — Never/Rarely/Sometimes/Often/Always (POSITIVE, 5 opts)
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
+
+        # Q2  Well-being: "Felt calm?" — same scale (POSITIVE, 5 opts)
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
+
+        # Q3  Energy: "Felt active?" — same scale (POSITIVE, 5 opts)
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
+
+        # Q4  Sleep: "Wake up rested?" — same scale (POSITIVE, 5 opts)
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
+
+        # Q5  Life: "Daily life interesting?" — same scale (POSITIVE, 5 opts)
+        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
+
+        # Q6  Mind: "Little interest/pleasure?" — Not at all / Several days / More than half / Nearly every day
+        #     NEGATIVE question — "Nearly every day" is worst outcome → gets lowest score
+        {1: 4, 2: 3, 3: 2, 4: 1},
+
+        # Q7  Mind: "Feel depressed/hopeless?" — same 4 opts as Q6 (NEGATIVE, 4 opts)
+        {1: 4, 2: 3, 3: 2, 4: 1},
+
+        # Q8  Focus: "Hard to concentrate?" — Never/Rarely/Sometimes/Often/Always (NEGATIVE, 5 opts)
+        #     "Always hard to concentrate" is worst → gets score 1
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
+
+        # Q9  Anxiety: "Feel nervous/anxious?" — same scale as Q8 (NEGATIVE, 5 opts)
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
+
+        # Q10 Anxiety: "Emotions out of control?" — same scale as Q8 (NEGATIVE, 5 opts)
+        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
+
+        # Q11 Safety: "Feel safe at home?" — Not safe / Sometimes worried / Mostly safe / Totally safe
+        #     POSITIVE question — "Totally safe" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q12 Sexual Safety: "Touched inappropriately?" — Never / Once / Sometimes / Happening now
+        #     NEGATIVE & CRITICAL — "Happening now" is worst → gets score 1
+        {1: 4, 2: 3, 3: 2, 4: 1},
+
+        # Q13 Safety: "Physically/emotionally hurt?" — Never / Once or twice / Frequently / Currently happening
+        #     NEGATIVE & CRITICAL — "Currently happening" is worst → gets score 1
+        {1: 4, 2: 3, 3: 2, 4: 1},
+
+        # Q14 Sexual Boundaries: "Pressured into sex?" — Never / Rarely / Sometimes / Often
+        #     NEGATIVE — "Often" is worst → gets score 1
+        {1: 4, 2: 3, 3: 2, 4: 1},
+
+        # Q15 Sexual Boundaries: "Can say No to advances?" — Never / Rarely / Sometimes / Always
+        #     POSITIVE — "Always" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q16 SRH Access: "Access to SRH info?" — No access / Limited / Some / Full access
+        #     POSITIVE — "Full access" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q17 SRH Needs: "Unwanted pregnancy / STI concerns?" — Yes urgently / Yes not urgent / Maybe / No
+        #     NEGATIVE — "Yes urgently" means person needs help NOW → gets score 1
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q18 Outlook: "Optimistic about future?" — Not at all / A little / Mostly / Very much
+        #     POSITIVE — "Very much" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q19 SRH Support: "Trusted adult for SRH?" — No one / Maybe one / Yes someone / Yes, multiple
+        #     POSITIVE — "Multiple trusted sources" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
+
+        # Q20 Help Access: "Know where to get confidential help?" — No idea / Heard of places / Know some / Yes, Youth Connect
+        #     POSITIVE — "Yes, know Youth Connect & clinics" is best → gets score 4
+        {1: 1, 2: 2, 3: 3, 4: 4},
     ]
 
-    # 3. Loop through q1 to q20
+    # ── Calculate Score ────────────────────────────────────────
     answers_dict = {}
     for i in range(1, 21):
         val = request.form.get(f'q{i}')
         if val:
             try:
                 ans_int = int(val)
-                total_score += score_mappings[i-1][ans_int]
-                answers_dict[f'q{i}'] = ans_int
+                mapping = score_mappings[i - 1]
+                if ans_int in mapping:
+                    total_score += mapping[ans_int]
+                    answers_dict[f'q{i}'] = ans_int
+                else:
+                    # Value out of range for this question's option set
+                    unanswered_questions += 1
             except (ValueError, KeyError):
                 unanswered_questions += 1
         else:
             unanswered_questions += 1
 
-    # 4. Error Check
+    # ── Validation ─────────────────────────────────────────────
     if unanswered_questions > 0:
-        return render_template('error.html', message=f"Please answer all questions. You missed {unanswered_questions}.")
+        return render_template(
+            'error.html',
+            message=f"Please answer all questions. You missed {unanswered_questions}."
+        )
 
-    # 5. Save to Database
+    # ── Save to Database ───────────────────────────────────────
     try:
         new_assessment = SubmitAssessment(
             email=email,
             phone=phone,
             age=age,
             sex=sex,
-            score=total_score,  # Save the calculated score
-            **answers_dict  # This automatically maps q1=val, q2=val...
+            score=total_score,
+            **answers_dict
         )
         db.session.add(new_assessment)
         db.session.commit()
     except Exception as e:
         print(f"Database Error: {e}")
-        # Even if DB fails, we want the user to see their result
-        pass
 
-    # 6. Save to Excel
+    # ── Save to Excel ──────────────────────────────────────────
     try:
         data_for_excel = {
             "timestamp": [new_assessment.timestamp],
@@ -562,12 +655,11 @@ def submit_assessment():
             "sex": [sex],
             "score": [total_score]
         }
-        # Add all questions to excel
         for i in range(1, 21):
             data_for_excel[f'q{i}'] = [answers_dict.get(f'q{i}', '')]
-        
+
         df = pd.DataFrame(data_for_excel)
-        
+
         if os.path.exists(EXCEL_FILE):
             with pd.ExcelWriter(EXCEL_FILE, engine="openpyxl", mode="a", if_sheet_exists="overlay") as writer:
                 start_row = load_workbook(EXCEL_FILE).active.max_row
@@ -578,6 +670,40 @@ def submit_assessment():
         print(f"Excel Error: {e}")
 
     return redirect(url_for('assessment_results', score=total_score))
+
+
+# ============================================================
+# ALSO UPDATE calculate_analytics() — same score_mappings bug
+# exists there. Replace the score_mappings block inside
+# calculate_analytics() with this identical list:
+# ============================================================
+SCORE_MAPPINGS = [
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q1
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q2
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q3
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q4
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q5
+    {1: 4, 2: 3, 3: 2, 4: 1},         # Q6  NEGATIVE
+    {1: 4, 2: 3, 3: 2, 4: 1},         # Q7  NEGATIVE
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q8  NEGATIVE
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q9  NEGATIVE
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q10 NEGATIVE
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q11
+    {1: 4, 2: 3, 3: 2, 4: 1},         # Q12 NEGATIVE CRITICAL
+    {1: 4, 2: 3, 3: 2, 4: 1},         # Q13 NEGATIVE CRITICAL
+    {1: 4, 2: 3, 3: 2, 4: 1},         # Q14 NEGATIVE
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q15
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q16
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q17
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q18
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q19
+    {1: 1, 2: 2, 3: 3, 4: 4},         # Q20
+]
+# Then in calculate_analytics(), replace:
+#   score_mappings[i-1].get(q_val, 0)
+# with:
+#   SCORE_MAPPINGS[i-1].get(q_val, 0)
+
 
 @app.route('/assessment_results')
 def assessment_results():
