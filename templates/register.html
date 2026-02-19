@@ -3,367 +3,714 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Support - Ondo State</title>
+    <title>Get Support – YouthConnect | Ondo State</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
             --primary: #FF6B35;
+            --primary-dark: #e55520;
             --secondary: #F7931E;
             --accent: #FDC500;
             --dark: #1A1A2E;
             --deep-blue: #16213E;
-            --light: #F9F9F9;
             --purple: #9D4EDD;
             --blue: #00B4D8;
             --pink: #FF006E;
-            --glass: rgba(255, 255, 255, 0.9);
+            --success: #06d6a0;
+            --glass: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.13);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            color: var(--dark);
+            color: #fff;
             overflow-x: hidden;
             background: #000;
-            font-size: 0.95rem; /* Slightly smaller base font */
+            min-height: 100vh;
         }
 
         /* Fixed Background */
         body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            content:'';
+            position:fixed; inset:0;
             background-image: url("{{ url_for('static', filename='you1.jpg') }}");
-            background-size: cover;
-            background-position: center;
-            z-index: -2;
+            background-size:cover; background-position:center;
+            z-index:-2;
         }
-
         body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(157, 78, 221, 0.45) 100%);
-            z-index: -1;
+            content:'';
+            position:fixed; inset:0;
+            background: linear-gradient(135deg,rgba(26,26,46,0.93) 0%,rgba(157,78,221,0.48) 60%,rgba(255,107,53,0.18) 100%);
+            z-index:-1;
         }
 
-        /* Navigation */
+        /* ── Navigation ── */
         nav {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 0.5rem 1rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
+            background: rgba(26,26,46,0.97);
+            backdrop-filter: blur(20px);
+            padding: 0.55rem 1.2rem;
+            position: fixed; width:100%; top:0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255,107,53,0.2);
         }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-section { display: flex; gap: 0.5rem; align-items: center; }
-        .logo-section img { height: 35px; } /* Smart logo size */
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-
+        .nav-container { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo-section { display:flex; gap:0.5rem; align-items:center; }
+        .logo-section img { height:34px; }
+        .nav-links { display:flex; gap:1.4rem; list-style:none; }
         .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-            opacity: 0.8;
-            transition: 0.3s;
+            color:rgba(255,255,255,0.72); text-decoration:none;
+            font-weight:600; font-size:0.8rem; letter-spacing:0.03em;
+            transition:0.25s; padding:0.2rem 0; position:relative;
+        }
+        .nav-links a::after {
+            content:''; position:absolute; bottom:-2px; left:0;
+            width:0; height:2px; background:var(--primary); transition:width 0.25s;
+        }
+        .nav-links a:hover { color:#fff; }
+        .nav-links a:hover::after { width:100%; }
+        .nav-links a.active { color:var(--primary); }
+        .menu-toggle { display:none; background:none; border:none; color:white; font-size:1.4rem; cursor:pointer; }
+
+        /* ── Page Layout ── */
+        .page-wrapper {
+            min-height:100vh;
+            padding-top:60px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            align-items:stretch;
         }
 
-        .nav-links a:hover { opacity: 1; color: var(--primary); }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.4rem;
-            cursor: pointer;
+        /* ── Left Panel ── */
+        .left-panel {
+            display:flex; flex-direction:column; justify-content:center;
+            padding:5rem 3.5rem 5rem 4rem;
+            position:sticky; top:60px;
+            height:calc(100vh - 60px);
         }
-
-        /* Hero Section */
-        .hero {
-            height: 70vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            text-align: center;
-            margin-top: 50px;
+        .badge {
+            display:inline-flex; align-items:center; gap:0.4rem;
+            background:rgba(255,107,53,0.14); border:1px solid rgba(255,107,53,0.32);
+            color:var(--primary); font-size:0.7rem; font-weight:700;
+            letter-spacing:0.08em; text-transform:uppercase;
+            padding:0.32rem 0.85rem; border-radius:50px;
+            margin-bottom:1.4rem; width:fit-content;
         }
-
-        .hero-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2.5rem 1.5rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 700px;
-            color: white;
+        .left-panel h1 {
+            font-family:'Righteous',cursive;
+            font-size:clamp(2rem,4vw,3.2rem);
+            line-height:1.1; margin-bottom:1.2rem;
+            background:linear-gradient(135deg,#fff 40%,var(--accent) 100%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
         }
-
-        /* Smart Headline Font */
-        .hero h1 { 
-            font-family: 'Righteous', cursive; 
-            font-size: clamp(1.8rem, 8vw, 3.5rem); 
-            margin-bottom: 0.8rem; 
-            line-height: 1.1; 
+        .left-panel p {
+            font-size:0.93rem; line-height:1.8;
+            color:rgba(255,255,255,0.68);
+            margin-bottom:2.5rem; max-width:380px;
         }
-        .hero p { 
-            font-size: clamp(0.9rem, 4vw, 1.1rem); 
-            margin-bottom: 1.5rem; 
-            opacity: 0.9; 
+        .trust-items { display:flex; flex-direction:column; gap:0.9rem; }
+        .trust-item { display:flex; align-items:center; gap:0.85rem; font-size:0.82rem; color:rgba(255,255,255,0.72); }
+        .trust-icon {
+            width:36px; height:36px; border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.88rem; flex-shrink:0;
         }
-
-        .btn {
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.3s;
-            border: none;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+        .trust-icon.orange { background:rgba(255,107,53,0.18); color:var(--primary); }
+        .trust-icon.purple { background:rgba(157,78,221,0.18); color:var(--purple); }
+        .trust-icon.blue   { background:rgba(0,180,216,0.18);  color:var(--blue); }
+        .trust-icon.gold   { background:rgba(253,197,0,0.18);  color:var(--accent); }
+        .emergency-strip {
+            margin-top:2.5rem; padding:1rem 1.2rem;
+            background:rgba(255,0,110,0.1); border:1px solid rgba(255,0,110,0.28);
+            border-radius:12px; display:flex; align-items:center; gap:0.75rem; font-size:0.79rem;
         }
+        .emergency-strip i { color:var(--pink); font-size:1.1rem; }
+        .emergency-strip a { color:#fff; font-weight:700; text-decoration:none; }
+        .emergency-strip a:hover { color:var(--pink); }
 
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255,107,53,0.3); }
-        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-left: 5px; }
-
-        /* Flicker Animation */
-        @keyframes flickerRed {
-            0%, 100% { background-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
-            50% { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
+        /* ── Right Panel ── */
+        .right-panel {
+            background:rgba(255,255,255,0.03);
+            backdrop-filter:blur(12px);
+            border-left:1px solid var(--glass-border);
+            display:flex; align-items:center; justify-content:center;
+            padding:5rem 3rem;
         }
-        .btn-flicker { animation: flickerRed 1s infinite; }
-
-        /* Form Section */
-        .white-section {
-            background: rgba(255, 255, 255, 0.96);
-            padding: 4rem 1rem;
+        .form-card {
+            width:100%; max-width:490px;
+            background:rgba(255,255,255,0.055);
+            border:1px solid rgba(255,255,255,0.11);
+            border-radius:24px; padding:2.5rem 2.2rem;
+            backdrop-filter:blur(8px);
         }
+        .form-card-header { margin-bottom:2rem; text-align:center; }
+        .form-card-header h2 { font-family:'Righteous',cursive; font-size:1.75rem; margin-bottom:0.4rem; }
+        .form-card-header p { font-size:0.78rem; color:rgba(255,255,255,0.48); }
 
-        .section-header h2 { 
-            font-family: 'Righteous', cursive; 
-            font-size: clamp(1.8rem, 6vw, 2.5rem); 
-            color: var(--dark); 
-            text-align: center;
-            margin-bottom: 2rem;
+        /* ── Step Indicator ── */
+        .step-indicator { display:flex; align-items:center; justify-content:center; margin-bottom:2rem; }
+        .step-dot {
+            width:30px; height:30px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.72rem; font-weight:700; transition:0.3s; flex-shrink:0;
         }
+        .step-dot.active  { background:var(--primary); color:#fff; box-shadow:0 0 14px rgba(255,107,53,0.5); }
+        .step-dot.done    { background:var(--success);  color:#fff; }
+        .step-dot.idle    { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.35); }
+        .step-line { flex:1; height:2px; max-width:55px; background:rgba(255,255,255,0.1); transition:background 0.4s; }
+        .step-line.done { background:var(--success); }
 
-        .form-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        /* ── Form Steps ── */
+        .form-step { display:none; }
+        .form-step.active { display:block; animation:slideIn 0.32s ease; }
+        @keyframes slideIn { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:translateX(0); } }
+
+        /* ── Fields ── */
+        .form-group { margin-bottom:1.1rem; position:relative; }
+        label {
+            display:block; font-size:0.7rem; font-weight:700;
+            letter-spacing:0.07em; text-transform:uppercase;
+            color:rgba(255,255,255,0.5); margin-bottom:0.42rem;
         }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group.full-width { grid-column: span 2; }
-
-        label { display: block; font-weight: 700; margin-bottom: 5px; color: var(--deep-blue); font-size: 0.8rem; }
+        .input-wrap { position:relative; }
+        .input-wrap i {
+            position:absolute; left:0.9rem; top:50%; transform:translateY(-50%);
+            font-size:0.82rem; color:rgba(255,255,255,0.28); pointer-events:none; transition:color 0.25s;
+        }
         input, select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            width:100%; padding:0.82rem 0.9rem 0.82rem 2.5rem;
+            background:rgba(255,255,255,0.07);
+            border:1.5px solid rgba(255,255,255,0.11);
+            border-radius:12px; color:#fff;
+            font-family:'Poppins',sans-serif; font-size:0.87rem;
+            transition:0.25s; outline:none; -webkit-appearance:none;
         }
+        input::placeholder { color:rgba(255,255,255,0.22); }
+        input:focus, select:focus {
+            border-color:var(--primary);
+            background:rgba(255,107,53,0.07);
+        }
+        .input-wrap:focus-within i { color:var(--primary); }
+        input[type="date"] { color-scheme:dark; }
+        input[type="date"]:not([value=""]):not(:placeholder-shown) { color:#fff; }
+        select option { background:var(--deep-blue); color:#fff; }
 
-        /* Footer */
-        footer { background: var(--dark); color: white; padding: 3rem 1.5rem 1.5rem; }
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 2rem;
+        /* Validation states */
+        input.valid, select.valid { border-color:var(--success); }
+        input.error, select.error { border-color:var(--pink); }
+        .error-msg { display:none; font-size:0.69rem; color:var(--pink); margin-top:0.3rem; padding-left:0.15rem; }
+        .error-msg.show { display:block; }
+
+        /* Service Cards */
+        .service-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.65rem; margin-top:0.15rem; }
+        .service-card {
+            cursor:pointer; border:1.5px solid rgba(255,255,255,0.11);
+            border-radius:13px; padding:0.9rem 0.4rem;
+            text-align:center; transition:0.25s;
+            background:rgba(255,255,255,0.04);
         }
-        .footer-col h4 { margin-bottom: 1rem; color: var(--primary); font-family: 'Righteous', cursive; font-size: 1rem; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 0.5rem; font-size: 0.85rem; }
-        .footer-col a { color: #ccc; text-decoration: none; }
+        .service-card i { display:block; font-size:1.3rem; margin-bottom:0.38rem; }
+        .service-card span { font-size:0.68rem; font-weight:600; color:rgba(255,255,255,0.6); line-height:1.3; display:block; }
+        .service-card:hover { border-color:rgba(255,107,53,0.38); background:rgba(255,107,53,0.06); }
+        .service-card.selected { border-color:var(--primary); background:rgba(255,107,53,0.12); box-shadow:0 0 14px rgba(255,107,53,0.2); }
+        .service-card.selected span { color:#fff; }
+        #serviceSelect { display:none; }
+
+        /* Buttons */
+        .btn-row { display:flex; gap:0.7rem; margin-top:1.5rem; }
+        .btn {
+            flex:1; padding:0.85rem; border-radius:12px; border:none;
+            font-family:'Poppins',sans-serif; font-size:0.8rem; font-weight:700;
+            letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; transition:0.25s;
+        }
+        .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; box-shadow:0 4px 14px rgba(255,107,53,0.3); }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 7px 18px rgba(255,107,53,0.4); }
+        .btn-ghost { background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.68); border:1.5px solid rgba(255,255,255,0.11); }
+        .btn-ghost:hover { background:rgba(255,255,255,0.13); color:#fff; }
+
+        @keyframes flickerGlow {
+            0%,100% { box-shadow:0 4px 16px rgba(255,107,53,0.4); }
+            50% { box-shadow:0 4px 28px rgba(255,80,0,0.75), 0 0 0 3px rgba(255,107,53,0.13); }
+        }
+        .btn-submit {
+            width:100%; margin-top:1.5rem;
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark,#e55520));
+            color:#fff; padding:1rem; border-radius:14px; border:none;
+            font-family:'Poppins',sans-serif; font-weight:700; font-size:0.88rem;
+            letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;
+            animation:flickerGlow 1.4s ease-in-out infinite;
+            transition:transform 0.2s;
+            display:flex; align-items:center; justify-content:center; gap:0.5rem;
+        }
+        .btn-submit:hover { transform:translateY(-2px); }
+        .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; animation:none; }
+        .btn-submit.loading .btn-label { display:none; }
+        .spinner { display:none; }
+        .btn-submit.loading .spinner { display:inline-block; animation:spin 0.7s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* Review Step */
+        .review-grid { display:flex; flex-direction:column; gap:0.6rem; }
+        .review-item {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:0.65rem 0.9rem;
+            background:rgba(255,255,255,0.05); border-radius:10px; font-size:0.82rem;
+        }
+        .review-label { color:rgba(255,255,255,0.42); font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+        .review-val { font-weight:600; text-align:right; }
 
         /* Back to Top */
         #scrollTop {
-            position: fixed;
-            bottom: 20px; right: 20px;
-            width: 40px; height: 40px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            cursor: pointer;
+            position:fixed; bottom:20px; right:20px;
+            width:40px; height:40px; background:var(--primary); color:white;
+            border-radius:50%; display:none; align-items:center; justify-content:center;
+            z-index:2000; cursor:pointer; border:none; font-size:0.88rem;
+            box-shadow:0 4px 12px rgba(255,107,53,0.4); transition:0.25s;
         }
+        #scrollTop:hover { transform:translateY(-3px); }
 
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links {
-                position: fixed;
-                top: 0; right: -100%;
-                width: 70%; height: 100vh;
-                background: var(--dark);
-                flex-direction: column;
-                padding: 5rem 2rem;
-                transition: 0.4s;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+        /* Footer */
+        footer { background:rgba(26,26,46,0.98); color:white; padding:3rem 1.5rem 1.5rem; border-top:1px solid rgba(255,255,255,0.06); }
+        .footer-grid {
+            max-width:1200px; margin:0 auto;
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:2rem; border-bottom:1px solid rgba(255,255,255,0.07); padding-bottom:2rem;
+        }
+        .footer-col h4 { margin-bottom:1rem; color:var(--primary); font-family:'Righteous',cursive; font-size:1rem; }
+        .footer-col ul { list-style:none; }
+        .footer-col ul li { margin-bottom:0.5rem; font-size:0.82rem; }
+        .footer-col a { color:rgba(255,255,255,0.55); text-decoration:none; transition:0.2s; }
+        .footer-col a:hover { color:var(--primary); }
+        .footer-bottom { text-align:center; padding-top:1.5rem; font-size:0.72rem; opacity:0.38; }
+
+        /* ── Mobile ── */
+        @media (max-width:900px) {
+            .page-wrapper { grid-template-columns:1fr; }
+            .left-panel {
+                position:static; height:auto;
+                padding:6rem 1.5rem 2.5rem;
+                text-align:center; align-items:center;
             }
-            .nav-links.active { right: 0; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: auto; }
-            .btn-secondary { margin-left: 0; margin-top: 10px; display: block; }
-            .hero-card { padding: 1.5rem 1rem; }
+            .left-panel p { max-width:100%; }
+            .right-panel { padding:2.5rem 1.2rem 4rem; border-left:none; border-top:1px solid var(--glass-border); }
+            .menu-toggle { display:block; }
+            .nav-links {
+                position:fixed; top:0; right:-100%;
+                width:72%; height:100vh;
+                background:var(--dark); flex-direction:column;
+                padding:5rem 2rem; transition:0.4s;
+                box-shadow:-5px 0 20px rgba(0,0,0,0.4);
+            }
+            .nav-links.active { right:0; }
+        }
+        @media (max-width:420px) {
+            .service-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div id="scrollTop" onclick="window.scrollTo(0,0)"><i class="fas fa-chevron-up"></i></div>
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+</button>
 
-    <nav>
-        <div class="nav-container">
-            <div class="logo-section">
-                <img src="{{ url_for('static', filename='log1.png') }}" alt="Logo">
-                <img src="{{ url_for('static', filename='odmoh.png') }}" alt="MOH">
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-container">
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='log1.png') }}" alt="Ondo State">
+            <img src="{{ url_for('static', filename='odmoh.png') }}" alt="MOH">
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+            <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+            <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+            <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+            <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+            <li><a href="{{ url_for('register') }}" class="active">Get Support</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ── Main ── -->
+<div class="page-wrapper">
+
+    <!-- Left Info Panel -->
+    <div class="left-panel">
+        <div class="badge"><i class="fas fa-shield-heart"></i>&nbsp; Confidential &amp; Safe</div>
+        <h1>You deserve<br>support.</h1>
+        <p>Whether you're navigating stress, anxiety, or just need someone to talk to — our qualified professionals are here. You are not alone.</p>
+
+        <div class="trust-items">
+            <div class="trust-item">
+                <div class="trust-icon orange"><i class="fas fa-lock"></i></div>
+                <span>All submissions are strictly confidential</span>
             </div>
-            
-            <button class="menu-toggle" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <ul class="nav-links" id="navLinks">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-card">
-            <h1>Ready to talk?</h1>
-            <p>Your mental health is a journey. We walk with you.</p>
-            <div class="cta-btns">
-                <a href="#register" class="btn btn-primary">Get Help</a>
-                <a href="{{ url_for('sel_activities') }}" class="btn btn-secondary">Toolkit</a>
+            <div class="trust-item">
+                <div class="trust-icon purple"><i class="fas fa-user-doctor"></i></div>
+                <span>Matched with qualified mental health professionals</span>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon blue"><i class="fas fa-clock"></i></div>
+                <span>Response within 24–48 hours of submission</span>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon gold"><i class="fas fa-heart"></i></div>
+                <span>Free services for all Ondo State youth</span>
             </div>
         </div>
-    </section>
 
-    <section class="white-section" id="register">
-        <div class="section-header">
-            <h2>Support Request</h2>
+        <div class="emergency-strip">
+            <i class="fas fa-triangle-exclamation"></i>
+            <div>
+                <strong>In crisis right now?</strong><br>
+                Call immediately: <a href="tel:+2348134812419">+234 813 481 2419</a>
+            </div>
         </div>
+    </div>
 
-        <div class="form-container">
-            <form method="POST" action="{{ url_for('submit') }}">
-                <div class="form-grid">
+    <!-- Right Form Panel -->
+    <div class="right-panel">
+        <div class="form-card">
+            <div class="form-card-header">
+                <h2>Support Request</h2>
+                <p>Takes less than 2 minutes to complete</p>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-dot active" id="dot-1">1</div>
+                <div class="step-line" id="line-1"></div>
+                <div class="step-dot idle" id="dot-2">2</div>
+                <div class="step-line" id="line-2"></div>
+                <div class="step-dot idle" id="dot-3"><i class="fas fa-check" style="font-size:0.62rem"></i></div>
+            </div>
+
+            <!--
+                FORM posts to url_for('submit').
+                Fields: name, age (DOB string → calculate_age() in app.py converts to int), email, phone, service.
+                All field names match the Registration model exactly.
+            -->
+            <form method="POST" action="{{ url_for('submit') }}" id="supportForm" novalidate>
+
+                <!-- Step 1: Personal Details -->
+                <div class="form-step active" id="step-1">
+
                     <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" placeholder="John Doe" required>
+                        <label for="name">Full Name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="name" name="name"
+                                   placeholder="e.g. Adaeze Okafor"
+                                   autocomplete="name"
+                                   minlength="2" maxlength="100" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="error-msg" id="err-name">Enter your full name (at least 2 characters).</span>
                     </div>
+
+                    <!--
+                        Field name="age" sends DOB string.
+                        app.py calculate_age() converts it to integer years for the DB.
+                        max is set by JS to ensure user is at least 10 years old.
+                    -->
                     <div class="form-group">
-                        <label>DOB</label>
-                        <input type="date" name="age" required>
+                        <label for="dob">Date of Birth</label>
+                        <div class="input-wrap">
+                            <input type="date" id="dob" name="age"
+                                   min="1930-01-01" required>
+                            <i class="fas fa-calendar-days"></i>
+                        </div>
+                        <span class="error-msg" id="err-dob">Enter a valid date of birth (must be at least 10 years old).</span>
                     </div>
+
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" placeholder="mail@site.com" required>
+                        <label for="email">Email Address</label>
+                        <div class="input-wrap">
+                            <input type="email" id="email" name="email"
+                                   placeholder="yourname@example.com"
+                                   autocomplete="email"
+                                   maxlength="100" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span class="error-msg" id="err-email">Enter a valid email address.</span>
                     </div>
+
                     <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" name="phone" placeholder="080..." required>
+                        <label for="phone">Phone Number</label>
+                        <div class="input-wrap">
+                            <input type="tel" id="phone" name="phone"
+                                   placeholder="e.g. 08012345678"
+                                   autocomplete="tel"
+                                   pattern="[0-9+\-\s]{7,20}"
+                                   maxlength="20" required>
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span class="error-msg" id="err-phone">Enter a valid phone number (7–20 digits).</span>
                     </div>
-                    <div class="form-group full-width">
-                        <label>Service</label>
-                        <select name="service" required>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-primary" onclick="goToStep(2)">
+                            Next &nbsp;<i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Service Selection -->
+                <div class="form-step" id="step-2">
+                    <div class="form-group">
+                        <label>What kind of support do you need?</label>
+                        <div class="service-grid" id="serviceGrid">
+                            <div class="service-card" onclick="selectService('counseling', this)">
+                                <i class="fas fa-comments" style="color:var(--purple)"></i>
+                                <span>Counseling</span>
+                            </div>
+                            <div class="service-card" onclick="selectService('stress', this)">
+                                <i class="fas fa-brain" style="color:var(--blue)"></i>
+                                <span>Stress Management</span>
+                            </div>
+                            <div class="service-card" onclick="selectService('crisis', this)">
+                                <i class="fas fa-circle-exclamation" style="color:var(--pink)"></i>
+                                <span>Urgent Support</span>
+                            </div>
+                        </div>
+                        <!-- Hidden select — name="service" matches Registration.service -->
+                        <select id="serviceSelect" name="service" required>
+                            <option value="">Select a service</option>
                             <option value="counseling">Counseling</option>
                             <option value="stress">Stress Management</option>
                             <option value="crisis">Urgent Support</option>
                         </select>
+                        <span class="error-msg" id="err-service">Please select a support type.</span>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-ghost" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left"></i>&nbsp; Back
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+                            Review &nbsp;<i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-flicker" style="width: 100%; margin-top: 1rem;">
-                    Submit Request
-                </button>
+
+                <!-- Step 3: Review & Submit -->
+                <div class="form-step" id="step-3">
+                    <p style="font-size:0.77rem;color:rgba(255,255,255,0.45);margin-bottom:1rem;text-align:center;">
+                        Please confirm your details before submitting.
+                    </p>
+                    <div class="review-grid" id="reviewGrid"></div>
+
+                    <!-- Native submit — no JS fetch; Flask handles redirect to confirmation -->
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="btn-label"><i class="fas fa-paper-plane"></i>&nbsp; Submit Request</span>
+                        <i class="fas fa-circle-notch spinner"></i>
+                    </button>
+
+                    <div class="btn-row" style="margin-top:0.8rem;">
+                        <button type="button" class="btn btn-ghost" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left"></i>&nbsp; Back
+                        </button>
+                    </div>
+                </div>
+
             </form>
         </div>
-    </section>
+    </div>
+</div>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>YouthConnect</h4>
-                <p style="font-size: 0.8rem; opacity: 0.8;">Ondo State Ministry of Health Initiative for mental wellbeing.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('register') }}">Support</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Emergency</h4>
-                <p style="font-size: 0.8rem;">📞 +234 813 481 2419</p>
-            </div>
+<!-- ── Footer ── -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>YouthConnect</h4>
+            <p style="font-size:0.8rem;opacity:0.6;line-height:1.7;">
+                Ondo State Ministry of Health initiative for youth mental wellbeing.
+            </p>
         </div>
-        <div class="footer-bottom" style="text-align: center; padding-top: 1.5rem; font-size: 0.75rem; opacity: 0.5;">
-            &copy; 2026 Youth Connect Hub
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+            </ul>
         </div>
-    </footer>
+        <div class="footer-col">
+            <h4>Emergency</h4>
+            <p style="font-size:0.82rem;line-height:1.9;">
+                📞 <a href="tel:+2348134812419">+234 813 481 2419</a><br>
+                Available 24 / 7 for crisis support
+            </p>
+        </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Youth Connect Hub — Ondo State Ministry of Health</div>
+</footer>
 
-    <script>
-        function toggleMenu() {
-            const links = document.getElementById('navLinks');
-            links.classList.toggle('active');
+<script>
+    // ── DOB max: user must be ≥ 10 years old ──
+    (function () {
+        const dob = document.getElementById('dob');
+        const cap = new Date();
+        cap.setFullYear(cap.getFullYear() - 10);
+        dob.max = cap.toISOString().split('T')[0];
+    })();
+
+    // ── Mobile menu ──
+    function toggleMenu() {
+        document.getElementById('navLinks').classList.toggle('active');
+    }
+    document.addEventListener('click', function (e) {
+        const nav = document.getElementById('navLinks');
+        const tog = document.querySelector('.menu-toggle');
+        if (nav.classList.contains('active') && !nav.contains(e.target) && !tog.contains(e.target)) {
+            nav.classList.remove('active');
+        }
+    });
+
+    // ── Scroll-to-top ──
+    window.addEventListener('scroll', function () {
+        document.getElementById('scrollTop').style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+
+    // ── Service card selection ──
+    function selectService(value, card) {
+        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        document.getElementById('serviceSelect').value = value;
+        document.getElementById('err-service').classList.remove('show');
+    }
+
+    // ── Validators ──
+    const validators = {
+        name:  v => v.trim().length >= 2,
+        dob:   v => {
+            if (!v) return false;
+            const d   = new Date(v);
+            const max = new Date(document.getElementById('dob').max);
+            const min = new Date('1930-01-01');
+            return d <= max && d >= min;
+        },
+        email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()),
+        phone: v => /^[0-9+\-\s]{7,20}$/.test(v.trim()),
+    };
+
+    function validateField(id, errId, key) {
+        const f  = document.getElementById(id);
+        const e  = document.getElementById(errId);
+        const ok = validators[key](f.value);
+        f.classList.toggle('valid', ok);
+        f.classList.toggle('error', !ok);
+        e.classList.toggle('show', !ok);
+        return ok;
+    }
+
+    // Live blur validation
+    [['name','err-name','name'],['dob','err-dob','dob'],
+     ['email','err-email','email'],['phone','err-phone','phone']]
+    .forEach(([id, eid, key]) => {
+        document.getElementById(id).addEventListener('blur', () => validateField(id, eid, key));
+    });
+
+    // ── Step Navigation ──
+    let currentStep = 1;
+
+    function goToStep(target) {
+        // Validate before advancing
+        if (target > currentStep) {
+            if (currentStep === 1) {
+                const ok = [
+                    validateField('name',  'err-name',  'name'),
+                    validateField('dob',   'err-dob',   'dob'),
+                    validateField('email', 'err-email', 'email'),
+                    validateField('phone', 'err-phone', 'phone'),
+                ].every(Boolean);
+                if (!ok) return;
+            }
+            if (currentStep === 2) {
+                const sel = document.getElementById('serviceSelect');
+                if (!sel.value) {
+                    document.getElementById('err-service').classList.add('show');
+                    return;
+                }
+                document.getElementById('err-service').classList.remove('show');
+                buildReview();
+            }
         }
 
-        window.onscroll = function() {
-            let btn = document.getElementById("scrollTop");
-            if (document.documentElement.scrollTop > 300) {
-                btn.style.display = "flex";
+        document.getElementById(`step-${currentStep}`).classList.remove('active');
+        document.getElementById(`step-${target}`).classList.add('active');
+        updateDots(target);
+        currentStep = target;
+
+        // Scroll right panel into view on mobile
+        document.querySelector('.right-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function updateDots(step) {
+        const checkIcon = '<i class="fas fa-check" style="font-size:0.62rem"></i>';
+        for (let i = 1; i <= 3; i++) {
+            const dot  = document.getElementById(`dot-${i}`);
+            if (i < step) {
+                dot.className = 'step-dot done';
+                dot.innerHTML = checkIcon;
+            } else if (i === step) {
+                dot.className = 'step-dot active';
+                dot.innerHTML = i < 3 ? String(i) : checkIcon;
             } else {
-                btn.style.display = "none";
+                dot.className = 'step-dot idle';
+                dot.innerHTML = i < 3 ? String(i) : checkIcon;
             }
-        };
-    </script>
+        }
+        for (let i = 1; i <= 2; i++) {
+            document.getElementById(`line-${i}`).classList.toggle('done', step > i);
+        }
+    }
+
+    function buildReview() {
+        const name  = document.getElementById('name').value.trim();
+        const dob   = document.getElementById('dob').value;
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const sel   = document.getElementById('serviceSelect');
+        const svc   = sel.options[sel.selectedIndex].text;
+
+        // Age for display only — actual calculation done server-side via calculate_age()
+        const today = new Date();
+        const birth = new Date(dob);
+        const age   = today.getFullYear() - birth.getFullYear() -
+            ((today.getMonth() < birth.getMonth() ||
+              (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) ? 1 : 0);
+
+        const rows = [
+            { label: 'Full Name',    value: name },
+            { label: 'Date of Birth',value: `${dob} &nbsp;·&nbsp; Age ${age}` },
+            { label: 'Email',        value: email },
+            { label: 'Phone',        value: phone },
+            { label: 'Support Type', value: svc },
+        ];
+
+        document.getElementById('reviewGrid').innerHTML = rows.map(r => `
+            <div class="review-item">
+                <span class="review-label">${r.label}</span>
+                <span class="review-val">${r.value}</span>
+            </div>`).join('');
+    }
+
+    // ── Submit: show loading state, then let native POST proceed ──
+    document.getElementById('supportForm').addEventListener('submit', function () {
+        const btn = document.getElementById('submitBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+    });
+</script>
+
 </body>
 </html>
