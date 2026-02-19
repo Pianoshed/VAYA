@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe Check - Youth Connect Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300 ;400;600;700&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css ">
 
     <style>
         :root {
@@ -800,7 +800,7 @@
             }
         }
 
-        /* Mobile Specific Styles - IMPROVED */
+        /* Mobile Specific Styles - FIXED */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -825,15 +825,19 @@
                 overflow-y: auto;
             }
             
+            .nav-links.active {
+                right: 0;
+            }
+            
             .nav-links ul {
                 flex-direction: column;
                 gap: 0;
                 width: 100%;
-                padding: 20px 0;
+                padding: 0;
             }
             
-            .nav-links.active {
-                right: 0;
+            .nav-links ul li {
+                width: 100%;
             }
             
             .nav-links a {
@@ -862,28 +866,22 @@
             }
             
             /* Mobile overlay when menu is open */
-            .nav-links.active::before {
-                content: '';
+            .nav-overlay {
                 position: fixed;
                 top: 0;
                 left: 0;
-                right: 280px;
+                right: 0;
                 bottom: 0;
                 background: rgba(0, 0, 0, 0.6);
-                z-index: -1;
-                animation: fadeIn 0.3s ease;
+                z-index: 998;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
             }
             
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            
-            /* Highlight active page on mobile */
-            .nav-links a.active-page {
-                background: rgba(255, 107, 53, 0.2);
-                border-left-color: var(--primary);
-                color: var(--primary);
+            .nav-overlay.active {
+                opacity: 1;
+                visibility: visible;
             }
         }
         
@@ -1021,8 +1019,12 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
+
+    <!-- Mobile Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
 
     <nav>
         <div class="nav-container">
@@ -1034,13 +1036,13 @@
             
             <div class="nav-links" id="navLinks">
                 <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{{ url_for('Resources') }}"><i class="fas fa-book"></i> Resources</a></li>
+                    <li><a href="{{ url_for('sel_activities') }}"><i class="fas fa-heart"></i> SEL Activities</a></li>
+                    <li><a href="{{ url_for('mental') }}"><i class="fas fa-clipboard-check"></i> Assessment</a></li>
+                    <li><a href="{{ url_for('mood_tracker') }}"><i class="fas fa-smile"></i> Mood Tracker</a></li>
+                    <li><a href="{{ url_for('runner_app') }}"><i class="fas fa-running"></i> Spark Runner</a></li>
+                    <li><a href="{{ url_for('register') }}" style="color: var(--primary);"><i class="fas fa-hands-helping"></i> Get Support</a></li>
                 </ul>
             </div>
             
@@ -1062,27 +1064,27 @@
 
     <div class="main-content">
         <div class="form-card">
-            <!-- ✅ FIX: Added action="/submit-assessment" and method="POST" -->
+            <!-- FIX: Added action="/submit-assessment" and method="POST" -->
             <form id="vibeForm" action="/submit-assessment" method="POST">
                 
-                <h2>Vibe Assessment 🔍</h2>
+                <h2>Vibe Assessment </h2>
                 <p>Please provide your basic details so we can tailor your wellness journey results.</p>
                 
                 <div class="personal-info">
                     <div class="form-group">
-                        <label>Email Address 📧</label>
+                        <label>Email Address </label>
                         <input type="email" name="email" placeholder="Required for your results" required>
                     </div>
                     <div class="form-group">
-                        <label>Phone Number 📱</label>
+                        <label>Phone Number </label>
                         <input type="tel" name="phone" placeholder="Valid Nigerian Phone No." required>
                     </div>
                     <div class="form-group">
-                        <label>Your Age 🎂</label>
+                        <label>Your Age </label>
                         <input type="number" name="age" min="10" max="35" placeholder="e.g. 21" required>
                     </div>
                     <div class="form-group">
-                        <label>Gender 🌈</label>
+                        <label>Gender </label>
                         <select name="sex" required>
                             <option value="">Select...</option>
                             <option value="male">Male</option>
@@ -1105,7 +1107,7 @@
                         and support contacts. <strong>You're not alone - help is available.</strong>
                     </p>
                     <div class="emergency-contact">
-                        <strong>📞 Emergency Support:</strong>
+                        <strong> Emergency Support:</strong>
                         <a href="tel:112">Nigeria Emergency: 112</a><br>
                         <a href="tel:08134812419">Youth Connect Hub: 08134812419</a>
                     </div>
@@ -1113,7 +1115,7 @@
 
                 <div id="questions-container"></div>
 
-                <button type="submit" class="submit-btn" id="submitBtn">Unlock My Vibe Score 🚀</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Unlock My Vibe Score </button>
             </form>
         </div>
     </div>
@@ -1132,15 +1134,15 @@
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
-            <ul class="nav-links" id="navMenu">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
-            </ul>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                    <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                    <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                    <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                    <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+                    <li><a href="{{ url_for('register') }}">Get Support</a></li>
+                </ul>
             </div>
             <div class="footer-links">
                 <h4>Contact Us</h4>
@@ -1160,26 +1162,28 @@
         // Hamburger Menu Toggle
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
+        const navOverlay = document.getElementById('navOverlay');
         
-        hamburger.addEventListener('click', () => {
+        function toggleMenu() {
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('active');
-        });
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        hamburger.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking on overlay
+        navOverlay.addEventListener('click', toggleMenu);
         
         // Close menu when clicking on a link
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
             });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
         });
 
         // Track high-risk responses
@@ -1196,21 +1200,21 @@
             { text: "Have you felt cheerful and in good spirits?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Have you felt calm and relaxed?", cat: "Well-being", color: "#d1e7ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Have you felt active and vigorous lately?", cat: "Energy", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you wake up feeling fresh and rested? 😴", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
+            { text: "Do you wake up feeling fresh and rested? ", cat: "Sleep", color: "#fff4d1", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "Is your daily life filled with things that interest you?", cat: "Life", color: "#d1ffd6", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you feel little interest or pleasure in doing things? 😔", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
+            { text: "Do you feel little interest or pleasure in doing things? ", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
             { text: "Do you feel down, depressed, or hopeless?", cat: "Mind", color: "#e9d1ff", opts: ["Not at all", "Several days", "More than half the days", "Nearly every day"], sensitive: false },
             { text: "How often do you find it hard to concentrate on school or work?", cat: "Focus", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
             { text: "How often do you feel nervous, anxious, or on edge?", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you feel like your emotions are out of control? 🌊", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
-            { text: "Do you feel safe and respected in your home environment? 🏠", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"], sensitive: false },
-            { text: "Has anyone touched you inappropriately or forced you into unwanted sexual activity? 🛑", cat: "Sexual Safety", color: "#ffcccc", opts: ["Never", "This happened once", "This happens sometimes", "This is happening now"], sensitive: true },
-            { text: "Has anyone physically or emotionally hurt you recently? 🛑", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"], sensitive: true },
+            { text: "Do you feel like your emotions are out of control? ", cat: "Anxiety", color: "#e9d1ff", opts: ["Never", "Rarely", "Sometimes", "Often", "Always"], sensitive: false },
+            { text: "Do you feel safe and respected in your home environment? ", cat: "Safety", color: "#ffd1d1", opts: ["Not safe", "Sometimes worried", "Mostly safe", "Totally safe"], sensitive: false },
+            { text: "Has anyone touched you inappropriately or forced you into unwanted sexual activity? ", cat: "Sexual Safety", color: "#ffcccc", opts: ["Never", "This happened once", "This happens sometimes", "This is happening now"], sensitive: true },
+            { text: "Has anyone physically or emotionally hurt you recently? ", cat: "Safety", color: "#ffd1d1", opts: ["Never", "Once or twice", "Frequently", "This is currently happening"], sensitive: true },
             { text: "Do you feel pressured by anyone (partner, family, peers) to engage in sexual activities you're not comfortable with?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Often"], sensitive: true },
             { text: "Do you feel you can say 'No' to sexual advances without fear or consequences?", cat: "Sexual Boundaries", color: "#ffcccc", opts: ["Never", "Rarely", "Sometimes", "Always"], sensitive: true },
             { text: "Do you have access to accurate information about sexual and reproductive health?", cat: "SRH Access", color: "#d1fff0", opts: ["No access", "Limited access", "Some access", "Full access"], sensitive: true },
             { text: "Have you experienced unwanted pregnancy, STI concerns, or need contraception advice but don't know where to get help?", cat: "SRH Needs", color: "#d1fff0", opts: ["Yes, urgently", "Yes, but not urgent", "Maybe in future", "No"], sensitive: true },
-            { text: "Are you optimistic about what the future holds for you? ✨", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"], sensitive: false },
+            { text: "Are you optimistic about what the future holds for you? ", cat: "Outlook", color: "#fff4d1", opts: ["Not at all", "A little", "Mostly", "Very much"], sensitive: false },
             { text: "Do you have a trusted adult or healthcare provider you can talk to about sexual health concerns?", cat: "SRH Support", color: "#d1fff0", opts: ["No one", "Maybe one person", "Yes, I have someone", "Yes, multiple trusted sources"], sensitive: true },
             { text: "When you feel unsafe or need help with sexual health issues, do you know where to go for confidential support in Ondo?", cat: "Help Access", color: "#fff4d1", opts: ["No idea", "I've heard of places", "I know some places", "Yes, I know Youth Connect & clinics"], sensitive: true }
         ];
@@ -1276,7 +1280,7 @@
                     You've indicated you may need support. Remember, you're not alone and help is available.
                 </p>
                 <div class="support-contacts">
-                    <strong>📞 24/7 Support Lines:</strong>
+                    <strong> 24/7 Support Lines:</strong>
                     <a href="tel:08134812419"><i class="fas fa-phone"></i> Youth Connect: 08134812419</a>
                     <a href="tel:112"><i class="fas fa-phone"></i> Nigeria Emergency: 112</a>
                 </div>
@@ -1324,7 +1328,7 @@
             // Disable button to prevent double submission
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.textContent = 'Submitting... ⏳';
+            btn.textContent = 'Submitting... ';
         });
     </script>
 </body>
