@@ -500,6 +500,7 @@
             text-decoration: underline;
         }
 
+        /* Loading state for submit button */
         .submit-btn {
             width: 100%; 
             padding: 1.25rem; 
@@ -519,6 +520,13 @@
         .submit-btn:hover { 
             background: #e85a28; 
             transform: translateY(-2px); 
+        }
+
+        .submit-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            animation: none;
+            transform: none;
         }
 
         /* --- FOOTER --- */
@@ -1054,7 +1062,8 @@
 
     <div class="main-content">
         <div class="form-card">
-            <form id="vibeForm">
+            <!-- ✅ FIX: Added action="/submit-assessment" and method="POST" -->
+            <form id="vibeForm" action="/submit-assessment" method="POST">
                 
                 <h2>Vibe Assessment 🔍</h2>
                 <p>Please provide your basic details so we can tailor your wellness journey results.</p>
@@ -1104,7 +1113,7 @@
 
                 <div id="questions-container"></div>
 
-                <button type="submit" class="submit-btn">Unlock My Vibe Score 🚀</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Unlock My Vibe Score 🚀</button>
             </form>
         </div>
     </div>
@@ -1292,6 +1301,31 @@
             document.getElementById('progressBar').style.width = perc + '%';
             document.getElementById('percLabel').innerText = perc + '%';
         }
+
+        // Prevent double-submit and show loading state
+        document.getElementById('vibeForm').addEventListener('submit', function(e) {
+            const selects = document.querySelectorAll('select[name^="q"]');
+            const unanswered = Array.from(selects).filter(s => s.value === "").length;
+
+            if (unanswered > 0) {
+                e.preventDefault();
+                alert(`Please answer all questions. You have ${unanswered} unanswered question(s).`);
+                // Scroll to first unanswered question
+                for (let s of selects) {
+                    if (s.value === "") {
+                        s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        s.style.borderColor = '#e74c3c';
+                        break;
+                    }
+                }
+                return;
+            }
+
+            // Disable button to prevent double submission
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Submitting... ⏳';
+        });
     </script>
 </body>
 </html>
