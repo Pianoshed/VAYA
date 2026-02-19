@@ -1033,15 +1033,15 @@
             </div>
             
             <div class="nav-links" id="navLinks">
-                <ul>
-                    <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
-                    <li><a href="/resources"><i class="fas fa-book"></i>Resources</a></li>
-                    <li><a href="/activities"><i class="fas fa-gamepad"></i>SEL Activities</a></li>
-                    <li><a href="/assessment"><i class="fas fa-brain"></i>Assessment</a></li>
-                    <li><a href="/mood"><i class="fas fa-chart-line"></i>Mood Tracker</a></li>
-                    <li><a href="/runner"><i class="fas fa-running"></i>Spark Runner</a></li>
-                    <li><a href="/support" style="color: var(--primary);"><i class="fas fa-heart"></i>Get Support</a></li>
-                </ul>
+ <ul class="nav-links" id="navMenu">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+            </ul>
             </div>
             
             <div class="hamburger" id="hamburger">
@@ -1132,15 +1132,15 @@
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/resources">Resources</a></li>
-                    <li><a href="/activities">SEL Activities</a></li>
-                    <li><a href="/assessment">Assessment</a></li>
-                    <li><a href="/mood">Mood Tracker</a></li>
-                    <li><a href="/runner">Spark Runner</a></li>
-                    <li><a href="/support">Get Support</a></li>
-                </ul>
+            <ul class="nav-links" id="navMenu">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
+            </ul>
             </div>
             <div class="footer-links">
                 <h4>Contact Us</h4>
