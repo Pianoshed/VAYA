@@ -24,167 +24,43 @@
             --info:      #3498DB;
             --purple:    #9B59B6;
             --teal:      #1ABC9C;
-            --red-alert: #FF3333;
         }
-
         * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
 
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--dark);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        /* ── SIDEBAR ─────────────────────────────────────────────────── */
+        /* ── SIDEBAR ── */
         .layout { display: flex; min-height: 100vh; }
-
-        .sidebar {
-            width: 220px;
-            background: var(--panel);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; left: 0;
-            height: 100vh;
-            z-index: 100;
-            transition: transform 0.3s;
-        }
-
-        .sidebar-logo {
-            padding: 1.5rem 1.25rem 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-logo h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1rem;
-            color: var(--primary);
-            line-height: 1.3;
-        }
-
-        .sidebar-logo span {
-            font-size: 0.7rem;
-            color: var(--muted);
-            font-weight: 400;
-        }
-
+        .sidebar { width: 220px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; transition: transform 0.3s; }
+        .sidebar-logo { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
+        .sidebar-logo h2 { font-family: 'Syne', sans-serif; font-size: 1rem; color: var(--primary); line-height: 1.3; }
+        .sidebar-logo span { font-size: 0.7rem; color: var(--muted); font-weight: 400; }
         .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
-
-        .nav-section {
-            padding: 0.5rem 1rem 0.25rem;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--muted);
-            font-weight: 600;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.6rem 1.25rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            color: var(--muted);
-            border-left: 3px solid transparent;
-            text-decoration: none;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: var(--text);
-            background: rgba(255,107,53,0.08);
-            border-left-color: var(--primary);
-        }
-
+        .nav-section { padding: 0.5rem 1rem 0.25rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-weight: 600; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 0.6rem 1.25rem; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; color: var(--muted); border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover, .nav-item.active { color: var(--text); background: rgba(255,107,53,0.08); border-left-color: var(--primary); }
         .nav-item.alert-nav { color: #ff6b6b; }
-        .nav-item.alert-nav:hover, .nav-item.alert-nav.active {
-            background: rgba(231,76,60,0.1);
-            border-left-color: var(--danger);
-            color: #ff8888;
-        }
-
+        .nav-item.alert-nav:hover, .nav-item.alert-nav.active { background: rgba(231,76,60,0.1); border-left-color: var(--danger); color: #ff8888; }
         .nav-item.teal-nav { color: #4dd9c0; }
-        .nav-item.teal-nav:hover, .nav-item.teal-nav.active {
-            background: rgba(26,188,156,0.1);
-            border-left-color: var(--teal);
-            color: #6ee8d0;
-        }
-
+        .nav-item.teal-nav:hover, .nav-item.teal-nav.active { background: rgba(26,188,156,0.1); border-left-color: var(--teal); color: #6ee8d0; }
         .nav-item i { width: 16px; text-align: center; font-size: 0.85rem; }
-
-        .badge-count {
-            margin-left: auto;
-            background: var(--danger);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
-        }
-
+        .badge-count { margin-left: auto; background: var(--danger); color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; min-width: 18px; text-align: center; }
         .badge-count.teal { background: var(--teal); }
         .badge-count.orange { background: var(--primary); }
-
-        .sidebar-footer {
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .sidebar-footer a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.2s;
-        }
-
+        .badge-count.info { background: var(--info); }
+        .sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
+        .sidebar-footer a { display: flex; align-items: center; gap: 8px; color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
         .sidebar-footer a:hover { color: var(--danger); }
 
-        /* ── MAIN CONTENT ────────────────────────────────────────────── */
+        /* ── MAIN ── */
         .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
-
-        .topbar {
-            background: var(--panel);
-            border-bottom: 1px solid var(--border);
-            padding: 0.875rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
+        .topbar { background: var(--panel); border-bottom: 1px solid var(--border); padding: 0.875rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
         .topbar-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
         .topbar-actions { display: flex; gap: 8px; }
 
-        .btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-            font-size: 0.8rem;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
+        .btn { padding: 8px 14px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; font-size: 0.8rem; font-family: 'Space Grotesk', sans-serif; }
         .btn-primary  { background: var(--primary);  color: white; }
-        .btn-primary:hover  { background: #e85a28; transform: translateY(-1px); }
+        .btn-primary:hover  { background: #e85a28; }
         .btn-secondary { background: var(--secondary); color: white; }
-        .btn-secondary:hover { background: #e08a1a; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: #c0392b; }
         .btn-success { background: var(--success); color: white; }
@@ -192,319 +68,51 @@
         .btn-teal { background: var(--teal); color: white; }
         .btn-teal:hover { background: #17a589; }
         .btn-purple { background: var(--purple); color: white; }
-        .btn-ghost {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-        }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
         .btn-sm { padding: 5px 10px; font-size: 0.72rem; }
 
         .content { padding: 1.5rem; }
-
-        /* ── SECTION PANELS ─────────────────────────────────────────── */
         .section-panel { display: none; }
         .section-panel.active { display: block; }
-
-        /* ── PAGE TITLE ─────────────────────────────────────────────── */
         .page-title { margin-bottom: 1.5rem; }
-        .page-title h1 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); }
+        .page-title h1 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; }
         .page-title p { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
 
-        /* ── STAT CARDS ─────────────────────────────────────────────── */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-
+        /* ── STAT CARDS ── */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; position: relative; overflow: hidden; transition: transform 0.2s; }
         .stat-card:hover { transform: translateY(-2px); }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px; height: 100%;
-            background: var(--primary);
-        }
-
+        .stat-card::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--primary); }
         .stat-card.s-success::after { background: var(--success); }
         .stat-card.s-danger::after  { background: var(--danger); }
         .stat-card.s-warning::after { background: var(--warning); }
         .stat-card.s-info::after    { background: var(--info); }
         .stat-card.s-purple::after  { background: var(--purple); }
         .stat-card.s-teal::after    { background: var(--teal); }
-
         .stat-icon { font-size: 1.6rem; opacity: 0.12; position: absolute; right: 14px; top: 14px; }
-
-        .stat-val {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.72rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 6px;
-        }
-
+        .stat-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; }
+        .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
         .stat-sub { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
 
-        /* ── CHART CARDS ────────────────────────────────────────────── */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .chart-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        /* ── CHART CARDS ── */
+        .charts-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 1.5rem; }
+        .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+        .card-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
         .card-title i { color: var(--primary); font-size: 0.85rem; }
-
         .chart-wrap { position: relative; height: 220px; }
 
-        /* ── VULNERABILITY ───────────────────────────────────────────── */
-        .vuln-header {
-            background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(155,89,182,0.1));
-            border: 1px solid rgba(231,76,60,0.3);
-            border-radius: 14px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .vuln-header-icon {
-            width: 44px; height: 44px;
-            background: rgba(231,76,60,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--danger);
-            flex-shrink: 0;
-        }
-
-        .vuln-header-text h2 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: #ff8888; }
-        .vuln-header-text p { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-
-        .vuln-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 1.25rem;
-        }
-
-        .vuln-stat {
-            background: var(--card);
-            border: 1px solid rgba(231,76,60,0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .vuln-stat .v-val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--danger); }
-        .vuln-stat .v-label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
-
-        .vuln-table-wrap {
-            background: var(--card);
-            border: 1px solid rgba(231,76,60,0.2);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 1.25rem;
-        }
-
-        .vuln-table-title {
-            padding: 0.875rem 1.25rem;
-            background: rgba(231,76,60,0.1);
-            border-bottom: 1px solid rgba(231,76,60,0.2);
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #ff8888;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .table-scroll { overflow-x: auto; }
-
-        .vuln-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.78rem;
-            min-width: 580px;
-        }
-
-        .vuln-table th {
-            background: rgba(0,0,0,0.2);
-            padding: 0.7rem 0.875rem;
-            text-align: left;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--muted);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .vuln-table td {
-            padding: 0.75rem 0.875rem;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .vuln-table tr:last-child td { border-bottom: none; }
-        .vuln-table tr:hover td { background: rgba(255,255,255,0.03); }
-
-        /* Flag Pills */
-        .flag-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            white-space: nowrap;
-            margin: 2px;
-        }
-
-        .flag-red    { background: rgba(231,76,60,0.2);  color: #ff8888; border: 1px solid rgba(231,76,60,0.3); }
-        .flag-orange { background: rgba(243,156,18,0.2); color: #f5c842; border: 1px solid rgba(243,156,18,0.3); }
-        .flag-purple { background: rgba(155,89,182,0.2); color: #c39bd3; border: 1px solid rgba(155,89,182,0.3); }
-        .flag-blue   { background: rgba(52,152,219,0.2); color: #85c1e9; border: 1px solid rgba(52,152,219,0.3); }
-        .flag-teal   { background: rgba(26,188,156,0.2); color: #76d7c4; border: 1px solid rgba(26,188,156,0.3); }
-
-        .risk-level { padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
-        .risk-critical { background: rgba(255,51,51,0.2);  color: #ff6666; }
-        .risk-high     { background: rgba(231,76,60,0.15); color: #e08080; }
-        .risk-medium   { background: rgba(243,156,18,0.2); color: #f5c842; }
-
-        /* SRH */
-        .srh-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.25rem; }
-
-        .srh-bar-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
-
-        .srh-bar-label {
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .srh-bar-label span:last-child { font-weight: 700; color: var(--text); }
-
-        .srh-bar-bg { height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
-        .srh-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
-
-        /* ── QUESTION BREAKDOWN ─────────────────────────────────────── */
-        .q-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.5rem; }
-
-        .q-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1rem;
-            border-left: 3px solid var(--info);
-            transition: all 0.2s;
-        }
-
-        .q-card:hover { transform: translateX(3px); }
-        .q-card.q-positive { border-left-color: var(--success); }
-        .q-card.q-negative { border-left-color: var(--warning); }
-        .q-card.q-critical { border-left-color: var(--danger); background: rgba(231,76,60,0.05); }
-
-        .q-number { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
-        .q-text { font-size: 0.82rem; color: var(--text); line-height: 1.4; margin-bottom: 0.75rem; }
-        .q-bar-wrap { display: flex; align-items: center; gap: 10px; }
-        .q-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
-        .q-bar-fill { height: 100%; border-radius: 3px; }
-        .q-avg { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--primary); min-width: 30px; text-align: right; }
-        .q-meta { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
-
-        /* ── DATA TABLES ─────────────────────────────────────────────── */
-        .data-table-wrap {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .data-table-head {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
+        /* ── TABLES ── */
+        .data-table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .data-table-head { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .data-table-head h3 { font-size: 0.9rem; font-weight: 600; }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.78rem;
-            min-width: 700px;
-        }
-
-        .data-table th {
-            background: rgba(0,0,0,0.2);
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--muted);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .data-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-        }
-
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 600px; }
+        .data-table th { background: rgba(0,0,0,0.2); padding: 0.75rem 1rem; text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+        .data-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
         .data-table tr:last-child td { border-bottom: none; }
         .data-table tr:hover td { background: rgba(255,255,255,0.02); }
 
+        /* Badges */
         .score-badge { padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
         .sc-critical  { background: rgba(255,51,51,0.2);  color: #ff6666; }
         .sc-high-risk { background: rgba(243,156,18,0.2); color: #f5c842; }
@@ -512,304 +120,152 @@
         .sc-good      { background: rgba(46,204,113,0.2); color: #82e0aa; }
         .sc-excellent { background: rgba(39,174,96,0.2);  color: #58d68d; }
 
-        /* ── SERVICE BADGE ──────────────────────────────────────────── */
+        .flag-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 700; white-space: nowrap; margin: 2px; }
+        .flag-red    { background: rgba(231,76,60,0.2);  color: #ff8888; border: 1px solid rgba(231,76,60,0.3); }
+        .flag-orange { background: rgba(243,156,18,0.2); color: #f5c842; border: 1px solid rgba(243,156,18,0.3); }
+        .flag-purple { background: rgba(155,89,182,0.2); color: #c39bd3; border: 1px solid rgba(155,89,182,0.3); }
+        .flag-blue   { background: rgba(52,152,219,0.2); color: #85c1e9; border: 1px solid rgba(52,152,219,0.3); }
+
+        .risk-level { padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+        .risk-critical { background: rgba(255,51,51,0.2);  color: #ff6666; }
+        .risk-high     { background: rgba(231,76,60,0.15); color: #e08080; }
+        .risk-medium   { background: rgba(243,156,18,0.2); color: #f5c842; }
+
         .svc-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
         .svc-counseling { background: rgba(155,89,182,0.2); color: #c39bd3; border: 1px solid rgba(155,89,182,0.25); }
         .svc-stress     { background: rgba(52,152,219,0.2); color: #85c1e9; border: 1px solid rgba(52,152,219,0.25); }
         .svc-crisis     { background: rgba(231,76,60,0.2);  color: #ff8888; border: 1px solid rgba(231,76,60,0.3); }
 
-        /* ── OUTREACH EMAIL COMPOSER ─────────────────────────────────── */
-        .outreach-header {
-            background: linear-gradient(135deg, rgba(26,188,156,0.12), rgba(52,152,219,0.08));
-            border: 1px solid rgba(26,188,156,0.3);
-            border-radius: 14px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
+        /* ── VULNERABILITY SECTION ── */
+        .alert-header { border-radius: 14px; padding: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 12px; }
+        .alert-header.red   { background: linear-gradient(135deg,rgba(231,76,60,0.15),rgba(155,89,182,0.1)); border: 1px solid rgba(231,76,60,0.3); }
+        .alert-header.teal  { background: linear-gradient(135deg,rgba(26,188,156,0.12),rgba(52,152,219,0.08)); border: 1px solid rgba(26,188,156,0.3); }
+        .alert-header-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .alert-header.red  .alert-header-icon { background: rgba(231,76,60,0.2); color: var(--danger); }
+        .alert-header.teal .alert-header-icon { background: rgba(26,188,156,0.2); color: var(--teal); }
+        .alert-header-text h2 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; }
+        .alert-header.red  .alert-header-text h2 { color: #ff8888; }
+        .alert-header.teal .alert-header-text h2 { color: #6ee8d0; }
+        .alert-header-text p { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 
-        .outreach-header-icon {
-            width: 44px; height: 44px;
-            background: rgba(26,188,156,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--teal);
-            flex-shrink: 0;
-        }
+        .vuln-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+        .vuln-stat { background: var(--card); border: 1px solid rgba(231,76,60,0.2); border-radius: 10px; padding: 1rem; text-align: center; }
+        .vuln-stat .v-val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--danger); }
+        .vuln-stat .v-label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
-        .outreach-header-text h2 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: #6ee8d0; }
-        .outreach-header-text p { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+        .vuln-table-wrap { background: var(--card); border: 1px solid rgba(231,76,60,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 1.25rem; }
+        .vuln-table-title { padding: 0.875rem 1.25rem; background: rgba(231,76,60,0.1); border-bottom: 1px solid rgba(231,76,60,0.2); font-size: 0.85rem; font-weight: 600; color: #ff8888; display: flex; align-items: center; gap: 8px; }
+        .table-scroll { overflow-x: auto; }
+        .vuln-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 580px; }
+        .vuln-table th { background: rgba(0,0,0,0.2); padding: 0.7rem 0.875rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+        .vuln-table td { padding: 0.75rem 0.875rem; border-bottom: 1px solid var(--border); }
+        .vuln-table tr:last-child td { border-bottom: none; }
+        .vuln-table tr:hover td { background: rgba(255,255,255,0.03); }
 
-        .outreach-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .outreach-stat {
-            background: var(--card);
-            border: 1px solid rgba(26,188,156,0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .outreach-stat .o-val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--teal); }
-        .outreach-stat .o-label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
-
-        /* Priority queue cards */
+        /* ── OUTREACH ── */
         .priority-queue { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
-
-        .pq-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            transition: background 0.2s;
-        }
-
+        .pq-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; transition: background 0.2s; }
         .pq-card:hover { background: rgba(255,255,255,0.03); }
-
         .pq-card.pq-critical { border-left: 3px solid var(--danger); }
         .pq-card.pq-high     { border-left: 3px solid var(--warning); }
         .pq-card.pq-medium   { border-left: 3px solid var(--info); }
-
-        .pq-priority {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            min-width: 70px;
-        }
-
+        .pq-priority { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; min-width: 70px; }
         .pq-critical .pq-priority { color: var(--danger); }
         .pq-high .pq-priority     { color: var(--warning); }
         .pq-medium .pq-priority   { color: var(--info); }
-
         .pq-info { flex: 1; min-width: 180px; }
-        .pq-email { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+        .pq-email { font-size: 0.85rem; font-weight: 600; }
         .pq-flags { margin-top: 3px; }
         .pq-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .pq-meta { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
 
-        /* Email Composer Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            z-index: 500;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
+        /* ── SRH BARS ── */
+        .srh-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.25rem; }
+        .srh-bar-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+        .srh-bar-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+        .srh-bar-label span:last-child { font-weight: 700; color: var(--text); }
+        .srh-bar-bg { height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+        .srh-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
 
+        /* ── QUESTION CARDS ── */
+        .q-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.5rem; }
+        .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--info); transition: all 0.2s; }
+        .q-card:hover { transform: translateX(3px); }
+        .q-card.q-positive { border-left-color: var(--success); }
+        .q-card.q-negative { border-left-color: var(--warning); }
+        .q-card.q-critical { border-left-color: var(--danger); background: rgba(231,76,60,0.05); }
+        .q-number { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+        .q-text { font-size: 0.82rem; line-height: 1.4; margin-bottom: 0.75rem; }
+        .q-bar-wrap { display: flex; align-items: center; gap: 10px; }
+        .q-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+        .q-bar-fill { height: 100%; border-radius: 3px; }
+        .q-avg { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--primary); min-width: 30px; text-align: right; }
+        .q-meta { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
+
+        /* ── PAGE VISIT SPECIFIC ── */
+        .page-bar-row { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+        .page-bar-row:last-child { border-bottom: none; }
+        .page-bar-name { font-size: 0.8rem; font-weight: 600; min-width: 140px; color: var(--text); }
+        .page-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+        .page-bar-fill { height: 100%; border-radius: 4px; background: var(--info); transition: width 0.8s ease; }
+        .page-bar-count { font-size: 0.78rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
+
+        .location-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.2); color: #85c1e9; margin: 2px; }
+
+        /* ── FILES ── */
+        .file-list { display: flex; flex-direction: column; gap: 8px; }
+        .file-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .file-name { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+        .file-name i { color: var(--success); }
+
+        /* ── MODAL ── */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 500; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.open { display: flex; }
-
-        .modal {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            width: 100%;
-            max-width: 640px;
-            max-height: 90vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            padding: 1.25rem 1.5rem 1rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: var(--panel);
-            z-index: 1;
-        }
-
+        .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
+        .modal-header { padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--panel); z-index: 1; }
         .modal-header h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; }
         .modal-header h3 i { color: var(--teal); margin-right: 6px; }
         .modal-close { background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; transition: color 0.2s; }
         .modal-close:hover { color: var(--danger); }
-
         .modal-body { padding: 1.25rem 1.5rem; flex: 1; }
-
-        .modal-recipient-bar {
-            background: rgba(26,188,156,0.08);
-            border: 1px solid rgba(26,188,156,0.2);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1.25rem;
-            font-size: 0.82rem;
-        }
-
+        .modal-recipient-bar { background: rgba(26,188,156,0.08); border: 1px solid rgba(26,188,156,0.2); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; }
         .modal-recipient-bar strong { color: var(--teal); }
-
         .form-row { margin-bottom: 1rem; }
-
-        .form-row label {
-            display: block;
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--muted);
-            margin-bottom: 0.4rem;
-        }
-
-        .form-row input,
-        .form-row select,
-        .form-row textarea {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.85rem;
-            padding: 0.75rem 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-            resize: vertical;
-        }
-
-        .form-row input:focus,
-        .form-row select:focus,
-        .form-row textarea:focus { border-color: var(--teal); }
-
+        .form-row label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.4rem; }
+        .form-row input, .form-row select, .form-row textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; padding: 0.75rem 0.9rem; outline: none; transition: border-color 0.2s; resize: vertical; }
+        .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--teal); }
         .form-row textarea { min-height: 140px; }
         .form-row select option { background: var(--dark); }
-
         .template-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 0.5rem; }
-
-        .template-chip {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            color: var(--muted);
-            background: transparent;
-            transition: all 0.2s;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
+        .template-chip { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); color: var(--muted); background: transparent; transition: all 0.2s; font-family: 'Space Grotesk', sans-serif; }
         .template-chip:hover { border-color: var(--teal); color: var(--teal); }
+        .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
 
-        .modal-footer {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        /* Sent log */
-        .sent-log { display: flex; flex-direction: column; gap: 8px; }
-        .sent-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.875rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .sent-item-meta { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-        .sent-item-subject { font-size: 0.85rem; font-weight: 600; }
-
-        /* ── FILES ──────────────────────────────────────────────────── */
-        .file-list { display: flex; flex-direction: column; gap: 8px; }
-
-        .file-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .file-name { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; color: var(--text); }
-        .file-name i { color: var(--success); }
-        .file-actions { display: flex; gap: 8px; }
-
-        /* ── MOBILE NAV TOGGLE ─────────────────────────────────────── */
-        .mobile-toggle {
-            display: none;
-            position: fixed;
-            bottom: 20px; right: 20px;
-            width: 48px; height: 48px;
-            background: var(--primary);
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 200;
-            box-shadow: 0 4px 20px rgba(255,107,53,0.4);
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 99;
-        }
-
-        /* ── EMPTY STATE ────────────────────────────────────────────── */
+        /* ── MISC ── */
+        .section-divider { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); padding: 0.5rem 0; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
         .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); }
         .empty i { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.3; display: block; }
         .empty p { font-size: 0.85rem; }
+        .search-box { background: rgba(255,255,255,0.05); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; padding: 0.5rem 0.875rem; outline: none; transition: border-color 0.2s; width: 200px; }
+        .search-box:focus { border-color: var(--primary); }
+        .search-box::placeholder { color: var(--muted); }
 
-        /* ── DIVIDER ────────────────────────────────────────────────── */
-        .section-divider {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--muted);
-            padding: 0.5rem 0;
-            margin-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
+        /* ── MOBILE ── */
+        .mobile-toggle { display: none; position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; background: var(--primary); border-radius: 50%; border: none; color: white; font-size: 1.1rem; cursor: pointer; z-index: 200; box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 99; }
 
-        /* ── RESPONSIVE ─────────────────────────────────────────────── */
         @media (min-width: 600px) {
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
             .vuln-stats { grid-template-columns: repeat(4, 1fr); }
-            .outreach-stats { grid-template-columns: repeat(4, 1fr); }
             .charts-grid { grid-template-columns: repeat(2, 1fr); }
             .srh-grid { grid-template-columns: repeat(2, 1fr); }
             .q-grid { grid-template-columns: repeat(2, 1fr); }
         }
-
         @media (min-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(4, 1fr); }
             .q-grid { grid-template-columns: repeat(3, 1fr); }
         }
-
-        @media (min-width: 1200px) {
-            .stats-grid { grid-template-columns: repeat(6, 1fr); }
-        }
-
+        @media (min-width: 1200px) { .stats-grid { grid-template-columns: repeat(6, 1fr); } }
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
@@ -820,44 +276,12 @@
             .content { padding: 1rem; }
         }
 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity:0; transform:translateY(16px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-
+        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
         .fade-up { animation: fadeUp 0.4s ease both; }
-
-        @keyframes pulse-red {
-            0%,100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); }
-            50%      { box-shadow: 0 0 0 8px rgba(231,76,60,0); }
-        }
-
+        @keyframes pulse-red { 0%,100% { box-shadow:0 0 0 0 rgba(231,76,60,0.4); } 50% { box-shadow:0 0 0 8px rgba(231,76,60,0); } }
         .pulse-red { animation: pulse-red 2s infinite; }
-
-        @keyframes pulse-teal {
-            0%,100% { box-shadow: 0 0 0 0 rgba(26,188,156,0.4); }
-            50%      { box-shadow: 0 0 0 8px rgba(26,188,156,0); }
-        }
-
+        @keyframes pulse-teal { 0%,100% { box-shadow:0 0 0 0 rgba(26,188,156,0.4); } 50% { box-shadow:0 0 0 8px rgba(26,188,156,0); } }
         .pulse-teal { animation: pulse-teal 2s infinite; }
-
-        /* search input */
-        .search-box {
-            background: rgba(255,255,255,0.05);
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.82rem;
-            padding: 0.5rem 0.875rem;
-            outline: none;
-            transition: border-color 0.2s;
-            width: 200px;
-        }
-
-        .search-box:focus { border-color: var(--primary); }
-        .search-box::placeholder { color: var(--muted); }
     </style>
 </head>
 <body>
@@ -875,10 +299,7 @@
                 &nbsp;&nbsp;|&nbsp;&nbsp;
                 <strong>Flags:</strong> <span id="modalRecipientFlags">—</span>
             </div>
-
-            <!-- Hidden fields used to build mailto link -->
             <input type="hidden" id="composerTo">
-
             <div class="form-row">
                 <label>Email Template</label>
                 <div class="template-chips">
@@ -889,36 +310,27 @@
                     <button class="template-chip" onclick="applyTemplate('followup')">📋 General Follow-Up</button>
                 </div>
             </div>
-
             <div class="form-row">
                 <label>Subject</label>
                 <input type="text" id="composerSubject" placeholder="Email subject line…">
             </div>
-
             <div class="form-row">
                 <label>Message Body</label>
                 <textarea id="composerBody" placeholder="Compose your message here…"></textarea>
             </div>
-
             <div class="form-row">
-                <label>Sender Name / Role (for signature)</label>
+                <label>Sender Name / Role</label>
                 <input type="text" id="composerSender" placeholder="e.g. Youth Connect Hub — Welfare Team">
             </div>
-
             <p style="font-size:0.72rem; color:var(--muted); margin-top:0.5rem;">
                 <i class="fas fa-info-circle"></i>
-                Clicking <strong>Open in Mail</strong> will launch your system email client with the composed message.
-                All communication must follow your safeguarding protocol and institutional guidelines.
+                Clicking <strong>Open in Mail</strong> will launch your system email client. Follow safeguarding protocol before sending.
             </p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-ghost" onclick="closeEmailModal()">Cancel</button>
-            <button class="btn btn-teal" onclick="openMailto()">
-                <i class="fas fa-paper-plane"></i> Open in Mail
-            </button>
-            <button class="btn btn-ghost" onclick="copyComposed()">
-                <i class="fas fa-copy"></i> Copy
-            </button>
+            <button class="btn btn-teal" onclick="openMailto()"><i class="fas fa-paper-plane"></i> Open in Mail</button>
+            <button class="btn btn-ghost" onclick="copyComposed()"><i class="fas fa-copy"></i> Copy</button>
         </div>
     </div>
 </div>
@@ -967,6 +379,12 @@
                 <span class="badge-count teal" id="outreach-count">–</span>
             </a>
 
+            <div class="nav-section" style="margin-top:0.75rem;">Traffic</div>
+            <a class="nav-item" onclick="showSection('pagevisits', this)">
+                <i class="fas fa-eye"></i> Page Visits
+                <span class="badge-count info" id="visits-count">–</span>
+            </a>
+
             <div class="nav-section" style="margin-top:0.75rem;">System</div>
             <a class="nav-item" onclick="showSection('files', this)">
                 <i class="fas fa-folder"></i> Files
@@ -1000,15 +418,12 @@
 
         <div class="content">
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: DASHBOARD OVERVIEW
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ OVERVIEW ══ -->
             <div class="section-panel active fade-up" id="sec-overview">
                 <div class="page-title">
                     <h1>Dashboard Overview</h1>
                     <p>Youth mental wellness assessment data — Ondo State</p>
                 </div>
-
                 <div class="stats-grid">
                     <div class="stat-card">
                         <i class="fas fa-clipboard-check stat-icon"></i>
@@ -1047,7 +462,6 @@
                         <div class="stat-sub">Score 70–88</div>
                     </div>
                 </div>
-
                 <div class="charts-grid">
                     <div class="chart-card">
                         <div class="card-title"><i class="fas fa-chart-pie"></i> Score Distribution</div>
@@ -1068,9 +482,7 @@
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: TRENDS
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ TRENDS ══ -->
             <div class="section-panel" id="sec-trends">
                 <div class="page-title">
                     <h1>Trends & Activity</h1>
@@ -1078,105 +490,83 @@
                 </div>
                 <div class="chart-card" style="margin-bottom:1rem;">
                     <div class="card-title"><i class="fas fa-chart-area"></i> Daily Submissions — Last 30 Days</div>
-                    <div class="chart-wrap" style="height:300px;">
-                        <canvas id="trendChart2"></canvas>
-                    </div>
+                    <div class="chart-wrap" style="height:300px;"><canvas id="trendChart2"></canvas></div>
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: QUESTION ANALYSIS
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ QUESTION ANALYSIS ══ -->
             <div class="section-panel" id="sec-questions">
                 <div class="page-title">
                     <h1>Question-by-Question Analysis</h1>
-                    <p>Average responses across all 20 assessment questions. Green = positive indicators. Red border = concern area.</p>
+                    <p>Average responses across all 20 assessment questions.</p>
                 </div>
 
                 <div class="section-divider">🌱 Wellbeing & Energy (Q1–Q5) — Higher avg = Better</div>
                 <div class="q-grid" style="margin-bottom:1.5rem;">
                     {% for qn in ['q1','q2','q3','q4','q5'] %}
-                    {% if qn in analytics.question_averages %}
-                    {% set qd = analytics.question_averages[qn] %}
+                    {% if qn in analytics.question_averages %}{% set qd = analytics.question_averages[qn] %}
                     <div class="q-card q-positive">
                         <div class="q-number">{{ qn|upper }} · Wellbeing</div>
                         <div class="q-text">{{ qd.label }}</div>
                         <div class="q-bar-wrap">
-                            <div class="q-bar-bg">
-                                <div class="q-bar-fill" style="width:{{ (qd.average/5)*100 }}%; background: var(--success);"></div>
-                            </div>
+                            <div class="q-bar-bg"><div class="q-bar-fill" style="width:{{ (qd.average/5)*100 }}%; background:var(--success);"></div></div>
                             <div class="q-avg">{{ qd.average }}</div>
                         </div>
                         <div class="q-meta">{{ qd.total_responses }} responses · out of 5</div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %}{% endfor %}
                 </div>
 
                 <div class="section-divider">🧠 Mental Health Indicators (Q6–Q10) — Lower avg = Better</div>
                 <div class="q-grid" style="margin-bottom:1.5rem;">
                     {% for qn in ['q6','q7','q8','q9','q10'] %}
-                    {% if qn in analytics.question_averages %}
-                    {% set qd = analytics.question_averages[qn] %}
+                    {% if qn in analytics.question_averages %}{% set qd = analytics.question_averages[qn] %}
                     <div class="q-card q-negative {% if qd.average <= 2 %}q-critical{% endif %}">
                         <div class="q-number">{{ qn|upper }} · Mental Health</div>
                         <div class="q-text">{{ qd.label }}</div>
                         <div class="q-bar-wrap">
-                            <div class="q-bar-bg">
-                                <div class="q-bar-fill" style="width:{{ (qd.average/5)*100 }}%; background: {% if qd.average <= 2 %}var(--danger){% else %}var(--warning){% endif %};"></div>
-                            </div>
+                            <div class="q-bar-bg"><div class="q-bar-fill" style="width:{{ (qd.average/5)*100 }}%; background:{% if qd.average <= 2 %}var(--danger){% else %}var(--warning){% endif %};"></div></div>
                             <div class="q-avg">{{ qd.average }}</div>
                         </div>
                         <div class="q-meta">{{ qd.total_responses }} responses · out of 5 | {% if qd.average <= 2 %}⚠ Concern{% else %}Within range{% endif %}</div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %}{% endfor %}
                 </div>
 
                 <div class="section-divider">🛡️ Safety & Sexual Boundaries (Q11–Q15) — CRITICAL</div>
                 <div class="q-grid" style="margin-bottom:1.5rem;">
                     {% for qn, qtype in [('q11','positive'),('q12','critical'),('q13','critical'),('q14','negative'),('q15','positive')] %}
-                    {% if qn in analytics.question_averages %}
-                    {% set qd = analytics.question_averages[qn] %}
+                    {% if qn in analytics.question_averages %}{% set qd = analytics.question_averages[qn] %}
                     <div class="q-card q-{{ qtype }}">
                         <div class="q-number">{{ qn|upper }} · Safety / Boundaries</div>
                         <div class="q-text">{{ qd.label }}</div>
                         <div class="q-bar-wrap">
-                            <div class="q-bar-bg">
-                                <div class="q-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background: {% if qtype=='critical' %}var(--danger){% elif qtype=='positive' %}var(--success){% else %}var(--warning){% endif %};"></div>
-                            </div>
+                            <div class="q-bar-bg"><div class="q-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background:{% if qtype=='critical' %}var(--danger){% elif qtype=='positive' %}var(--success){% else %}var(--warning){% endif %};"></div></div>
                             <div class="q-avg">{{ qd.average }}</div>
                         </div>
                         <div class="q-meta">{{ qd.total_responses }} responses · out of 4</div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %}{% endfor %}
                 </div>
 
                 <div class="section-divider">🌸 SRH Access & Support (Q16–Q20)</div>
                 <div class="q-grid">
                     {% for qn in ['q16','q17','q18','q19','q20'] %}
-                    {% if qn in analytics.question_averages %}
-                    {% set qd = analytics.question_averages[qn] %}
+                    {% if qn in analytics.question_averages %}{% set qd = analytics.question_averages[qn] %}
                     <div class="q-card q-positive">
                         <div class="q-number">{{ qn|upper }} · SRH</div>
                         <div class="q-text">{{ qd.label }}</div>
                         <div class="q-bar-wrap">
-                            <div class="q-bar-bg">
-                                <div class="q-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background: var(--info);"></div>
-                            </div>
+                            <div class="q-bar-bg"><div class="q-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background:var(--info);"></div></div>
                             <div class="q-avg">{{ qd.average }}</div>
                         </div>
                         <div class="q-meta">{{ qd.total_responses }} responses · out of 4</div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %}{% endfor %}
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: ALL RECORDS
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ ALL RECORDS ══ -->
             <div class="section-panel" id="sec-records">
                 <div class="page-title">
                     <h1>All Assessment Records</h1>
@@ -1186,23 +576,12 @@
                 <div class="data-table-wrap">
                     <div class="data-table-head">
                         <h3>{{ assessments|length }} Records</h3>
-                        <a href="{{ url_for('download_responses') }}" class="btn btn-secondary">
-                            <i class="fas fa-download"></i> Download All
-                        </a>
+                        <a href="{{ url_for('download_responses') }}" class="btn btn-secondary"><i class="fas fa-download"></i> Download All</a>
                     </div>
                     <div class="table-scroll">
                         <table class="data-table">
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Email</th>
-                                    <th>Age</th>
-                                    <th>Sex</th>
-                                    <th>Score</th>
-                                    <th>Band</th>
-                                    <th>Vuln Flag</th>
-                                </tr>
+                                <tr><th>#</th><th>Date</th><th>Email</th><th>Age</th><th>Sex</th><th>Score</th><th>Band</th><th>Vuln Flag</th></tr>
                             </thead>
                             <tbody>
                                 {% for a in assessments[:50] %}
@@ -1224,13 +603,8 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if is_vuln %}
-                                        <span style="color:var(--danger); font-size:0.78rem; font-weight:700;">
-                                            <i class="fas fa-exclamation-circle"></i> Flagged
-                                        </span>
-                                        {% else %}
-                                        <span style="color:var(--muted); font-size:0.75rem;">–</span>
-                                        {% endif %}
+                                        {% if is_vuln %}<span style="color:var(--danger); font-size:0.78rem; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Flagged</span>
+                                        {% else %}<span style="color:var(--muted); font-size:0.75rem;">–</span>{% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -1243,153 +617,71 @@
                 {% endif %}
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: REGISTRATIONS  ← NEW
-                 Shows all Registration model entries from register.html form
-                 Fields: id, name, age (int years), email, phone, service
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ REGISTRATIONS ══ -->
             <div class="section-panel" id="sec-registrations">
                 <div class="page-title">
                     <h1>Support Request Registrations</h1>
-                    <p>All submissions from the Get Support / Register form — name, contact, age &amp; requested service</p>
+                    <p>All submissions from the Get Support / Register form</p>
                 </div>
-
-                {# ── KPI mini-stats ── #}
                 {% set rns = namespace(total=0, counseling=0, stress=0, crisis=0) %}
                 {% if registrations is defined %}
-                    {% for r in registrations %}
-                        {% set rns.total = rns.total + 1 %}
+                    {% for r in registrations %}{% set rns.total = rns.total + 1 %}
                         {% if r.service == 'counseling' %}{% set rns.counseling = rns.counseling + 1 %}{% endif %}
                         {% if r.service == 'stress' %}{% set rns.stress = rns.stress + 1 %}{% endif %}
                         {% if r.service == 'crisis' %}{% set rns.crisis = rns.crisis + 1 %}{% endif %}
                     {% endfor %}
                 {% endif %}
-
                 <div class="stats-grid" style="margin-bottom:1.5rem;">
-                    <div class="stat-card s-teal">
-                        <i class="fas fa-address-card stat-icon"></i>
-                        <div class="stat-val">{{ rns.total }}</div>
-                        <div class="stat-label">Total Registrations</div>
-                        <div class="stat-sub">All time</div>
-                    </div>
-                    <div class="stat-card s-purple">
-                        <i class="fas fa-comments stat-icon"></i>
-                        <div class="stat-val">{{ rns.counseling }}</div>
-                        <div class="stat-label">Counseling</div>
-                        <div class="stat-sub">Service requested</div>
-                    </div>
-                    <div class="stat-card s-info">
-                        <i class="fas fa-brain stat-icon"></i>
-                        <div class="stat-val">{{ rns.stress }}</div>
-                        <div class="stat-label">Stress Management</div>
-                        <div class="stat-sub">Service requested</div>
-                    </div>
-                    <div class="stat-card s-danger">
-                        <i class="fas fa-circle-exclamation stat-icon"></i>
-                        <div class="stat-val">{{ rns.crisis }}</div>
-                        <div class="stat-label">Urgent / Crisis</div>
-                        <div class="stat-sub">Immediate attention needed</div>
-                    </div>
+                    <div class="stat-card s-teal"><i class="fas fa-address-card stat-icon"></i><div class="stat-val">{{ rns.total }}</div><div class="stat-label">Total Registrations</div></div>
+                    <div class="stat-card s-purple"><i class="fas fa-comments stat-icon"></i><div class="stat-val">{{ rns.counseling }}</div><div class="stat-label">Counseling</div></div>
+                    <div class="stat-card s-info"><i class="fas fa-brain stat-icon"></i><div class="stat-val">{{ rns.stress }}</div><div class="stat-label">Stress Management</div></div>
+                    <div class="stat-card s-danger"><i class="fas fa-circle-exclamation stat-icon"></i><div class="stat-val">{{ rns.crisis }}</div><div class="stat-label">Urgent / Crisis</div></div>
                 </div>
-
-                {# Crisis alert banner if there are crisis registrations #}
                 {% if rns.crisis > 0 %}
-                <div class="vuln-header" style="margin-bottom:1.25rem;">
-                    <div class="vuln-header-icon pulse-red">
-                        <i class="fas fa-circle-exclamation"></i>
-                    </div>
-                    <div class="vuln-header-text">
+                <div class="alert-header red" style="margin-bottom:1.25rem;">
+                    <div class="alert-header-icon pulse-red"><i class="fas fa-circle-exclamation"></i></div>
+                    <div class="alert-header-text">
                         <h2>{{ rns.crisis }} Urgent / Crisis Request{{ 's' if rns.crisis != 1 else '' }}</h2>
-                        <p>
-                            One or more registrants selected <strong>"Urgent Support"</strong> as their service.
-                            These individuals require immediate outreach. Use the
-                            <strong>Outreach &amp; Email</strong> section or contact them by phone directly.
-                        </p>
+                        <p>One or more registrants selected <strong>"Urgent Support"</strong>. Use the Outreach &amp; Email section or contact them by phone directly.</p>
                     </div>
                 </div>
                 {% endif %}
-
-                {# Service distribution bar chart #}
                 <div class="chart-card" style="margin-bottom:1.25rem;">
                     <div class="card-title"><i class="fas fa-chart-bar"></i> Registrations by Service</div>
-                    <div class="chart-wrap" style="height:180px;">
-                        <canvas id="regServiceChart"></canvas>
-                    </div>
+                    <div class="chart-wrap" style="height:180px;"><canvas id="regServiceChart"></canvas></div>
                 </div>
-
-                {# ── Registrations Table ── #}
                 {% if registrations is defined and registrations %}
                 <div class="data-table-wrap">
                     <div class="data-table-head">
                         <h3>{{ rns.total }} Registrations</h3>
                         <div style="display:flex; gap:8px; align-items:center;">
                             <input class="search-box" type="text" id="regSearch" placeholder="Search name / email…" oninput="filterRegTable()">
-                            <a href="{{ url_for('admin_registrations') }}" class="btn btn-ghost btn-sm">
-                                <i class="fas fa-external-link-alt"></i> Full View
-                            </a>
+                            <a href="{{ url_for('admin_registrations') }}" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> Full View</a>
                         </div>
                     </div>
                     <div class="table-scroll">
                         <table class="data-table" id="regTable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Age</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Service</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>Name</th><th>Age</th><th>Email</th><th>Phone</th><th>Service</th><th>Actions</th></tr></thead>
                             <tbody id="regTableBody">
                                 {% for r in registrations %}
                                 <tr data-name="{{ r.name|lower }}" data-email="{{ r.email|lower }}">
                                     <td><strong>#{{ r.id }}</strong></td>
-                                    <td>
-                                        <span style="font-weight:600;">{{ r.name }}</span>
-                                        {% if r.service == 'crisis' %}
-                                        <span style="color:var(--danger); font-size:0.68rem; margin-left:4px;">
-                                            <i class="fas fa-exclamation-circle"></i> CRISIS
-                                        </span>
-                                        {% endif %}
-                                    </td>
+                                    <td><span style="font-weight:600;">{{ r.name }}</span>{% if r.service == 'crisis' %}<span style="color:var(--danger); font-size:0.68rem; margin-left:4px;"><i class="fas fa-exclamation-circle"></i> CRISIS</span>{% endif %}</td>
                                     <td>{{ r.age }} yrs</td>
+                                    <td><a href="mailto:{{ r.email }}" style="color:var(--info); text-decoration:none;">{{ r.email }}</a></td>
+                                    <td><a href="tel:{{ r.phone }}" style="color:var(--text); text-decoration:none;">{{ r.phone }}</a></td>
                                     <td>
-                                        <a href="mailto:{{ r.email }}" style="color:var(--info); text-decoration:none;">
-                                            {{ r.email }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="tel:{{ r.phone }}" style="color:var(--text); text-decoration:none;">
-                                            {{ r.phone }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        {% if r.service == 'counseling' %}
-                                        <span class="svc-pill svc-counseling"><i class="fas fa-comments"></i> Counseling</span>
-                                        {% elif r.service == 'stress' %}
-                                        <span class="svc-pill svc-stress"><i class="fas fa-brain"></i> Stress Mgmt</span>
-                                        {% elif r.service == 'crisis' %}
-                                        <span class="svc-pill svc-crisis"><i class="fas fa-circle-exclamation"></i> Urgent</span>
-                                        {% else %}
-                                        <span class="svc-pill" style="color:var(--muted); border:1px solid var(--border);">{{ r.service }}</span>
-                                        {% endif %}
+                                        {% if r.service == 'counseling' %}<span class="svc-pill svc-counseling"><i class="fas fa-comments"></i> Counseling</span>
+                                        {% elif r.service == 'stress' %}<span class="svc-pill svc-stress"><i class="fas fa-brain"></i> Stress Mgmt</span>
+                                        {% elif r.service == 'crisis' %}<span class="svc-pill svc-crisis"><i class="fas fa-circle-exclamation"></i> Urgent</span>
+                                        {% else %}<span class="svc-pill" style="color:var(--muted); border:1px solid var(--border);">{{ r.service }}</span>{% endif %}
                                     </td>
                                     <td>
                                         <div style="display:flex; gap:5px;">
-                                            <button class="btn btn-teal btn-sm"
-                                                onclick="openEmailModalReg('{{ r.email }}', '{{ r.name }}', '{{ r.service }}')">
-                                                <i class="fas fa-envelope"></i> Email
-                                            </button>
-                                            <a href="tel:{{ r.phone }}" class="btn btn-ghost btn-sm">
-                                                <i class="fas fa-phone"></i>
-                                            </a>
-                                            <form action="{{ url_for('delete_submission', id=r.id) }}" method="POST"
-                                                  onsubmit="return confirm('Delete this registration?');" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                            <button class="btn btn-teal btn-sm" onclick="openEmailModalReg('{{ r.email }}', '{{ r.name }}', '{{ r.service }}')"><i class="fas fa-envelope"></i> Email</button>
+                                            <a href="tel:{{ r.phone }}" class="btn btn-ghost btn-sm"><i class="fas fa-phone"></i></a>
+                                            <form action="{{ url_for('delete_submission', id=r.id) }}" method="POST" onsubmit="return confirm('Delete this registration?');" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </div>
                                     </td>
@@ -1400,35 +692,23 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="empty">
-                    <i class="fas fa-address-card"></i>
-                    <p>No support registrations yet. They will appear here once users submit the form.</p>
-                </div>
+                <div class="empty"><i class="fas fa-address-card"></i><p>No support registrations yet.</p></div>
                 {% endif %}
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: 🚨 VULNERABILITY FLAGS
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ VULNERABILITY FLAGS ══ -->
             <div class="section-panel" id="sec-vulnerability">
                 <div class="page-title">
                     <h1>Vulnerability & Safeguarding Flags</h1>
                     <p>Respondents identified as at risk based on Q11–Q15 safety answers</p>
                 </div>
-
-                <div class="vuln-header">
-                    <div class="vuln-header-icon pulse-red">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="vuln-header-text">
+                <div class="alert-header red">
+                    <div class="alert-header-icon pulse-red"><i class="fas fa-shield-alt"></i></div>
+                    <div class="alert-header-text">
                         <h2>Safeguarding Alert System</h2>
-                        <p>
-                            This section flags respondents who indicated active abuse, coercion, or inability to protect themselves.
-                            These individuals require follow-up. All data is confidential — handle with care and follow your safeguarding protocol.
-                        </p>
+                        <p>Flags respondents who indicated active abuse, coercion, or inability to protect themselves. Handle with care and follow your safeguarding protocol.</p>
                     </div>
                 </div>
-
                 <div class="vuln-stats">
                     {% set ns = namespace(sexual_abuse=0, physical_abuse=0, coercion=0, cant_say_no=0, unsafe_home=0) %}
                     {% for a in assessments %}
@@ -1438,48 +718,17 @@
                         {% if a.q15 and a.q15 <= 2 %}{% set ns.cant_say_no = ns.cant_say_no + 1 %}{% endif %}
                         {% if a.q11 and a.q11 <= 2 %}{% set ns.unsafe_home = ns.unsafe_home + 1 %}{% endif %}
                     {% endfor %}
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ ns.sexual_abuse }}</div>
-                        <div class="v-label">Sexual Abuse<br>Reported (Q12)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ ns.physical_abuse }}</div>
-                        <div class="v-label">Physical/Emotional<br>Abuse (Q13)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ ns.coercion }}</div>
-                        <div class="v-label">Sexual<br>Coercion (Q14)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ ns.cant_say_no }}</div>
-                        <div class="v-label">Cannot Assert<br>Boundaries (Q15)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ ns.unsafe_home }}</div>
-                        <div class="v-label">Unsafe Home<br>Environment (Q11)</div>
-                    </div>
+                    <div class="vuln-stat"><div class="v-val">{{ ns.sexual_abuse }}</div><div class="v-label">Sexual Abuse<br>Reported (Q12)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ ns.physical_abuse }}</div><div class="v-label">Physical/Emotional<br>Abuse (Q13)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ ns.coercion }}</div><div class="v-label">Sexual<br>Coercion (Q14)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ ns.cant_say_no }}</div><div class="v-label">Cannot Assert<br>Boundaries (Q15)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ ns.unsafe_home }}</div><div class="v-label">Unsafe Home<br>Environment (Q11)</div></div>
                 </div>
-
                 <div class="vuln-table-wrap">
-                    <div class="vuln-table-title">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Flagged Respondents — Require Follow-up
-                    </div>
+                    <div class="vuln-table-title"><i class="fas fa-exclamation-triangle"></i> Flagged Respondents — Require Follow-up</div>
                     <div class="table-scroll">
                         <table class="vuln-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Age</th>
-                                    <th>Sex</th>
-                                    <th>Score</th>
-                                    <th>Active Flags</th>
-                                    <th>Risk Level</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>Email</th><th>Phone</th><th>Age</th><th>Sex</th><th>Score</th><th>Active Flags</th><th>Risk Level</th><th>Action</th></tr></thead>
                             <tbody>
                                 {% set flag_count = namespace(total=0) %}
                                 {% for a in assessments %}
@@ -1491,10 +740,7 @@
                                 {% if a.q13 and a.q13 == 3 %}{% set flags = flags + ['phys_abuse_freq'] %}{% endif %}
                                 {% if a.q14 and a.q14 >= 3 %}{% set flags = flags + ['coercion'] %}{% endif %}
                                 {% if a.q15 and a.q15 <= 2 %}{% set flags = flags + ['no_boundary'] %}{% endif %}
-                                {% if flags|length > 0 %}
-                                {% set flag_count.total = flag_count.total + 1 %}
-                                {# Build a readable flag label string for the email modal #}
-                                {% set flag_str = flags|join(', ') %}
+                                {% if flags|length > 0 %}{% set flag_count.total = flag_count.total + 1 %}{% set flag_str = flags|join(', ') %}
                                 <tr>
                                     <td>#{{ a.id }}</td>
                                     <td>{{ a.email }}</td>
@@ -1512,50 +758,36 @@
                                         {% if 'unsafe_home' in flags %}<span class="flag-pill flag-blue"><i class="fas fa-circle"></i> Unsafe home</span>{% endif %}
                                     </td>
                                     <td>
-                                        {% if 'sexual_abuse_now' in flags or 'phys_abuse_now' in flags %}
-                                        <span class="risk-level risk-critical">CRITICAL</span>
-                                        {% elif flags|length >= 3 %}
-                                        <span class="risk-level risk-high">HIGH</span>
-                                        {% else %}
-                                        <span class="risk-level risk-medium">MEDIUM</span>
-                                        {% endif %}
+                                        {% if 'sexual_abuse_now' in flags or 'phys_abuse_now' in flags %}<span class="risk-level risk-critical">CRITICAL</span>
+                                        {% elif flags|length >= 3 %}<span class="risk-level risk-high">HIGH</span>
+                                        {% else %}<span class="risk-level risk-medium">MEDIUM</span>{% endif %}
                                     </td>
                                     <td>
-                                        <button class="btn btn-teal btn-sm"
-                                            onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', '{{ flag_str }}', {% if 'sexual_abuse_now' in flags or 'phys_abuse_now' in flags %}'critical'{% elif flags|length >= 3 %}'high'{% else %}'medium'{% endif %})">
+                                        <button class="btn btn-teal btn-sm" onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', '{{ flag_str }}', {% if 'sexual_abuse_now' in flags or 'phys_abuse_now' in flags %}'critical'{% elif flags|length >= 3 %}'high'{% else %}'medium'{% endif %})">
                                             <i class="fas fa-envelope"></i> Email
                                         </button>
                                     </td>
                                 </tr>
-                                {% endif %}
-                                {% endfor %}
+                                {% endif %}{% endfor %}
                                 {% if flag_count.total == 0 %}
-                                <tr>
-                                    <td colspan="9" style="text-align:center; padding:2rem; color:var(--muted);">
-                                        <i class="fas fa-check-circle" style="color:var(--success);"></i> No vulnerability flags detected
-                                    </td>
-                                </tr>
+                                <tr><td colspan="9" style="text-align:center; padding:2rem; color:var(--muted);"><i class="fas fa-check-circle" style="color:var(--success);"></i> No vulnerability flags detected</td></tr>
                                 {% endif %}
                             </tbody>
                         </table>
                     </div>
                 </div>
-
                 <div class="chart-card">
                     <div class="card-title"><i class="fas fa-chart-bar"></i> Vulnerability Flag Distribution</div>
                     <div class="chart-wrap"><canvas id="vulnChart"></canvas></div>
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: SRH ACCESS & SUPPORT
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ SRH ACCESS ══ -->
             <div class="section-panel" id="sec-srh">
                 <div class="page-title">
                     <h1>Sexual & Reproductive Health Access</h1>
-                    <p>Based on Q16–Q20 responses — measures SRH knowledge, access and support systems</p>
+                    <p>Based on Q16–Q20 responses</p>
                 </div>
-
                 {% set srh = namespace(no_access=0, no_trusted=0, urgent_need=0, no_help_knowledge=0) %}
                 {% for a in assessments %}
                     {% if a.q16 and a.q16 == 1 %}{% set srh.no_access = srh.no_access + 1 %}{% endif %}
@@ -1563,115 +795,48 @@
                     {% if a.q17 and a.q17 == 1 %}{% set srh.urgent_need = srh.urgent_need + 1 %}{% endif %}
                     {% if a.q20 and a.q20 == 1 %}{% set srh.no_help_knowledge = srh.no_help_knowledge + 1 %}{% endif %}
                 {% endfor %}
-
                 <div class="vuln-stats" style="margin-bottom:1.5rem;">
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ srh.urgent_need }}</div>
-                        <div class="v-label">Urgent SRH Need<br>(Q17 = Yes urgently)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ srh.no_access }}</div>
-                        <div class="v-label">Zero SRH<br>Information Access (Q16)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ srh.no_trusted }}</div>
-                        <div class="v-label">No Trusted<br>Adult for SRH (Q19)</div>
-                    </div>
-                    <div class="vuln-stat">
-                        <div class="v-val">{{ srh.no_help_knowledge }}</div>
-                        <div class="v-label">Unaware of<br>Support Services (Q20)</div>
-                    </div>
+                    <div class="vuln-stat"><div class="v-val">{{ srh.urgent_need }}</div><div class="v-label">Urgent SRH Need (Q17)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ srh.no_access }}</div><div class="v-label">Zero SRH Info Access (Q16)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ srh.no_trusted }}</div><div class="v-label">No Trusted Adult (Q19)</div></div>
+                    <div class="vuln-stat"><div class="v-val">{{ srh.no_help_knowledge }}</div><div class="v-label">Unaware of Services (Q20)</div></div>
                 </div>
-
                 <div class="chart-card" style="margin-bottom:1rem;">
                     <div class="card-title"><i class="fas fa-heartbeat"></i> SRH Question Averages</div>
                     <div class="srh-grid">
-                        {% for qn, label, color in [
-                            ('q16','Access to SRH Information','#3498db'),
-                            ('q17','Urgent SRH / Contraception Need','#e74c3c'),
-                            ('q18','Optimism About the Future','#2ecc71'),
-                            ('q19','Trusted Adult for SRH Talks','#9b59b6'),
-                            ('q20','Knows Where to Get Confidential Help','#f39c12')
-                        ] %}
-                        {% if qn in analytics.question_averages %}
-                        {% set qd = analytics.question_averages[qn] %}
+                        {% for qn, label, color in [('q16','SRH Information Access','#3498db'),('q17','Urgent SRH Need','#e74c3c'),('q18','Optimism About Future','#2ecc71'),('q19','Trusted Adult for SRH','#9b59b6'),('q20','Knows Where to Get Help','#f39c12')] %}
+                        {% if qn in analytics.question_averages %}{% set qd = analytics.question_averages[qn] %}
                         <div class="srh-bar-card">
-                            <div class="srh-bar-label">
-                                <span>{{ qn|upper }}: {{ label }}</span>
-                                <span>{{ qd.average }} / 4</span>
-                            </div>
-                            <div class="srh-bar-bg">
-                                <div class="srh-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background:{{ color }};"></div>
-                            </div>
+                            <div class="srh-bar-label"><span>{{ qn|upper }}: {{ label }}</span><span>{{ qd.average }} / 4</span></div>
+                            <div class="srh-bar-bg"><div class="srh-bar-fill" style="width:{{ (qd.average/4)*100 }}%; background:{{ color }};"></div></div>
                         </div>
-                        {% endif %}
-                        {% endfor %}
+                        {% endif %}{% endfor %}
                     </div>
                 </div>
-
                 <div class="vuln-table-wrap">
-                    <div class="vuln-table-title">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Respondents with Urgent SRH Needs (Q17 = Yes urgently / Q16 = No access)
-                    </div>
+                    <div class="vuln-table-title"><i class="fas fa-exclamation-circle"></i> Respondents with Urgent SRH Needs</div>
                     <div class="table-scroll">
                         <table class="vuln-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Age</th>
-                                    <th>Sex</th>
-                                    <th>SRH Flags</th>
-                                    <th>Trusted Adult?</th>
-                                    <th>Knows Help?</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>Email</th><th>Phone</th><th>Age</th><th>Sex</th><th>SRH Flags</th><th>Trusted Adult?</th><th>Knows Help?</th><th>Action</th></tr></thead>
                             <tbody>
                                 {% set srh_shown = namespace(count=0) %}
                                 {% for a in assessments %}
                                 {% if (a.q17 and a.q17 == 1) or (a.q16 and a.q16 == 1) or (a.q19 and a.q19 == 1) %}
                                 {% set srh_shown.count = srh_shown.count + 1 %}
                                 <tr>
-                                    <td>#{{ a.id }}</td>
-                                    <td>{{ a.email }}</td>
-                                    <td>{{ a.phone }}</td>
-                                    <td>{{ a.age }}</td>
-                                    <td>{{ a.sex|title }}</td>
+                                    <td>#{{ a.id }}</td><td>{{ a.email }}</td><td>{{ a.phone }}</td><td>{{ a.age }}</td><td>{{ a.sex|title }}</td>
                                     <td>
                                         {% if a.q17 == 1 %}<span class="flag-pill flag-red">Urgent SRH need</span>{% endif %}
                                         {% if a.q16 == 1 %}<span class="flag-pill flag-orange">No SRH info</span>{% endif %}
                                         {% if a.q17 == 2 %}<span class="flag-pill flag-blue">SRH need (not urgent)</span>{% endif %}
                                     </td>
-                                    <td>
-                                        {% if a.q19 == 1 %}<span style="color:var(--danger);font-weight:700;">No one</span>
-                                        {% elif a.q19 == 2 %}<span style="color:var(--warning);">Maybe 1</span>
-                                        {% elif a.q19 >= 3 %}<span style="color:var(--success);">Yes</span>
-                                        {% else %}–{% endif %}
-                                    </td>
-                                    <td>
-                                        {% if a.q20 == 1 %}<span style="color:var(--danger);font-weight:700;">No idea</span>
-                                        {% elif a.q20 == 2 %}<span style="color:var(--warning);">Heard of places</span>
-                                        {% elif a.q20 >= 3 %}<span style="color:var(--success);">Yes</span>
-                                        {% else %}–{% endif %}
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-teal btn-sm"
-                                            onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'SRH urgent need / no SRH access', 'high')">
-                                            <i class="fas fa-envelope"></i> Email
-                                        </button>
-                                    </td>
+                                    <td>{% if a.q19 == 1 %}<span style="color:var(--danger);font-weight:700;">No one</span>{% elif a.q19 == 2 %}<span style="color:var(--warning);">Maybe 1</span>{% elif a.q19 >= 3 %}<span style="color:var(--success);">Yes</span>{% else %}–{% endif %}</td>
+                                    <td>{% if a.q20 == 1 %}<span style="color:var(--danger);font-weight:700;">No idea</span>{% elif a.q20 == 2 %}<span style="color:var(--warning);">Heard of places</span>{% elif a.q20 >= 3 %}<span style="color:var(--success);">Yes</span>{% else %}–{% endif %}</td>
+                                    <td><button class="btn btn-teal btn-sm" onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'SRH urgent need / no SRH access', 'high')"><i class="fas fa-envelope"></i> Email</button></td>
                                 </tr>
-                                {% endif %}
-                                {% endfor %}
+                                {% endif %}{% endfor %}
                                 {% if srh_shown.count == 0 %}
-                                <tr>
-                                    <td colspan="9" style="text-align:center; padding:2rem; color:var(--muted);">
-                                        <i class="fas fa-check-circle" style="color:var(--success);"></i> No urgent SRH needs flagged
-                                    </td>
-                                </tr>
+                                <tr><td colspan="9" style="text-align:center; padding:2rem; color:var(--muted);"><i class="fas fa-check-circle" style="color:var(--success);"></i> No urgent SRH needs flagged</td></tr>
                                 {% endif %}
                             </tbody>
                         </table>
@@ -1679,33 +844,19 @@
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: OUTREACH & EMAIL  ← NEW
-                 Priority contact queue for sensitive SRH / abuse flags
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ OUTREACH ══ -->
             <div class="section-panel" id="sec-outreach">
                 <div class="page-title">
                     <h1>Outreach & Email Centre</h1>
-                    <p>Priority contact queue for respondents with sensitive flags — sexual abuse, coercion &amp; urgent SRH needs</p>
+                    <p>Priority contact queue for respondents with sensitive flags</p>
                 </div>
-
-                <!-- Info banner -->
-                <div class="outreach-header">
-                    <div class="outreach-header-icon pulse-teal">
-                        <i class="fas fa-envelope-open-text"></i>
-                    </div>
-                    <div class="outreach-header-text">
+                <div class="alert-header teal">
+                    <div class="alert-header-icon pulse-teal"><i class="fas fa-envelope-open-text"></i></div>
+                    <div class="alert-header-text">
                         <h2>Sensitive Outreach Protocol</h2>
-                        <p>
-                            This section surfaces respondents who require a confidential, trauma-informed outreach.
-                            Use the pre-written templates or compose a custom message. Always follow your institution's
-                            safeguarding and child-protection guidelines before making contact.
-                            <strong style="color:#6ee8d0;">Never disclose assessment scores or specific answers in your outreach email.</strong>
-                        </p>
+                        <p>Use pre-written templates or compose custom messages. Always follow safeguarding guidelines. <strong style="color:#6ee8d0;">Never disclose assessment scores in outreach emails.</strong></p>
                     </div>
                 </div>
-
-                <!-- Outreach KPIs -->
                 {% set ons = namespace(critical=0, high=0, medium=0, total=0) %}
                 {% for a in assessments %}
                     {% set oflags = [] %}
@@ -1714,47 +865,23 @@
                     {% if a.q14 and a.q14 >= 3 %}{% set oflags = oflags + ['co'] %}{% endif %}
                     {% if a.q15 and a.q15 <= 2 %}{% set oflags = oflags + ['nb'] %}{% endif %}
                     {% if a.q17 and a.q17 == 1 %}{% set oflags = oflags + ['srh'] %}{% endif %}
-                    {% if oflags|length > 0 %}
-                        {% set ons.total = ons.total + 1 %}
-                        {% if (a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4) %}
-                            {% set ons.critical = ons.critical + 1 %}
-                        {% elif oflags|length >= 2 %}
-                            {% set ons.high = ons.high + 1 %}
-                        {% else %}
-                            {% set ons.medium = ons.medium + 1 %}
-                        {% endif %}
+                    {% if oflags|length > 0 %}{% set ons.total = ons.total + 1 %}
+                        {% if (a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4) %}{% set ons.critical = ons.critical + 1 %}
+                        {% elif oflags|length >= 2 %}{% set ons.high = ons.high + 1 %}
+                        {% else %}{% set ons.medium = ons.medium + 1 %}{% endif %}
                     {% endif %}
                 {% endfor %}
-
-                <div class="outreach-stats">
-                    <div class="outreach-stat">
-                        <div class="o-val" style="color:var(--danger);">{{ ons.critical }}</div>
-                        <div class="o-label">🚨 Critical<br>Immediate contact needed</div>
-                    </div>
-                    <div class="outreach-stat">
-                        <div class="o-val" style="color:var(--warning);">{{ ons.high }}</div>
-                        <div class="o-label">⚠ High Priority<br>Contact within 24 hrs</div>
-                    </div>
-                    <div class="outreach-stat">
-                        <div class="o-val" style="color:var(--info);">{{ ons.medium }}</div>
-                        <div class="o-label">📋 Medium Priority<br>Contact within 48–72 hrs</div>
-                    </div>
-                    <div class="outreach-stat">
-                        <div class="o-val">{{ ons.total }}</div>
-                        <div class="o-label">Total Requiring<br>Outreach</div>
-                    </div>
+                <div class="vuln-stats" style="margin-bottom:1.5rem; border-color: rgba(26,188,156,0.2);">
+                    <div class="vuln-stat" style="border-color:rgba(231,76,60,0.2);"><div class="v-val" style="color:var(--danger);">{{ ons.critical }}</div><div class="v-label">🚨 Critical<br>Immediate contact</div></div>
+                    <div class="vuln-stat" style="border-color:rgba(243,156,18,0.2);"><div class="v-val" style="color:var(--warning);">{{ ons.high }}</div><div class="v-label">⚠ High Priority<br>Within 24 hrs</div></div>
+                    <div class="vuln-stat" style="border-color:rgba(52,152,219,0.2);"><div class="v-val" style="color:var(--info);">{{ ons.medium }}</div><div class="v-label">📋 Medium<br>Within 48–72 hrs</div></div>
+                    <div class="vuln-stat" style="border-color:rgba(26,188,156,0.2);"><div class="v-val">{{ ons.total }}</div><div class="v-label">Total Requiring<br>Outreach</div></div>
                 </div>
-
-                <!-- Priority Queue -->
                 <div class="section-divider">🚨 Priority Contact Queue</div>
-
                 {% set pq_shown = namespace(n=0) %}
                 <div class="priority-queue">
-
-                    {# ── CRITICAL first (active abuse NOW) ── #}
                     {% for a in assessments %}
-                    {% if (a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4) %}
-                    {% set pq_shown.n = pq_shown.n + 1 %}
+                    {% if (a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4) %}{% set pq_shown.n = pq_shown.n + 1 %}
                     <div class="pq-card pq-critical">
                         <div class="pq-priority">🚨 CRITICAL</div>
                         <div class="pq-info">
@@ -1765,26 +892,14 @@
                                 {% if a.q14 and a.q14 >= 3 %}<span class="flag-pill flag-purple">Sexual coercion</span>{% endif %}
                                 {% if a.q17 == 1 %}<span class="flag-pill flag-orange">Urgent SRH need</span>{% endif %}
                             </div>
-                            <div class="sent-item-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}
-                                {% if a.phone %} · 📞 {{ a.phone }}{% endif %}
-                            </div>
+                            <div class="pq-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}{% if a.phone %} · 📞 {{ a.phone }}{% endif %}</div>
                         </div>
                         <div class="pq-actions">
-                            <button class="btn btn-danger btn-sm"
-                                onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'active sexual/physical abuse NOW', 'critical')">
-                                <i class="fas fa-envelope"></i> Email Now
-                            </button>
-                            {% if a.phone %}
-                            <a href="tel:{{ a.phone }}" class="btn btn-ghost btn-sm">
-                                <i class="fas fa-phone"></i> Call
-                            </a>
-                            {% endif %}
+                            <button class="btn btn-danger btn-sm" onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'active sexual/physical abuse NOW', 'critical')"><i class="fas fa-envelope"></i> Email Now</button>
+                            {% if a.phone %}<a href="tel:{{ a.phone }}" class="btn btn-ghost btn-sm"><i class="fas fa-phone"></i> Call</a>{% endif %}
                         </div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
-
-                    {# ── HIGH priority (ongoing abuse / multiple flags / urgent SRH) ── #}
+                    {% endif %}{% endfor %}
                     {% for a in assessments %}
                     {% set hflags = [] %}
                     {% if a.q12 and a.q12 == 3 %}{% set hflags = hflags + ['sa_past'] %}{% endif %}
@@ -1792,9 +907,7 @@
                     {% if a.q14 and a.q14 >= 3 %}{% set hflags = hflags + ['coercion'] %}{% endif %}
                     {% if a.q15 and a.q15 <= 2 %}{% set hflags = hflags + ['no_boundary'] %}{% endif %}
                     {% if a.q17 and a.q17 == 1 %}{% set hflags = hflags + ['srh_urgent'] %}{% endif %}
-                    {# Exclude already shown as critical #}
-                    {% if hflags|length >= 2 and not ((a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4)) %}
-                    {% set pq_shown.n = pq_shown.n + 1 %}
+                    {% if hflags|length >= 2 and not ((a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4)) %}{% set pq_shown.n = pq_shown.n + 1 %}
                     <div class="pq-card pq-high">
                         <div class="pq-priority">⚠ HIGH</div>
                         <div class="pq-info">
@@ -1806,26 +919,14 @@
                                 {% if 'no_boundary' in hflags %}<span class="flag-pill flag-orange">Cannot say No</span>{% endif %}
                                 {% if 'srh_urgent' in hflags %}<span class="flag-pill flag-red">Urgent SRH need</span>{% endif %}
                             </div>
-                            <div class="sent-item-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}
-                                {% if a.phone %} · 📞 {{ a.phone }}{% endif %}
-                            </div>
+                            <div class="pq-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}{% if a.phone %} · 📞 {{ a.phone }}{% endif %}</div>
                         </div>
                         <div class="pq-actions">
-                            <button class="btn btn-teal btn-sm"
-                                onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'ongoing abuse / coercion / urgent SRH', 'high')">
-                                <i class="fas fa-envelope"></i> Email
-                            </button>
-                            {% if a.phone %}
-                            <a href="tel:{{ a.phone }}" class="btn btn-ghost btn-sm">
-                                <i class="fas fa-phone"></i> Call
-                            </a>
-                            {% endif %}
+                            <button class="btn btn-teal btn-sm" onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', 'ongoing abuse / coercion / urgent SRH', 'high')"><i class="fas fa-envelope"></i> Email</button>
+                            {% if a.phone %}<a href="tel:{{ a.phone }}" class="btn btn-ghost btn-sm"><i class="fas fa-phone"></i> Call</a>{% endif %}
                         </div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
-
-                    {# ── MEDIUM priority (single flags) ── #}
+                    {% endif %}{% endfor %}
                     {% for a in assessments %}
                     {% set mflags = [] %}
                     {% if a.q12 and a.q12 == 3 %}{% set mflags = mflags + ['sa'] %}{% endif %}
@@ -1834,107 +935,144 @@
                     {% if a.q15 and a.q15 <= 2 %}{% set mflags = mflags + ['nb'] %}{% endif %}
                     {% if a.q11 and a.q11 <= 2 %}{% set mflags = mflags + ['uh'] %}{% endif %}
                     {% if a.q17 and a.q17 == 1 %}{% set mflags = mflags + ['srh'] %}{% endif %}
-                    {# Only show if exactly 1 flag and NOT already shown as critical or high #}
-                    {% if mflags|length == 1 and not ((a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4)) %}
-                    {% set pq_shown.n = pq_shown.n + 1 %}
+                    {% if mflags|length == 1 and not ((a.q12 and a.q12 == 4) or (a.q13 and a.q13 == 4)) %}{% set pq_shown.n = pq_shown.n + 1 %}
                     <div class="pq-card pq-medium">
                         <div class="pq-priority">📋 MEDIUM</div>
                         <div class="pq-info">
                             <div class="pq-email">{{ a.email }}</div>
                             <div class="pq-flags">
                                 {% if 'sa' in mflags %}<span class="flag-pill flag-orange">Sexual abuse — reported</span>{% endif %}
-                                {% if 'pa' in mflags %}<span class="flag-pill flag-orange">Frequent abuse — reported</span>{% endif %}
+                                {% if 'pa' in mflags %}<span class="flag-pill flag-orange">Frequent abuse</span>{% endif %}
                                 {% if 'co' in mflags %}<span class="flag-pill flag-purple">Sexual coercion</span>{% endif %}
                                 {% if 'nb' in mflags %}<span class="flag-pill flag-blue">Boundary concerns</span>{% endif %}
                                 {% if 'uh' in mflags %}<span class="flag-pill flag-blue">Unsafe home</span>{% endif %}
                                 {% if 'srh' in mflags %}<span class="flag-pill flag-orange">Urgent SRH need</span>{% endif %}
                             </div>
-                            <div class="sent-item-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}
-                                {% if a.phone %} · 📞 {{ a.phone }}{% endif %}
-                            </div>
+                            <div class="pq-meta">ID #{{ a.id }} · Age {{ a.age }} · {{ a.sex|title }}</div>
                         </div>
                         <div class="pq-actions">
-                            <button class="btn btn-info btn-sm"
-                                onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', '{{ mflags|join(', ') }}', 'medium')">
-                                <i class="fas fa-envelope"></i> Email
-                            </button>
+                           {% set mflags_str = mflags|join(", ") %}
+                            <button class="btn btn-info btn-sm" onclick="openEmailModalVuln('{{ a.email }}', '{{ a.phone }}', '{{ mflags_str }}', 'medium')"><i class="fas fa-envelope"></i> Email</button>
                         </div>
                     </div>
-                    {% endif %}
-                    {% endfor %}
-
+                    {% endif %}{% endfor %}
                     {% if pq_shown.n == 0 %}
-                    <div class="empty" style="background:var(--card); border:1px solid var(--border); border-radius:12px;">
-                        <i class="fas fa-check-circle" style="color:var(--success);"></i>
-                        <p>No sensitive flags requiring outreach. All clear.</p>
-                    </div>
+                    <div class="empty" style="background:var(--card); border:1px solid var(--border); border-radius:12px;"><i class="fas fa-check-circle" style="color:var(--success);"></i><p>No sensitive flags requiring outreach. All clear.</p></div>
                     {% endif %}
                 </div>
+            </div>
 
-                <!-- ── Bulk email crisis registrants ── -->
-                {% if rns is defined and rns.crisis > 0 %}
-                <div class="section-divider" style="margin-top:2rem;">📮 Crisis Support Registrations — Pending Contact</div>
-                <div class="priority-queue">
-                    {% if registrations is defined %}
-                    {% for r in registrations %}
-                    {% if r.service == 'crisis' %}
-                    <div class="pq-card pq-critical">
-                        <div class="pq-priority">🚨 CRISIS REG</div>
-                        <div class="pq-info">
-                            <div class="pq-email">{{ r.name }} &nbsp;·&nbsp; {{ r.email }}</div>
-                            <div class="pq-flags">
-                                <span class="flag-pill flag-red">Requested Urgent Support via Register form</span>
-                            </div>
-                            <div class="sent-item-meta">Age {{ r.age }} · 📞 {{ r.phone }}</div>
-                        </div>
-                        <div class="pq-actions">
-                            <button class="btn btn-danger btn-sm"
-                                onclick="openEmailModalReg('{{ r.email }}', '{{ r.name }}', 'crisis')">
-                                <i class="fas fa-envelope"></i> Email
-                            </button>
-                            <a href="tel:{{ r.phone }}" class="btn btn-ghost btn-sm">
-                                <i class="fas fa-phone"></i> Call
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                    {% endif %}
+            <!-- ══ PAGE VISITS ══ -->
+            <div class="section-panel" id="sec-pagevisits">
+                <div class="page-title">
+                    <h1>Page Visit Analytics</h1>
+                    <p>Track which pages users visit and where they're coming from</p>
                 </div>
-                {% endif %}
 
-                <!-- ── Email Template Reference ── -->
-                <div class="section-divider" style="margin-top:2rem;">✉ Email Template Reference</div>
-                <div class="charts-grid" style="grid-template-columns: 1fr;">
+                <!-- KPI row -->
+                <div class="stats-grid" style="margin-bottom:1.5rem;">
+                    <div class="stat-card s-info">
+                        <i class="fas fa-eye stat-icon"></i>
+                        <div class="stat-val">{{ page_analytics.total_visits }}</div>
+                        <div class="stat-label">Total Page Views</div>
+                        <div class="stat-sub">All time, all pages</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user stat-icon"></i>
+                        <div class="stat-val">{{ page_analytics.unique_visitors }}</div>
+                        <div class="stat-label">Unique Visitors</div>
+                        <div class="stat-sub">Distinct IP addresses</div>
+                    </div>
+                    <div class="stat-card s-warning">
+                        <i class="fas fa-calendar-week stat-icon"></i>
+                        <div class="stat-val">{{ page_analytics.visits_last_7_days }}</div>
+                        <div class="stat-label">Last 7 Days</div>
+                        <div class="stat-sub">Recent activity</div>
+                    </div>
+                    <div class="stat-card s-success">
+                        <i class="fas fa-map-marker-alt stat-icon"></i>
+                        <div class="stat-val">{{ page_analytics.top_locations|length }}</div>
+                        <div class="stat-label">Unique Locations</div>
+                        <div class="stat-sub">Cities / countries</div>
+                    </div>
+                </div>
+
+                <!-- Charts row -->
+                <div class="charts-grid" style="margin-bottom:1.5rem;">
                     <div class="chart-card">
-                        <div class="card-title"><i class="fas fa-book-open"></i> Available Templates</div>
-                        <div style="display:grid; gap:10px;">
-                            {% set templates = [
-                                ('🚨 Safety Check-In', 'safety', 'For respondents flagged with active or recent abuse. Opens a gentle, non-intrusive check-in.', 'var(--danger)'),
-                                ('💔 Abuse Support', 'abuse', 'Trauma-informed message directing to professional support and crisis lines.', 'var(--purple)'),
-                                ('🌸 SRH Resources', 'srh', 'For urgent SRH needs — provides information about reproductive health services and support.', 'var(--info)'),
-                                ('🧠 Counseling Referral', 'counseling', 'Refers the individual to a Youth Connect counselor with a warm handoff message.', 'var(--success)'),
-                                ('📋 General Follow-Up', 'followup', 'Neutral, supportive follow-up for medium-priority flags or registration requests.', 'var(--warning)')
-                            ] %}
-                            {% for label, key, desc, color in templates %}
-                            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-left:3px solid {{ color }}; border-radius:10px; padding:0.875rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-                                <div>
-                                    <div style="font-weight:700; font-size:0.85rem;">{{ label }}</div>
-                                    <div style="font-size:0.75rem; color:var(--muted); margin-top:3px;">{{ desc }}</div>
-                                </div>
-                                <button class="btn btn-ghost btn-sm" onclick="previewTemplate('{{ key }}')">
-                                    <i class="fas fa-eye"></i> Preview
-                                </button>
-                            </div>
-                            {% endfor %}
+                        <div class="card-title"><i class="fas fa-chart-area"></i> Daily Visits — Last 30 Days</div>
+                        <div class="chart-wrap"><canvas id="pageVisitTrendChart"></canvas></div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-title"><i class="fas fa-chart-bar"></i> Visits by Page</div>
+                        <div class="chart-wrap"><canvas id="pageVisitBarChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Top pages bar list -->
+                <div class="chart-card" style="margin-bottom:1.5rem;">
+                    <div class="card-title"><i class="fas fa-list-ol"></i> Page Popularity</div>
+                    {% if page_analytics.top_pages %}
+                    {% set max_count = page_analytics.top_pages[0][1] %}
+                    {% for page_name, count in page_analytics.top_pages %}
+                    <div class="page-bar-row">
+                        <div class="page-bar-name">{{ page_name }}</div>
+                        <div class="page-bar-bg">
+                            <div class="page-bar-fill" style="width:{{ (count / max_count * 100)|int }}%;"></div>
                         </div>
+                        <div class="page-bar-count">{{ count }}</div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="empty" style="padding:1.5rem;"><i class="fas fa-chart-bar"></i><p>No page visit data yet</p></div>
+                    {% endif %}
+                </div>
+
+                <!-- Top locations -->
+                <div class="chart-card" style="margin-bottom:1.5rem;">
+                    <div class="card-title"><i class="fas fa-globe-africa"></i> Top Visitor Locations</div>
+                    {% if page_analytics.top_locations %}
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; padding-top:0.25rem;">
+                        {% for loc, count in page_analytics.top_locations %}
+                        <span class="location-pill"><i class="fas fa-map-marker-alt"></i> {{ loc }} <strong>{{ count }}</strong></span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty" style="padding:1.5rem;"><i class="fas fa-globe"></i><p>No location data yet</p></div>
+                    {% endif %}
+                </div>
+
+                <!-- Recent visits log -->
+                <div class="data-table-wrap">
+                    <div class="data-table-head">
+                        <h3>Recent Visits (last 20)</h3>
+                        <button class="btn btn-ghost btn-sm" onclick="refreshVisitData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>#</th><th>Timestamp</th><th>Page</th><th>IP Address</th><th>Location</th><th>Device / Browser</th></tr>
+                            </thead>
+                            <tbody id="recentVisitsBody">
+                                {% for v in page_analytics.recent_visits %}
+                                <tr>
+                                    <td><strong>#{{ v.id }}</strong></td>
+                                    <td style="white-space:nowrap; font-size:0.72rem; color:var(--muted);">{{ v.timestamp.strftime('%Y-%m-%d %H:%M') if v.timestamp else '–' }}</td>
+                                    <td><span style="font-weight:600; color:var(--info);">{{ v.page or '/' }}</span></td>
+                                    <td style="font-size:0.72rem; color:var(--muted);">{{ v.ip_address }}</td>
+                                    <td>{{ v.location or 'Unknown' }}</td>
+                                    <td style="font-size:0.7rem; color:var(--muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ v.user_agent }}">{{ (v.user_agent or 'Unknown')[:60] }}…</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--muted);">No visits recorded yet</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 SECTION: FILES
-            ══════════════════════════════════════════════════ -->
+            <!-- ══ FILES ══ -->
             <div class="section-panel" id="sec-files">
                 <div class="page-title">
                     <h1>File Management</h1>
@@ -1944,29 +1082,18 @@
                 <div class="file-list">
                     {% for file in files %}
                     <div class="file-item">
-                        <div class="file-name">
-                            <i class="fas fa-file-excel"></i> {{ file }}
-                        </div>
-                        <div class="file-actions">
-                            <a href="{{ url_for('download_responses') }}" class="btn btn-success">
-                                <i class="fas fa-download"></i> Download
-                            </a>
-                            <form action="{{ url_for('clear_excel') }}" method="POST"
-                                  onsubmit="return confirm('Clear all responses? This cannot be undone.');"
-                                  style="display:inline;">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i> Clear
-                                </button>
+                        <div class="file-name"><i class="fas fa-file-excel"></i> {{ file }}</div>
+                        <div style="display:flex; gap:8px;">
+                            <a href="{{ url_for('download_responses') }}" class="btn btn-success"><i class="fas fa-download"></i> Download</a>
+                            <form action="{{ url_for('clear_excel') }}" method="POST" onsubmit="return confirm('Clear all responses? This cannot be undone.');" style="display:inline;">
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Clear</button>
                             </form>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="empty">
-                    <i class="fas fa-folder-open"></i>
-                    <p>No files available</p>
-                </div>
+                <div class="empty"><i class="fas fa-folder-open"></i><p>No files available</p></div>
                 {% endif %}
             </div>
 
@@ -1974,22 +1101,21 @@
     </main>
 </div>
 
-<button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i>
-</button>
+<button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
 
 <script>
-    // ── Navigation ────────────────────────────────────────────
+    // ── Section navigation ──────────────────────────────────────────────────
     const sectionMap = {
-        'overview':       { id: 'sec-overview',       title: 'Dashboard Overview' },
-        'trends':         { id: 'sec-trends',          title: 'Trends & Activity' },
-        'questions':      { id: 'sec-questions',       title: 'Question Analysis' },
-        'records':        { id: 'sec-records',         title: 'All Records' },
-        'registrations':  { id: 'sec-registrations',  title: '📋 Support Registrations' },
-        'vulnerability':  { id: 'sec-vulnerability',   title: '🚨 Vulnerability Flags' },
-        'srh':            { id: 'sec-srh',             title: 'SRH Access & Support' },
-        'outreach':       { id: 'sec-outreach',        title: '✉ Outreach & Email Centre' },
-        'files':          { id: 'sec-files',           title: 'File Management' },
+        'overview':      { id: 'sec-overview',      title: 'Dashboard Overview' },
+        'trends':        { id: 'sec-trends',         title: 'Trends & Activity' },
+        'questions':     { id: 'sec-questions',      title: 'Question Analysis' },
+        'records':       { id: 'sec-records',        title: 'All Records' },
+        'registrations': { id: 'sec-registrations',  title: '📋 Support Registrations' },
+        'vulnerability': { id: 'sec-vulnerability',  title: '🚨 Vulnerability Flags' },
+        'srh':           { id: 'sec-srh',            title: 'SRH Access & Support' },
+        'outreach':      { id: 'sec-outreach',       title: '✉ Outreach & Email Centre' },
+        'pagevisits':    { id: 'sec-pagevisits',     title: '📊 Page Visit Analytics' },
+        'files':         { id: 'sec-files',          title: 'File Management' },
     };
 
     function showSection(key, el) {
@@ -2014,61 +1140,55 @@
         document.getElementById('overlay').classList.remove('open');
     }
 
-    // ── Badge counts ─────────────────────────────────────────
+    // ── Badge counts ────────────────────────────────────────────────────────
     (function setBadges() {
-        // Vulnerability count
         {% set vc = namespace(n=0) %}
-        {% for a in assessments %}
-        {% if (a.q12 and a.q12 >= 3) or (a.q13 and a.q13 >= 3) or (a.q14 and a.q14 >= 3) or (a.q15 and a.q15 <= 2) or (a.q11 and a.q11 <= 2) %}
-        {% set vc.n = vc.n + 1 %}
-        {% endif %}
-        {% endfor %}
+        {% for a in assessments %}{% if (a.q12 and a.q12 >= 3) or (a.q13 and a.q13 >= 3) or (a.q14 and a.q14 >= 3) or (a.q15 and a.q15 <= 2) or (a.q11 and a.q11 <= 2) %}{% set vc.n = vc.n + 1 %}{% endif %}{% endfor %}
         const vEl = document.getElementById('vuln-count');
         if (vEl) vEl.textContent = '{{ vc.n }}';
 
-        // Outreach priority count
         {% set oc = namespace(n=0) %}
-        {% for a in assessments %}
-        {% if (a.q12 and a.q12 >= 3) or (a.q13 and a.q13 >= 3) or (a.q14 and a.q14 >= 3) or (a.q17 and a.q17 == 1) %}
-        {% set oc.n = oc.n + 1 %}
-        {% endif %}
-        {% endfor %}
+        {% for a in assessments %}{% if (a.q12 and a.q12 >= 3) or (a.q13 and a.q13 >= 3) or (a.q14 and a.q14 >= 3) or (a.q17 and a.q17 == 1) %}{% set oc.n = oc.n + 1 %}{% endif %}{% endfor %}
         const oEl = document.getElementById('outreach-count');
         if (oEl) oEl.textContent = '{{ oc.n }}';
 
-        // Registrations count
         {% set rc = namespace(n=0) %}
-        {% if registrations is defined %}
-        {% for r in registrations %}{% set rc.n = rc.n + 1 %}{% endfor %}
-        {% endif %}
+        {% if registrations is defined %}{% for r in registrations %}{% set rc.n = rc.n + 1 %}{% endfor %}{% endif %}
         const rEl = document.getElementById('reg-count');
         if (rEl) rEl.textContent = '{{ rc.n }}';
+
+        const visitsEl = document.getElementById('visits-count');
+        if (visitsEl) visitsEl.textContent = '{{ page_analytics.total_visits }}';
     })();
 
-    // ── Registration table search ─────────────────────────────
+    // ── Registration search ─────────────────────────────────────────────────
     function filterRegTable() {
         const q = document.getElementById('regSearch').value.toLowerCase();
         document.querySelectorAll('#regTableBody tr').forEach(row => {
-            const name  = row.dataset.name  || '';
-            const email = row.dataset.email || '';
-            row.style.display = (name.includes(q) || email.includes(q)) ? '' : 'none';
+            row.style.display = ((row.dataset.name||'').includes(q) || (row.dataset.email||'').includes(q)) ? '' : 'none';
         });
     }
 
-    // ── Email Modal ───────────────────────────────────────────
+    // ── Live refresh page visits ────────────────────────────────────────────
+    function refreshVisitData() {
+        fetch('{{ url_for("admin_page_analytics_api") }}')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('visits-count').textContent = data.total_visits;
+                console.log('Page analytics refreshed', data);
+            })
+            .catch(err => console.error('Refresh failed', err));
+    }
+
+    // ── Email modal ─────────────────────────────────────────────────────────
     function openEmailModalVuln(email, phone, flagsDesc, priority) {
         document.getElementById('composerTo').value = email;
         document.getElementById('modalRecipientEmail').textContent = email;
         document.getElementById('modalRecipientFlags').textContent = flagsDesc;
-        document.getElementById('composerSubject').value = '';
-        document.getElementById('composerBody').value = '';
         document.getElementById('composerSender').value = 'Youth Connect Hub — Welfare & Safeguarding Team';
-
-        // Auto-apply template based on priority
         if (priority === 'critical') applyTemplate('abuse');
         else if (priority === 'high') applyTemplate('safety');
         else applyTemplate('followup');
-
         document.getElementById('emailModal').classList.add('open');
     }
 
@@ -2077,98 +1197,34 @@
         document.getElementById('modalRecipientEmail').textContent = email;
         document.getElementById('modalRecipientFlags').textContent = 'Registration — service: ' + service;
         document.getElementById('composerSender').value = 'Youth Connect Hub — Support Team';
-
         if (service === 'crisis') applyTemplate('safety');
         else if (service === 'counseling') applyTemplate('counseling');
         else applyTemplate('followup');
-
         document.getElementById('emailModal').classList.add('open');
     }
 
-    function closeEmailModal() {
-        document.getElementById('emailModal').classList.remove('open');
-    }
+    function closeEmailModal() { document.getElementById('emailModal').classList.remove('open'); }
 
-    // ── Email templates ───────────────────────────────────────
     const templates = {
         safety: {
             subject: 'A Message of Support — Youth Connect Hub',
-            body: `Dear Friend,
-
-We are reaching out from the Youth Connect Hub, Ondo State Ministry of Health.
-
-We care about your wellbeing and want to make sure you are safe. If you are going through a difficult time right now, please know that you are not alone and support is available.
-
-You can reach our confidential support line at any time:
-📞 +234 813 481 2419
-
-Your safety matters to us. If you are in immediate danger, please contact emergency services or a trusted adult near you.
-
-We are here whenever you are ready to talk.
-
-Warm regards,`
+            body: `Dear Friend,\n\nWe are reaching out from the Youth Connect Hub, Ondo State Ministry of Health.\n\nWe care about your wellbeing and want to make sure you are safe. If you are going through a difficult time right now, please know that you are not alone and support is available.\n\nYou can reach our confidential support line at any time:\n📞 +234 813 481 2419\n\nYour safety matters to us. If you are in immediate danger, please contact emergency services or a trusted adult near you.\n\nWarm regards,`
         },
         abuse: {
             subject: 'Confidential Support Available for You — Youth Connect Hub',
-            body: `Dear Friend,
-
-We are writing to you confidentially from the Youth Connect Hub.
-
-We want you to know that whatever you may be experiencing, you deserve to be safe and supported. If someone has hurt you or is hurting you, it is not your fault — and there is help available.
-
-Our trained counselors are ready to speak with you, completely confidentially:
-📞 +234 813 481 2419
-
-If you are in immediate danger, please reach out to someone you trust or contact emergency services.
-
-You are brave, and you do not have to face this alone.
-
-With care,`
+            body: `Dear Friend,\n\nWe are writing to you confidentially from the Youth Connect Hub.\n\nWe want you to know that whatever you may be experiencing, you deserve to be safe and supported. If someone has hurt you or is hurting you, it is not your fault — and there is help available.\n\nOur trained counselors are ready to speak with you, completely confidentially:\n📞 +234 813 481 2419\n\nIf you are in immediate danger, please reach out to someone you trust or contact emergency services.\n\nWith care,`
         },
         srh: {
             subject: 'Health Resources & Support — Youth Connect Hub',
-            body: `Dear Friend,
-
-We are reaching out from the Youth Connect Hub, Ondo State Ministry of Health.
-
-We want to make sure you have access to the health information and support you need. Our team can connect you with confidential sexual and reproductive health services, guidance, and trained professionals.
-
-To access free, confidential SRH support, please contact us:
-📞 +234 813 481 2419
-
-Your health and privacy are our priority.
-
-Warm regards,`
+            body: `Dear Friend,\n\nWe are reaching out from the Youth Connect Hub, Ondo State Ministry of Health.\n\nWe want to make sure you have access to the health information and support you need. Our team can connect you with confidential sexual and reproductive health services, guidance, and trained professionals.\n\nTo access free, confidential SRH support, please contact us:\n📞 +234 813 481 2419\n\nYour health and privacy are our priority.\n\nWarm regards,`
         },
         counseling: {
             subject: 'Your Counseling Support — Youth Connect Hub',
-            body: `Dear Friend,
-
-Thank you for reaching out to Youth Connect Hub.
-
-We have received your request and one of our qualified counselors would like to connect with you. Please contact us at your convenience to schedule a confidential session:
-
-📞 +234 813 481 2419
-
-Sessions are free, confidential, and available to all Ondo State youth. We look forward to walking this journey with you.
-
-Warm regards,`
+            body: `Dear Friend,\n\nThank you for reaching out to Youth Connect Hub.\n\nWe have received your request and one of our qualified counselors would like to connect with you. Please contact us at your convenience to schedule a confidential session:\n\n📞 +234 813 481 2419\n\nSessions are free, confidential, and available to all Ondo State youth.\n\nWarm regards,`
         },
         followup: {
             subject: 'Checking In — Youth Connect Hub',
-            body: `Dear Friend,
-
-We hope this message finds you well.
-
-We are reaching out from Youth Connect Hub as part of our ongoing commitment to youth mental wellness in Ondo State. We just want to check in and let you know that our team is available to support you.
-
-If you ever need to talk, access resources, or simply want more information, we are here:
-📞 +234 813 481 2419
-🌐 Visit us at your nearest health centre
-
-Take good care of yourself.
-
-Warm regards,`
+            body: `Dear Friend,\n\nWe hope this message finds you well.\n\nWe are reaching out from Youth Connect Hub as part of our ongoing commitment to youth mental wellness in Ondo State. We just want to check in and let you know that our team is available to support you.\n\nIf you ever need to talk, access resources, or simply want more information, we are here:\n📞 +234 813 481 2419\n\nTake good care of yourself.\n\nWarm regards,`
         }
     };
 
@@ -2180,29 +1236,16 @@ Warm regards,`
         document.getElementById('composerBody').value = t.body + '\n' + sender;
     }
 
-    function previewTemplate(key) {
-        // Open modal in preview mode with blank recipient
-        document.getElementById('composerTo').value = '';
-        document.getElementById('modalRecipientEmail').textContent = '(preview — no recipient set)';
-        document.getElementById('modalRecipientFlags').textContent = 'Template preview';
-        document.getElementById('composerSender').value = 'Youth Connect Hub — Welfare Team';
-        applyTemplate(key);
-        document.getElementById('emailModal').classList.add('open');
-    }
-
     function openMailto() {
-        const to      = document.getElementById('composerTo').value.trim();
+        const to = document.getElementById('composerTo').value.trim();
         const subject = document.getElementById('composerSubject').value.trim();
-        const body    = document.getElementById('composerBody').value.trim();
+        const body = document.getElementById('composerBody').value.trim();
         if (!to) { alert('No recipient email address set.'); return; }
-        const link = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = link;
+        window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
     function copyComposed() {
-        const subject = document.getElementById('composerSubject').value;
-        const body    = document.getElementById('composerBody').value;
-        const text = `Subject: ${subject}\n\n${body}`;
+        const text = `Subject: ${document.getElementById('composerSubject').value}\n\n${document.getElementById('composerBody').value}`;
         navigator.clipboard.writeText(text).then(() => {
             const btn = event.target.closest('button');
             const orig = btn.innerHTML;
@@ -2211,21 +1254,14 @@ Warm regards,`
         });
     }
 
-    // ── Chart.js Setup ────────────────────────────────────────
+    // ── Chart.js ────────────────────────────────────────────────────────────
     Chart.defaults.color = '#8888AA';
     Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-
     const isMobile = window.innerWidth < 600;
 
     const baseOpts = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: isMobile ? 'bottom' : 'right',
-                labels: { padding: 12, font: { size: isMobile ? 10 : 11, family: 'Space Grotesk' }, color: '#8888AA' }
-            }
-        }
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: isMobile ? 'bottom' : 'right', labels: { padding: 12, font: { size: isMobile ? 10 : 11, family: 'Space Grotesk' }, color: '#8888AA' } } }
     };
 
     const barScales = {
@@ -2235,18 +1271,13 @@ Warm regards,`
         }
     };
 
-    // Score Distribution
+    // Score distribution
     {% if analytics.score_distribution %}
     new Chart(document.getElementById('scoreDistChart'), {
         type: 'doughnut',
         data: {
             labels: {{ analytics.score_distribution.keys()|list|tojson }},
-            datasets: [{
-                data: {{ analytics.score_distribution.values()|list|tojson }},
-                backgroundColor: ['#E74C3C','#F39C12','#3498DB','#2ECC71','#27AE60'],
-                borderWidth: 2,
-                borderColor: '#1A1A2E'
-            }]
+            datasets: [{ data: {{ analytics.score_distribution.values()|list|tojson }}, backgroundColor: ['#E74C3C','#F39C12','#3498DB','#2ECC71','#27AE60'], borderWidth: 2, borderColor: '#1A1A2E' }]
         },
         options: { ...baseOpts, cutout: '65%' }
     });
@@ -2256,14 +1287,7 @@ Warm regards,`
     {% if analytics.gender_breakdown %}
     new Chart(document.getElementById('genderChart'), {
         type: 'bar',
-        data: {
-            labels: ['Male','Female','Other'],
-            datasets: [{
-                data: [{{ analytics.gender_breakdown.male }},{{ analytics.gender_breakdown.female }},{{ analytics.gender_breakdown.other }}],
-                backgroundColor: ['#3498DB','#FF6B35','#9B59B6'],
-                borderRadius: 6, borderWidth: 0
-            }]
-        },
+        data: { labels: ['Male','Female','Other'], datasets: [{ data: [{{ analytics.gender_breakdown.male }},{{ analytics.gender_breakdown.female }},{{ analytics.gender_breakdown.other }}], backgroundColor: ['#3498DB','#FF6B35','#9B59B6'], borderRadius: 6, borderWidth: 0 }] },
         options: { ...baseOpts, plugins: { legend: { display: false } }, ...barScales }
     });
     {% endif %}
@@ -2272,91 +1296,68 @@ Warm regards,`
     {% if analytics.age_distribution %}
     new Chart(document.getElementById('ageChart'), {
         type: 'bar',
-        data: {
-            labels: {{ analytics.age_distribution.keys()|list|tojson }},
-            datasets: [{
-                data: {{ analytics.age_distribution.values()|list|tojson }},
-                backgroundColor: '#F7931E',
-                borderRadius: 6, borderWidth: 0
-            }]
-        },
+        data: { labels: {{ analytics.age_distribution.keys()|list|tojson }}, datasets: [{ data: {{ analytics.age_distribution.values()|list|tojson }}, backgroundColor: '#F7931E', borderRadius: 6, borderWidth: 0 }] },
         options: { ...baseOpts, plugins: { legend: { display: false } }, ...barScales }
     });
     {% endif %}
 
-    // Trend
+    // Assessment trend
     {% if analytics.recent_trend %}
-    const tDates  = [];
-    const tCounts = [];
-    {% for item in analytics.recent_trend %}
-    tDates.push('{{ item.date }}');
-    tCounts.push({{ item.count }});
-    {% endfor %}
-
+    const tDates = [], tCounts = [];
+    {% for item in analytics.recent_trend %}tDates.push('{{ item.date }}'); tCounts.push({{ item.count }});{% endfor %}
     const trendDataset = {
         labels: tDates,
-        datasets: [{
-            label: 'Assessments',
-            data: tCounts,
-            borderColor: '#FF6B35',
-            backgroundColor: 'rgba(255,107,53,0.08)',
-            tension: 0.4, fill: true, pointRadius: 3,
-            pointBackgroundColor: '#FF6B35'
-        }]
+        datasets: [{ label: 'Assessments', data: tCounts, borderColor: '#FF6B35', backgroundColor: 'rgba(255,107,53,0.08)', tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: '#FF6B35' }]
     };
-
-    const trendOpts = {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-            y: { beginAtZero: true, ticks: { precision:0, font:{size:10} }, grid:{color:'rgba(255,255,255,0.05)'} },
-            x: { ticks: { maxRotation:45, minRotation:45, font:{size:9} }, grid:{display:false} }
-        }
-    };
-
+    const trendOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision:0, font:{size:10} }, grid:{color:'rgba(255,255,255,0.05)'} }, x: { ticks: { maxRotation:45, minRotation:45, font:{size:9} }, grid:{display:false} } } };
     new Chart(document.getElementById('trendChart'), { type:'line', data:trendDataset, options:trendOpts });
     const t2 = document.getElementById('trendChart2');
     if (t2) new Chart(t2, { type:'line', data:trendDataset, options:{...trendOpts, maintainAspectRatio:false} });
     {% endif %}
 
-    // Vulnerability Bar Chart
+    // Vuln bar chart
     const vulnEl = document.getElementById('vulnChart');
     if (vulnEl) {
         {% set ns2 = namespace(sa=0,pa=0,co=0,bn=0,uh=0) %}
-        {% for a in assessments %}
-            {% if a.q12 and a.q12 >= 3 %}{% set ns2.sa = ns2.sa + 1 %}{% endif %}
-            {% if a.q13 and a.q13 >= 3 %}{% set ns2.pa = ns2.pa + 1 %}{% endif %}
-            {% if a.q14 and a.q14 >= 3 %}{% set ns2.co = ns2.co + 1 %}{% endif %}
-            {% if a.q15 and a.q15 <= 2 %}{% set ns2.bn = ns2.bn + 1 %}{% endif %}
-            {% if a.q11 and a.q11 <= 2 %}{% set ns2.uh = ns2.uh + 1 %}{% endif %}
-        {% endfor %}
+        {% for a in assessments %}{% if a.q12 and a.q12 >= 3 %}{% set ns2.sa = ns2.sa + 1 %}{% endif %}{% if a.q13 and a.q13 >= 3 %}{% set ns2.pa = ns2.pa + 1 %}{% endif %}{% if a.q14 and a.q14 >= 3 %}{% set ns2.co = ns2.co + 1 %}{% endif %}{% if a.q15 and a.q15 <= 2 %}{% set ns2.bn = ns2.bn + 1 %}{% endif %}{% if a.q11 and a.q11 <= 2 %}{% set ns2.uh = ns2.uh + 1 %}{% endif %}{% endfor %}
         new Chart(vulnEl, {
             type: 'bar',
-            data: {
-                labels: ['Sexual Abuse\n(Q12)','Physical Abuse\n(Q13)','Sexual Coercion\n(Q14)',"Can't Say No\n(Q15)",'Unsafe Home\n(Q11)'],
-                datasets: [{
-                    data: [{{ ns2.sa }},{{ ns2.pa }},{{ ns2.co }},{{ ns2.bn }},{{ ns2.uh }}],
-                    backgroundColor: ['#E74C3C','#C0392B','#9B59B6','#F39C12','#3498DB'],
-                    borderRadius: 6, borderWidth: 0
-                }]
-            },
+            data: { labels: ['Sexual Abuse\n(Q12)','Physical Abuse\n(Q13)','Sexual Coercion\n(Q14)',"Can't Say No\n(Q15)",'Unsafe Home\n(Q11)'], datasets: [{ data: [{{ ns2.sa }},{{ ns2.pa }},{{ ns2.co }},{{ ns2.bn }},{{ ns2.uh }}], backgroundColor: ['#E74C3C','#C0392B','#9B59B6','#F39C12','#3498DB'], borderRadius: 6, borderWidth: 0 }] },
             options: { ...baseOpts, plugins: { legend: { display: false } }, ...barScales }
         });
     }
 
-    // Registrations Service Chart
+    // Registrations service chart
     const regSvcEl = document.getElementById('regServiceChart');
     if (regSvcEl) {
+        {% set rns2 = namespace(counseling=0, stress=0, crisis=0) %}
+        {% if registrations is defined %}{% for r in registrations %}{% if r.service == 'counseling' %}{% set rns2.counseling = rns2.counseling + 1 %}{% endif %}{% if r.service == 'stress' %}{% set rns2.stress = rns2.stress + 1 %}{% endif %}{% if r.service == 'crisis' %}{% set rns2.crisis = rns2.crisis + 1 %}{% endif %}{% endfor %}{% endif %}
         new Chart(regSvcEl, {
             type: 'bar',
-            data: {
-                labels: ['Counseling', 'Stress Management', 'Urgent / Crisis'],
-                datasets: [{
-                    data: [{{ rns.counseling }}, {{ rns.stress }}, {{ rns.crisis }}],
-                    backgroundColor: ['#9B59B6','#3498DB','#E74C3C'],
-                    borderRadius: 8, borderWidth: 0
-                }]
-            },
+            data: { labels: ['Counseling', 'Stress Management', 'Urgent / Crisis'], datasets: [{ data: [{{ rns2.counseling }}, {{ rns2.stress }}, {{ rns2.crisis }}], backgroundColor: ['#9B59B6','#3498DB','#E74C3C'], borderRadius: 8, borderWidth: 0 }] },
+            options: { ...baseOpts, plugins: { legend: { display: false } }, ...barScales }
+        });
+    }
+
+    // ── Page visit charts ────────────────────────────────────────────────────
+    const pvTrendEl = document.getElementById('pageVisitTrendChart');
+    if (pvTrendEl) {
+        const pvDates = [], pvCounts = [];
+        {% for item in page_analytics.daily_trend %}pvDates.push('{{ item.date }}'); pvCounts.push({{ item.count }});{% endfor %}
+        new Chart(pvTrendEl, {
+            type: 'line',
+            data: { labels: pvDates, datasets: [{ label: 'Page Views', data: pvCounts, borderColor: '#3498DB', backgroundColor: 'rgba(52,152,219,0.1)', tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: '#3498DB' }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision:0, font:{size:10} }, grid:{color:'rgba(255,255,255,0.05)'} }, x: { ticks: { maxRotation:45, minRotation:45, font:{size:9} }, grid:{display:false} } } }
+        });
+    }
+
+    const pvBarEl = document.getElementById('pageVisitBarChart');
+    if (pvBarEl) {
+        const pvPageLabels = [], pvPageData = [], pvColors = ['#3498DB','#FF6B35','#2ECC71','#9B59B6','#F39C12','#E74C3C','#1ABC9C','#E67E22'];
+        {% for page_name, count in page_analytics.top_pages[:8] %}pvPageLabels.push('{{ page_name }}'); pvPageData.push({{ count }});{% endfor %}
+        new Chart(pvBarEl, {
+            type: 'bar',
+            data: { labels: pvPageLabels, datasets: [{ data: pvPageData, backgroundColor: pvPageLabels.map((_, i) => pvColors[i % pvColors.length]), borderRadius: 6, borderWidth: 0 }] },
             options: { ...baseOpts, plugins: { legend: { display: false } }, ...barScales }
         });
     }

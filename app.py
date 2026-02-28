@@ -29,8 +29,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-app.config['SECRET_KEY'] = 'Akingbesote Babajide Created This Site 08134812419'  # Replace with a secure key
-
 # Securely load secret key
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'Akingbesote Babajide Created This Site 08134812419')
 
@@ -51,7 +49,7 @@ GAME_PROGRESS_FILE = os.path.join(UPLOAD_FOLDER, 'game_progress.json')
 
 # Admin credentials (hashed password)
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
-ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD', 'admin123'))  # Always store hashed passwords
+ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD', 'admin123'))
 
 # API Keys
 IPGEO_API_KEY = os.getenv('IPGEO_API_KEY')
@@ -61,6 +59,7 @@ if not os.path.exists(GAME_PROGRESS_FILE):
     with open(GAME_PROGRESS_FILE, 'w') as f:
         json.dump([], f)
 
+
 def load_game_data():
     """Load game progress data from file"""
     try:
@@ -69,10 +68,12 @@ def load_game_data():
     except:
         return []
 
+
 def save_game_data(data):
     """Save game progress data to file"""
     with open(GAME_PROGRESS_FILE, 'w') as f:
         json.dump(data, f, indent=2)
+
 
 # Function to load journal entries
 def load_journal_entries():
@@ -81,24 +82,27 @@ def load_journal_entries():
             return json.load(file)
     return []
 
+
 # Function to save a new journal entry
 def save_journal_entry(entry):
     entries = load_journal_entries()
-    entries.append(entry)  # Add new entry
+    entries.append(entry)
     with open(JOURNAL_FILE, "w") as file:
         json.dump(entries, file, indent=4)
 
+
+# ── MODELS ──────────────────────────────────────────────────────────────────
+
 class JournalEntry(db.Model):
-    __bind_key__ = 'mood_tracker'  # Ensures this table is stored in mood_tracker.db
+    __bind_key__ = 'mood_tracker'
     id = db.Column(db.Integer, primary_key=True)
     mood = db.Column(db.String(50), nullable=False)
     entry = db.Column(db.Text, nullable=False)
-    activity = db.Column(db.String(255))  # Optional field
-    note = db.Column(db.Text)  # Optional field
+    activity = db.Column(db.String(255))
+    note = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-### **MODELS**
 class Registration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -110,6 +114,7 @@ class Registration(db.Model):
     def __repr__(self):
         return f'<Registration {self.name}>'
 
+
 class SubmitAssessment(db.Model):
     __bind_key__ = 'submit_assessment'
     id = db.Column(db.Integer, primary_key=True)
@@ -118,15 +123,15 @@ class SubmitAssessment(db.Model):
     phone = db.Column(db.String(20))
     age = db.Column(db.Integer)
     sex = db.Column(db.String(20))
-    score = db.Column(db.Integer)  # Added score field
-    # Create q1 through q20
-    q1 = db.Column(db.Integer); q2 = db.Column(db.Integer); q3 = db.Column(db.Integer)
-    q4 = db.Column(db.Integer); q5 = db.Column(db.Integer); q6 = db.Column(db.Integer)
-    q7 = db.Column(db.Integer); q8 = db.Column(db.Integer); q9 = db.Column(db.Integer)
+    score = db.Column(db.Integer)
+    q1 = db.Column(db.Integer);  q2 = db.Column(db.Integer);  q3 = db.Column(db.Integer)
+    q4 = db.Column(db.Integer);  q5 = db.Column(db.Integer);  q6 = db.Column(db.Integer)
+    q7 = db.Column(db.Integer);  q8 = db.Column(db.Integer);  q9 = db.Column(db.Integer)
     q10 = db.Column(db.Integer); q11 = db.Column(db.Integer); q12 = db.Column(db.Integer)
     q13 = db.Column(db.Integer); q14 = db.Column(db.Integer); q15 = db.Column(db.Integer)
     q16 = db.Column(db.Integer); q17 = db.Column(db.Integer); q18 = db.Column(db.Integer)
     q19 = db.Column(db.Integer); q20 = db.Column(db.Integer)
+
 
 class Feedback(db.Model):
     __bind_key__ = 'submit_assessment'
@@ -136,14 +141,45 @@ class Feedback(db.Model):
     message = db.Column(db.Text, nullable=False)
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 class PageVisit(db.Model):
+    """Tracks every page visit with route, IP, location and timestamp."""
     id = db.Column(db.Integer, primary_key=True)
     ip_address = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     location = db.Column(db.String(255))
+    page = db.Column(db.String(100), default='/')          # which route was visited
+    user_agent = db.Column(db.String(255))                 # browser / device info
+
 
 with app.app_context():
-    db.create_all()  # Ensure this is called only once
+    db.create_all()
+
+
+# ── HELPER: record a page visit ──────────────────────────────────────────────
+
+def record_page_visit(page: str):
+    """Call this at the top of any route you want to monitor."""
+    ip_address = request.remote_addr
+    user_agent = request.headers.get('User-Agent', 'Unknown')
+    location = get_location(ip_address)
+
+    visit = PageVisit(
+        ip_address=ip_address,
+        location=location,
+        page=page,
+        user_agent=user_agent,
+    )
+    db.session.add(visit)
+    db.session.commit()
+
+    # Also keep the in-memory log for the / route
+    if page == '/':
+        homepage_visits.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "location": location
+        })
+
 
 # Random Challenges
 challenges = [
@@ -165,97 +201,100 @@ affirmations = [
     "🔥 You are capable of amazing things."
 ]
 
-# Analytics Helper Function
+# ── SCORE MAPPINGS (single source of truth) ──────────────────────────────────
+SCORE_MAPPINGS = [
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},   # Q1  POSITIVE 5-opt
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},   # Q2  POSITIVE 5-opt
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},   # Q3  POSITIVE 5-opt
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},   # Q4  POSITIVE 5-opt
+    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},   # Q5  POSITIVE 5-opt
+    {1: 4, 2: 3, 3: 2, 4: 1},          # Q6  NEGATIVE 4-opt
+    {1: 4, 2: 3, 3: 2, 4: 1},          # Q7  NEGATIVE 4-opt
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},   # Q8  NEGATIVE 5-opt
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},   # Q9  NEGATIVE 5-opt
+    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},   # Q10 NEGATIVE 5-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q11 POSITIVE 4-opt
+    {1: 4, 2: 3, 3: 2, 4: 1},          # Q12 NEGATIVE CRITICAL 4-opt
+    {1: 4, 2: 3, 3: 2, 4: 1},          # Q13 NEGATIVE CRITICAL 4-opt
+    {1: 4, 2: 3, 3: 2, 4: 1},          # Q14 NEGATIVE 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q15 POSITIVE 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q16 POSITIVE 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q17 (higher = better context) 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q18 POSITIVE 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q19 POSITIVE 4-opt
+    {1: 1, 2: 2, 3: 3, 4: 4},          # Q20 POSITIVE 4-opt
+]
+
+
+# ── ANALYTICS HELPER ─────────────────────────────────────────────────────────
+
 def calculate_analytics():
-    """Calculate comprehensive analytics for the admin dashboard"""
+    """Calculate comprehensive analytics for the admin dashboard."""
     assessments = SubmitAssessment.query.all()
-    
+
+    empty = {
+        'total_assessments': 0,
+        'avg_score': 0,
+        'median_score': 0,
+        'min_score': 0,
+        'max_score': 0,
+        'score_distribution': {
+            '0-17 (Critical)': 0, '18-34 (High Risk)': 0,
+            '35-51 (Moderate)': 0, '52-69 (Good)': 0, '70-88 (Excellent)': 0
+        },
+        'gender_breakdown': {'male': 0, 'female': 0, 'other': 0},
+        'age_distribution': {'10-15': 0, '16-20': 0, '21-25': 0, '26-30': 0, '31-35': 0},
+        'question_averages': {},
+        'recent_trend': [],
+        'risk_categories': {'critical': 0, 'high_risk': 0, 'moderate': 0, 'good': 0, 'excellent': 0},
+        'completion_rate_last_7_days': 0,
+        'top_concerns': []
+    }
+
     if not assessments:
-        return {
-            'total_assessments': 0,
-            'avg_score': 0,
-            'median_score': 0,
-            'min_score': 0,
-            'max_score': 0,
-            'score_distribution': {
-                '0-20 (Critical)': 0,
-                '21-40 (High Risk)': 0,
-                '41-60 (Moderate)': 0,
-                '61-80 (Good)': 0,
-                '81-100 (Excellent)': 0
-            },
-            'gender_breakdown': {'male': 0, 'female': 0, 'other': 0},
-            'age_distribution': {'10-15': 0, '16-20': 0, '21-25': 0, '26-30': 0, '31-35': 0},
-            'question_averages': {},
-            'recent_trend': [],
-            'risk_categories': {'critical': 0, 'high_risk': 0, 'moderate': 0, 'good': 0, 'excellent': 0},
-            'completion_rate_last_7_days': 0,
-            'top_concerns': []
-        }
-    
-    # Score mappings for calculating scores if needed
-    score_mappings = [
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
-    ]
-    
-    # Calculate scores for assessments that don't have one
+        return empty
+
+    # Build scores list
     scores = []
     for a in assessments:
-        # Check if score exists and is not None
         if hasattr(a, 'score') and a.score is not None:
             scores.append(a.score)
         else:
-            # Calculate score from questions
-            total_score = 0
+            total = 0
             for i in range(1, 21):
                 q_val = getattr(a, f'q{i}', None)
                 if q_val is not None:
-                    total_score += score_mappings[i-1].get(q_val, 0)
-            scores.append(total_score)
-    
+                    total += SCORE_MAPPINGS[i - 1].get(q_val, 0)
+            scores.append(total)
+
     total_count = len(assessments)
     avg_score = sum(scores) / len(scores) if scores else 0
-    median_score = sorted(scores)[len(scores)//2] if scores else 0
+    median_score = sorted(scores)[len(scores) // 2] if scores else 0
     min_score = min(scores) if scores else 0
     max_score = max(scores) if scores else 0
-    
-    # Score distribution (group by ranges)
+
     score_ranges = {
-        '0-20 (Critical)': 0,
-        '21-40 (High Risk)': 0,
-        '41-60 (Moderate)': 0,
-        '61-80 (Good)': 0,
-        '81-100 (Excellent)': 0
+        '0-17 (Critical)': 0, '18-34 (High Risk)': 0,
+        '35-51 (Moderate)': 0, '52-69 (Good)': 0, '70-88 (Excellent)': 0
     }
     for score in scores:
-        if score <= 20:
-            score_ranges['0-20 (Critical)'] += 1
-        elif score <= 40:
-            score_ranges['21-40 (High Risk)'] += 1
-        elif score <= 60:
-            score_ranges['41-60 (Moderate)'] += 1
-        elif score <= 80:
-            score_ranges['61-80 (Good)'] += 1
+        if score <= 17:
+            score_ranges['0-17 (Critical)'] += 1
+        elif score <= 34:
+            score_ranges['18-34 (High Risk)'] += 1
+        elif score <= 51:
+            score_ranges['35-51 (Moderate)'] += 1
+        elif score <= 69:
+            score_ranges['52-69 (Good)'] += 1
         else:
-            score_ranges['81-100 (Excellent)'] += 1
-    
-    # Gender breakdown
+            score_ranges['70-88 (Excellent)'] += 1
+
     gender_breakdown = {
         'male': SubmitAssessment.query.filter_by(sex='male').count(),
         'female': SubmitAssessment.query.filter_by(sex='female').count(),
         'other': SubmitAssessment.query.filter_by(sex='other').count()
     }
-    
-    # Age distribution
+
     ages = [a.age for a in assessments if a.age is not None]
     age_distribution = {
         '10-15': sum(1 for age in ages if 10 <= age <= 15),
@@ -264,32 +303,21 @@ def calculate_analytics():
         '26-30': sum(1 for age in ages if 26 <= age <= 30),
         '31-35': sum(1 for age in ages if 31 <= age <= 35)
     }
-    
-    # Question-by-question averages
-    question_averages = {}
+
     question_labels = {
-        'q1': 'Cheerful and good spirits',
-        'q2': 'Calm and relaxed',
-        'q3': 'Active and vigorous',
-        'q4': 'Wake up fresh and rested',
-        'q5': 'Interested in daily life',
-        'q6': 'Little interest/pleasure',
-        'q7': 'Down/depressed/hopeless',
-        'q8': 'Hard to concentrate',
-        'q9': 'Nervous/anxious',
-        'q10': 'Emotions out of control',
-        'q11': 'Safe at home',
-        'q12': 'Trusted person to talk to',
-        'q13': 'Recently hurt',
-        'q14': 'Pressured to do things',
-        'q15': 'Can say No',
-        'q16': 'Sense of belonging',
-        'q17': 'Feel lonely',
-        'q18': 'Optimistic about future',
-        'q19': 'Can handle problems',
-        'q20': 'Know where to get help'
+        'q1': 'Cheerful and good spirits', 'q2': 'Calm and relaxed',
+        'q3': 'Active and vigorous', 'q4': 'Wake up fresh and rested',
+        'q5': 'Interested in daily life', 'q6': 'Little interest/pleasure',
+        'q7': 'Down/depressed/hopeless', 'q8': 'Hard to concentrate',
+        'q9': 'Nervous/anxious', 'q10': 'Emotions out of control',
+        'q11': 'Safe at home', 'q12': 'Touched inappropriately',
+        'q13': 'Recently hurt', 'q14': 'Pressured to do things',
+        'q15': 'Can say No', 'q16': 'Sense of belonging',
+        'q17': 'Feel lonely', 'q18': 'Optimistic about future',
+        'q19': 'Can handle problems', 'q20': 'Know where to get help'
     }
-    
+
+    question_averages = {}
     for i in range(1, 21):
         q_field = f'q{i}'
         responses = [getattr(a, q_field) for a in assessments if getattr(a, q_field) is not None]
@@ -300,37 +328,42 @@ def calculate_analytics():
                 'average': round(avg, 2),
                 'total_responses': len(responses)
             }
-    
-    # Recent trend (last 30 days)
+
     thirty_days_ago = datetime.now() - timedelta(days=30)
-    recent_assessments = [a for a in assessments 
-                         if datetime.strptime(a.timestamp, "%Y-%m-%d %H:%M:%S") >= thirty_days_ago]
-    
+    recent_assessments = []
+    for a in assessments:
+        try:
+            if datetime.strptime(a.timestamp, "%Y-%m-%d %H:%M:%S") >= thirty_days_ago:
+                recent_assessments.append(a)
+        except Exception:
+            pass
+
     recent_trend = []
     for i in range(30):
-        date = (datetime.now() - timedelta(days=29-i)).strftime("%Y-%m-%d")
-        count = sum(1 for a in recent_assessments 
-                   if a.timestamp.startswith(date))
+        date = (datetime.now() - timedelta(days=29 - i)).strftime("%Y-%m-%d")
+        count = sum(1 for a in recent_assessments if a.timestamp.startswith(date))
         recent_trend.append({'date': date, 'count': count})
-    
-    # Risk categories based on score ranges
+
     risk_categories = {
-        'critical': sum(1 for s in scores if s <= 20),
-        'high_risk': sum(1 for s in scores if 21 <= s <= 40),
-        'moderate': sum(1 for s in scores if 41 <= s <= 60),
-        'good': sum(1 for s in scores if 61 <= s <= 80),
-        'excellent': sum(1 for s in scores if s > 80)
+        'critical': sum(1 for s in scores if s <= 17),
+        'high_risk': sum(1 for s in scores if 18 <= s <= 34),
+        'moderate': sum(1 for s in scores if 35 <= s <= 51),
+        'good': sum(1 for s in scores if 52 <= s <= 69),
+        'excellent': sum(1 for s in scores if s >= 70)
     }
-    
-    # Completion rate last 7 days
+
     seven_days_ago = datetime.now() - timedelta(days=7)
-    recent_week = [a for a in assessments 
-                  if datetime.strptime(a.timestamp, "%Y-%m-%d %H:%M:%S") >= seven_days_ago]
+    recent_week = []
+    for a in assessments:
+        try:
+            if datetime.strptime(a.timestamp, "%Y-%m-%d %H:%M:%S") >= seven_days_ago:
+                recent_week.append(a)
+        except Exception:
+            pass
     completion_rate_last_7_days = len(recent_week)
-    
-    # Identify top concerns (questions with highest averages for negative questions)
+
     concern_questions = []
-    for q_num in [6, 7, 8, 9, 10, 13, 14, 17]:  # Questions where higher = worse
+    for q_num in [6, 7, 8, 9, 10, 13, 14, 17]:
         q_field = f'q{q_num}'
         responses = [getattr(a, q_field) for a in assessments if getattr(a, q_field) is not None]
         if responses:
@@ -340,9 +373,9 @@ def calculate_analytics():
                 'average': round(avg, 2),
                 'severity': 'High' if avg >= 3.5 else 'Moderate' if avg >= 2.5 else 'Low'
             })
-    
+
     top_concerns = sorted(concern_questions, key=lambda x: x['average'], reverse=True)[:5]
-    
+
     return {
         'total_assessments': total_count,
         'avg_score': round(avg_score, 2),
@@ -359,91 +392,194 @@ def calculate_analytics():
         'top_concerns': top_concerns
     }
 
-# Set or Update a Cookie
+
+def calculate_page_analytics():
+    """Aggregate page visit data for the admin dashboard."""
+    all_visits = PageVisit.query.order_by(PageVisit.timestamp.desc()).all()
+    total_visits = len(all_visits)
+    unique_ips = db.session.query(func.count(func.distinct(PageVisit.ip_address))).scalar() or 0
+
+    # Per-page counts
+    page_counts = {}
+    for v in all_visits:
+        page = v.page or '/'
+        page_counts[page] = page_counts.get(page, 0) + 1
+
+    # Top pages sorted
+    top_pages = sorted(page_counts.items(), key=lambda x: x[1], reverse=True)
+
+    # Daily visits for last 30 days
+    thirty_days_ago = datetime.now() - timedelta(days=30)
+    recent = [v for v in all_visits if v.timestamp and v.timestamp >= thirty_days_ago]
+    daily_visits = {}
+    for v in recent:
+        day = v.timestamp.strftime("%Y-%m-%d")
+        daily_visits[day] = daily_visits.get(day, 0) + 1
+
+    daily_trend = []
+    for i in range(30):
+        date = (datetime.now() - timedelta(days=29 - i)).strftime("%Y-%m-%d")
+        daily_trend.append({'date': date, 'count': daily_visits.get(date, 0)})
+
+    # Visits last 7 days
+    seven_days_ago = datetime.now() - timedelta(days=7)
+    visits_last_7 = sum(1 for v in all_visits if v.timestamp and v.timestamp >= seven_days_ago)
+
+    # Top locations
+    location_counts = {}
+    for v in all_visits:
+        loc = v.location or 'Unknown'
+        location_counts[loc] = location_counts.get(loc, 0) + 1
+    top_locations = sorted(location_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+
+    # Recent visits (last 20)
+    recent_visits = all_visits[:20]
+
+    return {
+        'total_visits': total_visits,
+        'unique_visitors': unique_ips,
+        'visits_last_7_days': visits_last_7,
+        'top_pages': top_pages,
+        'daily_trend': daily_trend,
+        'top_locations': top_locations,
+        'recent_visits': recent_visits,
+        'page_counts': page_counts,
+    }
+
+
+# ── COOKIE ROUTES ─────────────────────────────────────────────────────────────
+
 @app.route('/set-cookie', methods=['POST'])
 def set_cookie():
     data = request.json
     cookie_name = data.get('name')
     cookie_value = data.get('value')
     days = data.get('days', 30)
-
     if not cookie_name or not cookie_value:
         return jsonify({"error": "Missing cookie name or value"}), 400
-
     response = make_response(jsonify({"message": f"Cookie {cookie_name} set"}))
     response.set_cookie(cookie_name, cookie_value, max_age=days * 24 * 60 * 60)
     return response
 
-# Get a Cookie
+
 @app.route('/get-cookie', methods=['GET'])
 def get_cookie():
     cookie_name = request.args.get('name')
     if not cookie_name:
         return jsonify({"error": "Cookie name is required"}), 400
-
     cookie_value = request.cookies.get(cookie_name)
     if cookie_value:
         return jsonify({cookie_name: cookie_value})
-    else:
-        return jsonify({"error": "Cookie not found"}), 404
-        
+    return jsonify({"error": "Cookie not found"}), 404
+
+
+# ── MAIN ROUTES ───────────────────────────────────────────────────────────────
+
+@app.route('/')
+def index():
+    record_page_visit('/')
+
+    ip_address = request.remote_addr
+    location = get_location(ip_address)
+
+    visit_count = request.cookies.get("visit_count", 0)
+    visit_count = int(visit_count) + 1
+
+    resp = make_response(render_template("index.html", location=location, visit_count=visit_count))
+    resp.set_cookie("visit_count", str(visit_count), max_age=365 * 24 * 60 * 60, httponly=True, samesite="Lax")
+    return resp
+
+
 @app.route('/mood_tracker')
 def mood_tracker():
+    record_page_visit('/mood_tracker')
     return render_template('mood_tracker.html')
 
-# API: Get a Random Affirmation (one per day based on date)
+
+@app.route('/mental')
+def mental():
+    record_page_visit('/mental')
+    return render_template('mental.html')
+
+
+@app.route('/Resources')
+def Resources():
+    record_page_visit('/Resources')
+    return render_template('Resources.html')
+
+
+@app.route('/sel_activities')
+def sel_activities():
+    record_page_visit('/sel_activities')
+    return render_template('sel-activities.html')
+
+
+@app.route('/register', endpoint='register')
+def register():
+    record_page_visit('/register')
+    return render_template('register.html')
+
+
+@app.route('/runnerapp')
+def runner_app():
+    record_page_visit('/runnerapp')
+    return render_template('runnerapp.html')
+
+
+@app.route('/visit')
+def visit():
+    visit_count = request.cookies.get('visit_count', 0)
+    location = request.cookies.get('location', "Unknown")
+    return render_template('visit.html', visit_count=visit_count, homepage_visits=homepage_visits)
+
+
+@app.route('/confirmation')
+def confirmation():
+    latest_submission = Registration.query.order_by(Registration.id.desc()).first()
+    if latest_submission:
+        return render_template(
+            'confirmation.html',
+            name=latest_submission.name,
+            age=latest_submission.age,
+            email=latest_submission.email,
+            phone=latest_submission.phone,
+            service=latest_submission.service,
+        )
+    return "No submission found."
+
+
+# ── API ROUTES ────────────────────────────────────────────────────────────────
+
 @app.route('/api/affirmation', methods=['GET'])
 def get_affirmation():
-    """
-    Returns the same affirmation for the entire day.
-    Uses current date as seed to ensure consistency.
-    """
-    # Get today's date as string
     today = datetime.now().strftime("%Y-%m-%d")
-    
-    # Use date as seed for random selection
-    random.seed(today + "affirmation")  # Add suffix to make it unique from challenge
+    random.seed(today + "affirmation")
     daily_affirmation = random.choice(affirmations)
-    
-    # Reset random seed to not affect other operations
     random.seed()
-    
     return jsonify({"affirmation": daily_affirmation})
 
-# API: Get a Random Challenge (one per day based on date)
+
 @app.route('/api/challenge', methods=['GET'])
 def get_challenge():
-    """
-    Returns the same challenge for the entire day.
-    Uses current date as seed to ensure consistency.
-    """
-    # Get today's date as string
     today = datetime.now().strftime("%Y-%m-%d")
-    
-    # Use date as seed for random selection
-    random.seed(today + "challenge")  # Add suffix to make it unique from affirmation
+    random.seed(today + "challenge")
     daily_challenge = random.choice(challenges)
-    
-    # Reset random seed to not affect other operations
     random.seed()
-    
     return jsonify({"challenge": daily_challenge})
 
-# API: Get All Journal Entries
+
 @app.route('/api/journal', methods=['GET'])
 def get_journals():
     journals = JournalEntry.query.all()
     journal_list = [{"id": j.id, "mood": j.mood, "entry": j.entry} for j in journals]
     return jsonify(journal_list)
 
-# API to save journal entries
+
 @app.route('/save_journal_entry', methods=['POST'])
 def save_journal_entry_route():
     data = request.get_json()
-
     if not data or 'mood' not in data or 'entry' not in data:
         return jsonify({'error': 'Mood and entry are required'}), 400
-
     new_entry = JournalEntry(
         mood=data['mood'],
         entry=data['entry'],
@@ -451,186 +587,96 @@ def save_journal_entry_route():
         note=data.get('note', None),
         timestamp=data.get('timestamp', datetime.utcnow())
     )
-
     db.session.add(new_entry)
     db.session.commit()
-
     return jsonify({'message': 'Journal entry saved successfully'}), 201
+
 
 @app.route('/api/get_journal')
 def get_journal():
-    """Retrieve all past journal entries."""
     entries = load_journal_entries()
     return jsonify(entries)
 
-@app.route('/')
-def index():
-    ip_address = request.remote_addr
-    location = get_location(ip_address)
 
-    # Get visit count from cookies
-    visit_count = request.cookies.get("visit_count", 0)
-    visit_count = int(visit_count) + 1
+# ── FORM SUBMISSION ROUTES ────────────────────────────────────────────────────
 
-    # Add visit to homepage visits log
-    homepage_visits.append({
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "location": location
-    })
+def calculate_age(dob):
+    try:
+        birth_date = datetime.strptime(dob, "%Y-%m-%d")
+        today = datetime.today()
+        return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    except ValueError:
+        return None
 
-    # Store visit in database if it's the first time
-    existing_visit = PageVisit.query.filter_by(ip_address=ip_address).first()
-    if not existing_visit:
-        visit = PageVisit(ip_address=ip_address, location=location)
-        db.session.add(visit)
-        db.session.commit()
 
-    # Create response with updated visit count cookie
-    resp = make_response(render_template("index.html", location=location, visit_count=visit_count))
-    resp.set_cookie("visit_count", str(visit_count), max_age=365 * 24 * 60 * 60, httponly=True, samesite="Lax")
+@app.route('/submit', methods=['POST'])
+def submit():
+    required_fields = ['name', 'age', 'email', 'phone', 'service']
+    for field in required_fields:
+        if field not in request.form:
+            return f"Missing field: {field}", 400
 
-    return resp
+    name = request.form['name']
+    age = calculate_age(request.form['age'])
+    email = request.form['email']
+    phone = request.form['phone']
+    service = request.form['service']
 
-# ============================================================
-# PASTE THIS OVER THE EXISTING submit_assessment() IN app.py
-# ============================================================
-#
-# MAX POSSIBLE SCORE = 70  (mix of 4-opt and 5-opt questions)
-#   Q1-Q5,Q8-Q10 → 5 options, max 5 pts each  = 40 pts
-#   Q6,Q7,Q11-Q20 → 4 options, max 4 pts each = 36 pts  (but 2 of those are negative so max stays 4)
-#   True max = (5×8) + (4×12) = 40 + 48 = 88 pts
-#
-# Score bands (out of 88):
-#   70-88  → Excellent / Thriving
-#   52-69  → Good / Mostly Well
-#   35-51  → Moderate / Needs Attention
-#   18-34  → High Risk / Struggling
-#   0-17   → Critical / Urgent Help Needed
-# ============================================================
+    if not age:
+        return "Invalid date format for age", 400
+
+    new_registration = Registration(name=name, age=age, email=email, phone=phone, service=service)
+    db.session.add(new_registration)
+    db.session.commit()
+
+    data = {key: [value] for key, value in request.form.items()}
+    df = pd.DataFrame(data)
+
+    if os.path.exists(EXCEL_FILE):
+        with pd.ExcelWriter(EXCEL_FILE, engine="openpyxl", mode="a", if_sheet_exists="overlay") as writer:
+            wb = load_workbook(EXCEL_FILE)
+            sheet = wb.active
+            start_row = sheet.max_row + 1
+            df.to_excel(writer, index=False, header=False, startrow=start_row)
+    else:
+        df.to_excel(EXCEL_FILE, index=False)
+
+    return redirect(url_for('confirmation'))
+
 
 @app.route('/submit-assessment', methods=['POST'])
 def submit_assessment():
     total_score = 0
     unanswered_questions = 0
 
-    # ── Personal Info ──────────────────────────────────────────
     email = request.form.get("email")
     phone = request.form.get("phone")
     age   = request.form.get("age")
     sex   = request.form.get("sex")
 
-    # ── Corrected Score Mappings ───────────────────────────────
-    #
-    # Key   = the integer value submitted by the form (1-indexed option position)
-    # Value = wellness points awarded (higher = better mental health outcome)
-    #
-    # POSITIVE questions (more = better):  map low→low, high→high
-    # NEGATIVE questions (more = worse):   map low→high, high→low
-    #
-    # Questions with only 4 options only define keys 1-4.
-    # Questions with 5 options define keys 1-5.
-    #
-    score_mappings = [
-        # Q1  Well-being: "Felt cheerful?" — Never/Rarely/Sometimes/Often/Always (POSITIVE, 5 opts)
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-
-        # Q2  Well-being: "Felt calm?" — same scale (POSITIVE, 5 opts)
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-
-        # Q3  Energy: "Felt active?" — same scale (POSITIVE, 5 opts)
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-
-        # Q4  Sleep: "Wake up rested?" — same scale (POSITIVE, 5 opts)
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-
-        # Q5  Life: "Daily life interesting?" — same scale (POSITIVE, 5 opts)
-        {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-
-        # Q6  Mind: "Little interest/pleasure?" — Not at all / Several days / More than half / Nearly every day
-        #     NEGATIVE question — "Nearly every day" is worst outcome → gets lowest score
-        {1: 4, 2: 3, 3: 2, 4: 1},
-
-        # Q7  Mind: "Feel depressed/hopeless?" — same 4 opts as Q6 (NEGATIVE, 4 opts)
-        {1: 4, 2: 3, 3: 2, 4: 1},
-
-        # Q8  Focus: "Hard to concentrate?" — Never/Rarely/Sometimes/Often/Always (NEGATIVE, 5 opts)
-        #     "Always hard to concentrate" is worst → gets score 1
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-
-        # Q9  Anxiety: "Feel nervous/anxious?" — same scale as Q8 (NEGATIVE, 5 opts)
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-
-        # Q10 Anxiety: "Emotions out of control?" — same scale as Q8 (NEGATIVE, 5 opts)
-        {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-
-        # Q11 Safety: "Feel safe at home?" — Not safe / Sometimes worried / Mostly safe / Totally safe
-        #     POSITIVE question — "Totally safe" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q12 Sexual Safety: "Touched inappropriately?" — Never / Once / Sometimes / Happening now
-        #     NEGATIVE & CRITICAL — "Happening now" is worst → gets score 1
-        {1: 4, 2: 3, 3: 2, 4: 1},
-
-        # Q13 Safety: "Physically/emotionally hurt?" — Never / Once or twice / Frequently / Currently happening
-        #     NEGATIVE & CRITICAL — "Currently happening" is worst → gets score 1
-        {1: 4, 2: 3, 3: 2, 4: 1},
-
-        # Q14 Sexual Boundaries: "Pressured into sex?" — Never / Rarely / Sometimes / Often
-        #     NEGATIVE — "Often" is worst → gets score 1
-        {1: 4, 2: 3, 3: 2, 4: 1},
-
-        # Q15 Sexual Boundaries: "Can say No to advances?" — Never / Rarely / Sometimes / Always
-        #     POSITIVE — "Always" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q16 SRH Access: "Access to SRH info?" — No access / Limited / Some / Full access
-        #     POSITIVE — "Full access" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q17 SRH Needs: "Unwanted pregnancy / STI concerns?" — Yes urgently / Yes not urgent / Maybe / No
-        #     NEGATIVE — "Yes urgently" means person needs help NOW → gets score 1
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q18 Outlook: "Optimistic about future?" — Not at all / A little / Mostly / Very much
-        #     POSITIVE — "Very much" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q19 SRH Support: "Trusted adult for SRH?" — No one / Maybe one / Yes someone / Yes, multiple
-        #     POSITIVE — "Multiple trusted sources" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-
-        # Q20 Help Access: "Know where to get confidential help?" — No idea / Heard of places / Know some / Yes, Youth Connect
-        #     POSITIVE — "Yes, know Youth Connect & clinics" is best → gets score 4
-        {1: 1, 2: 2, 3: 3, 4: 4},
-    ]
-
-    # ── Calculate Score ────────────────────────────────────────
     answers_dict = {}
     for i in range(1, 21):
         val = request.form.get(f'q{i}')
         if val:
             try:
                 ans_int = int(val)
-                mapping = score_mappings[i - 1]
+                mapping = SCORE_MAPPINGS[i - 1]
                 if ans_int in mapping:
                     total_score += mapping[ans_int]
                     answers_dict[f'q{i}'] = ans_int
                 else:
-                    # Value out of range for this question's option set
                     unanswered_questions += 1
             except (ValueError, KeyError):
                 unanswered_questions += 1
         else:
             unanswered_questions += 1
 
-    # ── Validation ─────────────────────────────────────────────
     if unanswered_questions > 0:
         return render_template(
             'error.html',
             message=f"Please answer all questions. You missed {unanswered_questions}."
         )
 
-    # ── Save to Database ───────────────────────────────────────
     try:
         new_assessment = SubmitAssessment(
             email=email,
@@ -645,7 +691,6 @@ def submit_assessment():
     except Exception as e:
         print(f"Database Error: {e}")
 
-    # ── Save to Excel ──────────────────────────────────────────
     try:
         data_for_excel = {
             "timestamp": [new_assessment.timestamp],
@@ -672,209 +717,13 @@ def submit_assessment():
     return redirect(url_for('assessment_results', score=total_score))
 
 
-# ============================================================
-# ALSO UPDATE calculate_analytics() — same score_mappings bug
-# exists there. Replace the score_mappings block inside
-# calculate_analytics() with this identical list:
-# ============================================================
-SCORE_MAPPINGS = [
-    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q1
-    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q2
-    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q3
-    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q4
-    {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},  # Q5
-    {1: 4, 2: 3, 3: 2, 4: 1},         # Q6  NEGATIVE
-    {1: 4, 2: 3, 3: 2, 4: 1},         # Q7  NEGATIVE
-    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q8  NEGATIVE
-    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q9  NEGATIVE
-    {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},  # Q10 NEGATIVE
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q11
-    {1: 4, 2: 3, 3: 2, 4: 1},         # Q12 NEGATIVE CRITICAL
-    {1: 4, 2: 3, 3: 2, 4: 1},         # Q13 NEGATIVE CRITICAL
-    {1: 4, 2: 3, 3: 2, 4: 1},         # Q14 NEGATIVE
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q15
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q16
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q17
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q18
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q19
-    {1: 1, 2: 2, 3: 3, 4: 4},         # Q20
-]
-# Then in calculate_analytics(), replace:
-#   score_mappings[i-1].get(q_val, 0)
-# with:
-#   SCORE_MAPPINGS[i-1].get(q_val, 0)
-
-
 @app.route('/assessment_results')
 def assessment_results():
     score = request.args.get('score', 0, type=int)
     return render_template('assessment_results.html', score=score)
 
-@app.route('/admin/clear_excel', methods=['POST'])
-def clear_excel():
-    # Ensure only admin can perform this action
-    if not session.get("is_admin"):
-        return redirect(url_for("admin_login"))
 
-    if os.path.exists(EXCEL_FILE):
-        wb = load_workbook(EXCEL_FILE)
-        ws = wb.active
-        # Delete all rows after the header row (assuming header is in row 1)
-        if ws.max_row > 1:
-            ws.delete_rows(2, ws.max_row - 1)
-        wb.save(EXCEL_FILE)
-        message = "Excel sheet entries have been cleared."
-    else:
-        message = "Excel file does not exist."
-
-    # You can choose to render a template with the message or simply return it.
-    return redirect(url_for('admin_panel'))
-
-@app.route('/visit')
-def visit():
-    visit_count = request.cookies.get('visit_count', 0)
-    location = request.cookies.get('location', "Unknown")
-
-    return render_template('visit.html', visit_count=visit_count, homepage_visits=homepage_visits)
-
-def calculate_age(dob):
-    try:
-        birth_date = datetime.strptime(dob, "%Y-%m-%d")
-        today = datetime.today()
-        return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-    except ValueError:
-        return None  # Invalid date format
-
-@app.route('/submit', methods=['POST'])
-def submit():
-    required_fields = ['name', 'age', 'email', 'phone', 'service']
-    for field in required_fields:
-        if field not in request.form:
-            return f"Missing field: {field}", 400
-
-    # Capture specific form fields
-    name = request.form['name']
-    age = calculate_age(request.form['age'])
-    email = request.form['email']
-    phone = request.form['phone']
-    service = request.form['service']
-
-    if not age:
-        return "Invalid date format for age", 400
-
-    # Save to database
-    new_registration = Registration(name=name, age=age, email=email, phone=phone, service=service)
-    db.session.add(new_registration)
-    db.session.commit()
-
-    data = {key: [value] for key, value in request.form.items()}
-    df = pd.DataFrame(data)
-
-    # Append to Excel file
-    if os.path.exists(EXCEL_FILE):
-        with pd.ExcelWriter(EXCEL_FILE, engine="openpyxl", mode="a", if_sheet_exists="overlay") as writer:
-            wb = load_workbook(EXCEL_FILE)
-            sheet = wb.active
-            start_row = sheet.max_row + 1
-            df.to_excel(writer, index=False, header=False, startrow=start_row)
-    else:
-        df.to_excel(EXCEL_FILE, index=False)
-
-    return redirect(url_for('confirmation'))
-
-@app.route('/confirmation')
-def confirmation():
-    latest_submission = Registration.query.order_by(Registration.id.desc()).first()
-
-    if latest_submission:
-        return render_template(
-            'confirmation.html',
-            name=latest_submission.name,
-            age=latest_submission.age,
-            email=latest_submission.email,
-            phone=latest_submission.phone,
-            service=latest_submission.service,
-        )
-    return "No submission found."
-
-@app.route('/admin/registrations')
-def admin_registrations():
-    registrations = Registration.query.all()
-    latest_data = {
-        "name": session.get('name'),
-        "age": session.get('age'),
-        "email": session.get('email'),
-        "phone": session.get('phone'),
-        "service": session.get('service'),
-    }
-
-    return render_template(
-        'admin_registrations.html',
-        registrations=registrations,
-        latest=latest_data,
-        datetime=datetime  # Pass datetime to the template
-    )
-
-@app.route('/admin/delete_submission/<int:id>', methods=['POST'])
-def delete_submission(id):
-    try:
-        submission = Registration.query.get(id)
-        if submission:
-            db.session.delete(submission)
-            db.session.commit()
-            return jsonify({"success": True, "message": "Submission deleted successfully."})
-        return jsonify({"success": False, "message": "Submission not found."})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"success": False, "message": str(e)})
-
-@app.route('/register', endpoint='register')
-def register():
-    return render_template('register.html')
-
-@app.route('/mental')
-def mental():
-    return render_template('mental.html')
-
-@app.route('/Resources')
-def Resources():
-    return render_template('Resources.html')
-
-@app.route('/sel_activities')
-def sel_activities():
-    return render_template('sel-activities.html')
-
-def get_location(ip):
-    try:
-        # Handle local/private IPs
-        if ip in ["127.0.0.1", "::1"] or ip.startswith(("192.168.", "10.", "172.")):
-            return "Local Network (Unknown Location)"
-
-        # API Request
-        url = f"https://api.ipgeolocation.io/ipgeo?apiKey={IPGEO_API_KEY}&ip={ip}"
-        response = requests.get(url, timeout=5)  # 5-second timeout
-
-        if response.status_code == 200:
-            data = response.json()
-            city = data.get("city", "Unknown")
-            country = data.get("country_name", "Unknown")
-            return f"{city}, {country}"
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching location: {e}")
-
-    return "Location unavailable"
-
-# Download Responses (Excel)
-@app.route('/admin/download_responses')
-def download_responses():
-    if not session.get("is_admin"):
-        return redirect(url_for("admin_login"))
-
-    if not os.path.exists(EXCEL_FILE):
-        return "No responses available to download.", 404
-
-    return send_file(EXCEL_FILE, as_attachment=True, download_name="responses.xlsx")
+# ── ADMIN ROUTES ──────────────────────────────────────────────────────────────
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
@@ -889,25 +738,21 @@ def admin_login():
             error_message = "Invalid username or password!"
     return render_template("admin_login.html", error=error_message)
 
+
 @app.route('/admin/panel')
 def admin_panel():
     if not session.get("is_admin"):
         return redirect(url_for("admin_login"))
 
-    # Fetch all assessments
     assessments = SubmitAssessment.query.order_by(SubmitAssessment.id.desc()).all()
-    
-    # Calculate comprehensive analytics
     analytics = calculate_analytics()
-    
-    # Get file list
+    page_analytics = calculate_page_analytics()
+    registrations = Registration.query.order_by(Registration.id.desc()).all()
     files = os.listdir(UPLOAD_FOLDER) if os.path.exists(UPLOAD_FOLDER) else []
-    
-    # Page visits analytics
+
     total_visits = PageVisit.query.count()
-    unique_visitors = db.session.query(func.count(func.distinct(PageVisit.ip_address))).scalar()
-    
-    # Get game stats
+    unique_visitors = db.session.query(func.count(func.distinct(PageVisit.ip_address))).scalar() or 0
+
     game_data = load_game_data()
     game_stats = {
         'total_sessions': len(game_data),
@@ -916,70 +761,118 @@ def admin_panel():
         'highest_score': max((entry.get('glimmers', 0) for entry in game_data), default=0),
         'latest_target': game_data[-1].get('target', 10) if game_data else 10
     }
-    
+
     return render_template(
         "admin_panel.html",
         assessments=assessments,
         analytics=analytics,
+        page_analytics=page_analytics,
+        registrations=registrations,
         files=files,
         total_visits=total_visits,
         unique_visitors=unique_visitors,
         game_stats=game_stats
     )
 
+
+@app.route('/admin/registrations')
+def admin_registrations():
+    if not session.get("is_admin"):
+        return redirect(url_for("admin_login"))
+    registrations = Registration.query.all()
+    latest_data = {
+        "name": session.get('name'),
+        "age": session.get('age'),
+        "email": session.get('email'),
+        "phone": session.get('phone'),
+        "service": session.get('service'),
+    }
+    return render_template(
+        'admin_registrations.html',
+        registrations=registrations,
+        latest=latest_data,
+        datetime=datetime
+    )
+
+
 @app.route('/admin/analytics/api')
 def admin_analytics_api():
-    """API endpoint for fetching analytics data (useful for AJAX updates)"""
     if not session.get("is_admin"):
         return jsonify({'error': 'Unauthorized'}), 401
-    
     analytics = calculate_analytics()
     return jsonify(analytics)
 
+
+@app.route('/admin/page_analytics/api')
+def admin_page_analytics_api():
+    """API endpoint for live page visit analytics."""
+    if not session.get("is_admin"):
+        return jsonify({'error': 'Unauthorized'}), 401
+    return jsonify(calculate_page_analytics())
+
+
 @app.route('/admin/export_analytics')
 def export_analytics():
-    """Export analytics data as JSON"""
     if not session.get("is_admin"):
         return redirect(url_for("admin_login"))
-    
     analytics = calculate_analytics()
-    
-    # Create a JSON file
     analytics_file = os.path.join(UPLOAD_FOLDER, f"analytics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
     with open(analytics_file, 'w') as f:
         json.dump(analytics, f, indent=2)
-    
     return send_file(analytics_file, as_attachment=True)
+
+
+@app.route('/admin/download_responses')
+def download_responses():
+    if not session.get("is_admin"):
+        return redirect(url_for("admin_login"))
+    if not os.path.exists(EXCEL_FILE):
+        return "No responses available to download.", 404
+    return send_file(EXCEL_FILE, as_attachment=True, download_name="responses.xlsx")
+
+
+@app.route('/admin/clear_excel', methods=['POST'])
+def clear_excel():
+    if not session.get("is_admin"):
+        return redirect(url_for("admin_login"))
+    if os.path.exists(EXCEL_FILE):
+        wb = load_workbook(EXCEL_FILE)
+        ws = wb.active
+        if ws.max_row > 1:
+            ws.delete_rows(2, ws.max_row - 1)
+        wb.save(EXCEL_FILE)
+    return redirect(url_for('admin_panel'))
+
+
+@app.route('/admin/delete_submission/<int:id>', methods=['POST'])
+def delete_submission(id):
+    try:
+        submission = Registration.query.get(id)
+        if submission:
+            db.session.delete(submission)
+            db.session.commit()
+            return jsonify({"success": True, "message": "Submission deleted successfully."})
+        return jsonify({"success": False, "message": "Submission not found."})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "message": str(e)})
+
 
 @app.route('/admin/logout')
 def admin_logout():
     session.pop("is_admin", None)
     return redirect(url_for("admin_login"))
 
-@app.route('/runnerapp')
-def runner_app():
-    """Serve the Spark Runner game"""
-    return render_template('runnerapp.html')
 
-# ==================== SPARK RUNNER GAME API ENDPOINTS ====================
+# ── SPARK RUNNER GAME API ─────────────────────────────────────────────────────
 
 @app.route('/api/save_progress', methods=['POST'])
 def save_progress():
-    """Save player's Spark Runner game progress"""
     try:
         data = request.get_json()
-        
-        # Validate input
         if not data or 'glimmers' not in data:
-            return jsonify({
-                'success': False,
-                'message': 'Invalid data - glimmers count required'
-            }), 400
-        
-        # Load existing data
+            return jsonify({'success': False, 'message': 'Invalid data - glimmers count required'}), 400
         progress_data = load_game_data()
-        
-        # Create new progress entry
         new_entry = {
             'glimmers': data.get('glimmers', 0),
             'target': data.get('target', 10),
@@ -988,142 +881,94 @@ def save_progress():
             'user_agent': request.headers.get('User-Agent', 'Unknown'),
             'ip_address': request.remote_addr
         }
-        
-        # Add to data
         progress_data.append(new_entry)
-        
-        # Save to file
         save_game_data(progress_data)
-        
-        return jsonify({
-            'success': True,
-            'message': 'Progress saved successfully',
-            'data': new_entry
-        }), 200
-        
+        return jsonify({'success': True, 'message': 'Progress saved successfully', 'data': new_entry}), 200
     except Exception as e:
-        print(f"Error saving game progress: {e}")
-        return jsonify({
-            'success': False,
-            'message': f'Error saving progress: {str(e)}'
-        }), 500
+        return jsonify({'success': False, 'message': f'Error saving progress: {str(e)}'}), 500
+
 
 @app.route('/api/get_progress', methods=['GET'])
 def get_progress():
-    """Get all Spark Runner game progress records"""
     try:
         progress_data = load_game_data()
-        
-        return jsonify({
-            'success': True,
-            'total_sessions': len(progress_data),
-            'data': progress_data
-        }), 200
-        
+        return jsonify({'success': True, 'total_sessions': len(progress_data), 'data': progress_data}), 200
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error retrieving progress: {str(e)}'
-        }), 500
+        return jsonify({'success': False, 'message': f'Error retrieving progress: {str(e)}'}), 500
+
 
 @app.route('/api/get_stats', methods=['GET'])
 def get_stats():
-    """Get Spark Runner player statistics"""
     try:
         progress_data = load_game_data()
-        
         if not progress_data:
-            return jsonify({
-                'success': True,
-                'stats': {
-                    'total_sessions': 0,
-                    'total_glimmers': 0,
-                    'average_glimmers': 0,
-                    'highest_score': 0,
-                    'latest_target': 10,
-                    'last_played': None
-                }
-            }), 200
-        
+            return jsonify({'success': True, 'stats': {
+                'total_sessions': 0, 'total_glimmers': 0, 'average_glimmers': 0,
+                'highest_score': 0, 'latest_target': 10, 'last_played': None
+            }}), 200
         total_glimmers = sum(entry.get('glimmers', 0) for entry in progress_data)
         highest_score = max(entry.get('glimmers', 0) for entry in progress_data)
-        average_glimmers = total_glimmers / len(progress_data) if progress_data else 0
-        latest_target = progress_data[-1].get('target', 10) if progress_data else 10
-        
+        average_glimmers = total_glimmers / len(progress_data)
         stats = {
             'total_sessions': len(progress_data),
             'total_glimmers': total_glimmers,
             'average_glimmers': round(average_glimmers, 2),
             'highest_score': highest_score,
-            'latest_target': latest_target,
-            'last_played': progress_data[-1].get('timestamp') if progress_data else None
+            'latest_target': progress_data[-1].get('target', 10),
+            'last_played': progress_data[-1].get('timestamp')
         }
-        
-        return jsonify({
-            'success': True,
-            'stats': stats
-        }), 200
-        
+        return jsonify({'success': True, 'stats': stats}), 200
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error calculating stats: {str(e)}'
-        }), 500
+        return jsonify({'success': False, 'message': f'Error calculating stats: {str(e)}'}), 500
+
 
 @app.route('/api/reset_progress', methods=['DELETE'])
 def reset_progress():
-    """Reset all Spark Runner game progress (Admin only)"""
     if not session.get("is_admin"):
-        return jsonify({
-            'success': False,
-            'message': 'Unauthorized - Admin access required'
-        }), 401
-    
+        return jsonify({'success': False, 'message': 'Unauthorized - Admin access required'}), 401
     try:
         save_game_data([])
-        
-        return jsonify({
-            'success': True,
-            'message': 'All game progress has been reset'
-        }), 200
-        
+        return jsonify({'success': True, 'message': 'All game progress has been reset'}), 200
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error resetting progress: {str(e)}'
-        }), 500
+        return jsonify({'success': False, 'message': f'Error resetting progress: {str(e)}'}), 500
+
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
         'service': 'Mental Health Platform with Spark Runner',
         'timestamp': datetime.now().isoformat(),
-        'version': '2.0'
+        'version': '2.1'
     }), 200
 
-### **RUN FLASK APP**
+
+# ── UTILITIES ─────────────────────────────────────────────────────────────────
+
+def get_location(ip):
+    try:
+        if ip in ["127.0.0.1", "::1"] or ip.startswith(("192.168.", "10.", "172.")):
+            return "Local Network"
+        url = f"https://api.ipgeolocation.io/ipgeo?apiKey={IPGEO_API_KEY}&ip={ip}"
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            city = data.get("city", "Unknown")
+            country = data.get("country_name", "Unknown")
+            return f"{city}, {country}"
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching location: {e}")
+    return "Location unavailable"
+
+
+# ── RUN ───────────────────────────────────────────────────────────────────────
+
 if __name__ == "__main__":
     print("=" * 60)
-    print("Mental Health Platform with Spark Runner Game")
+    print("Mental Health Platform with Spark Runner Game  v2.1")
     print("=" * 60)
     print("Server running on http://localhost:5000")
-    print("\nAvailable Routes:")
-    print("  Main Site:")
-    print("    /                    - Homepage")
-    print("    /mental              - Mental health resources")
-    print("    /mood_tracker        - Mood tracking")
-    print("    /runnerapp           - Spark Runner Game")
-    print("\n  Game API:")
-    print("    POST   /api/save_progress   - Save game progress")
-    print("    GET    /api/get_progress    - Get all progress")
-    print("    GET    /api/get_stats       - Get player stats")
-    print("    DELETE /api/reset_progress  - Reset progress (admin)")
-    print("    GET    /api/health          - Health check")
-    print("\n  Admin:")
-    print("    /admin/login         - Admin login")
-    print("    /admin/panel         - Admin dashboard")
+    print("\nPage visit tracking enabled on all routes.")
+    print("Admin dashboard: /admin/login")
     print("=" * 60)
-    
     app.run(debug=True)

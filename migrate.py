@@ -1,99 +1,75 @@
 """
-Database Migration Script
-Adds the 'score' column to the submit_assessment table
-Run this ONCE before starting the application
+Run this script ONCE to add the missing 'page' and 'user_agent' columns
+to the existing page_visit table.
+
+Usage:
+    python migrate_page_visit.py
 """
 
 import sqlite3
 import os
 
-# Path to your database file
-DB_PATH = 'instance/submit-assessment.db'
+# Search for ALL .db files starting from the script's directory
+search_dir = os.path.dirname(os.path.abspath(__file__))
 
-def migrate_database():
-    """Add score column to submit_assessment table if it doesn't exist"""
-    
-    # Check if database exists
-    if not os.path.exists(DB_PATH):
-        print(f" Database not found at {DB_PATH}")
-        print("The database will be created automatically when you run the app.")
-        return
-    
-    try:
-        # Connect to database
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        # Check if score column already exists
-        cursor.execute("PRAGMA table_info(submit_assessment)")
-        columns = [column[1] for column in cursor.fetchall()]
-        
-        if 'score' in columns:
-            print("Score column already exists. No migration needed.")
-            conn.close()
-            return
-        
-        # Add the score column
-        print("Adding 'score' column to submit_assessment table...")
-        cursor.execute("ALTER TABLE submit_assessment ADD COLUMN score INTEGER")
-        
-        # Calculate and update scores for existing records
-        print("Calculating scores for existing assessments...")
-        
-        # Fetch all existing records
-        cursor.execute("SELECT id, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20 FROM submit_assessment")
-        records = cursor.fetchall()
-        
-        # Score mappings (same as in app.py)
-        score_mappings = [
-            {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-            {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 5, 2: 4, 3: 3, 4: 2, 5: 1},
-            {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 5, 2: 4, 3: 3, 4: 2, 5: 1}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5},
-            {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
-        ]
-        
-        updated_count = 0
-        for record in records:
-            record_id = record[0]
-            answers = record[1:]  # q1 to q20
-            
-            # Calculate score
-            total_score = 0
-            for i, answer in enumerate(answers):
-                if answer is not None:
-                    total_score += score_mappings[i].get(answer, 0)
-            
-            # Update the record
-            cursor.execute("UPDATE submit_assessment SET score = ? WHERE id = ?", (total_score, record_id))
-            updated_count += 1
-        
-        conn.commit()
-        print(f" Successfully migrated database!")
-        print(f"   - Added 'score' column")
-        print(f"   - Updated {updated_count} existing records with calculated scores")
-        
-        conn.close()
-        
-    except sqlite3.Error as e:
-        print(f" Database error: {e}")
-    except Exception as e:
-        print(f" Unexpected error: {e}")
+print(f"Searching for .db files in: {search_dir}")
+db_files = []
+for root, dirs, files in os.walk(search_dir):
+    for f in files:
+        if f.endswith('.db'):
+            db_files.append(os.path.join(root, f))
 
-if __name__ == "__main__":
-    print("=" * 60)
-    print("Youth Connect Hub - Database Migration")
-    print("=" * 60)
-    print()
-    
-    migrate_database()
-    
-    print()
-    print("=" * 60)
-    print("Migration complete! You can now start your Flask app.")
-    print("=" * 60)
+if not db_files:
+    print(" No .db files found. Make sure you've run the Flask app at least once first.")
+    exit(1)
+
+print("Found database files:")
+for i, f in enumerate(db_files):
+    print(f"  [{i}] {f}")
+
+# Prefer default.db, otherwise use the first found
+target_db = next((f for f in db_files if os.path.basename(f) == 'default.db'), db_files[0])
+print(f"\nUsing: {target_db}")
+
+conn = sqlite3.connect(target_db)
+cursor = conn.cursor()
+
+# Show all tables in this database
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+tables = [row[0] for row in cursor.fetchall()]
+print(f"Tables found: {tables}")
+
+if 'page_visit' not in tables:
+    print("\n  'page_visit' table does not exist — creating it fresh with all columns.")
+    cursor.execute("""
+        CREATE TABLE page_visit (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ip_address VARCHAR(100),
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            location VARCHAR(255),
+            page VARCHAR(100) DEFAULT '/',
+            user_agent VARCHAR(255)
+        )
+    """)
+    print(" Created table: page_visit")
+else:
+    cursor.execute("PRAGMA table_info(page_visit)")
+    existing_cols = [row[1] for row in cursor.fetchall()]
+    print(f"Existing columns in page_visit: {existing_cols}")
+
+    if 'page' not in existing_cols:
+        cursor.execute("ALTER TABLE page_visit ADD COLUMN page VARCHAR(100) DEFAULT '/'")
+        print(" Added column: page")
+    else:
+        print("⏭  Column 'page' already exists, skipping.")
+
+    if 'user_agent' not in existing_cols:
+        cursor.execute("ALTER TABLE page_visit ADD COLUMN user_agent VARCHAR(255)")
+        print(" Added column: user_agent")
+    else:
+        print("⏭  Column 'user_agent' already exists, skipping.")
+
+conn.commit()
+conn.close()
+
+print("\n Done. Restart your Flask app.")
