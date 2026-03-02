@@ -42,7 +42,7 @@ if not USE_FLASK:
     print(f"[INFO] Using database: {DB_PATH}")
 
 # ── Extended Seed Data ────────────────────────────────────────────────────────
-random.seed(42) # Changed seed for fresh variety
+random.seed(42)
 
 MALE_FIRST = [
     "Adewale", "Babatunde", "Damilola", "Femi", "Gbenga", "Idris", "Jide", "Kayode", "Leke", "Muyiwa",
@@ -65,13 +65,14 @@ LAST_NAMES = [
     "Obasanjo", "Oyelowo", "Popoola", "Shonibare", "Tinubu", "Williams", "Yerima"
 ]
 
-# Scoring Config
+# Scoring Config (UNCHANGED)
 SCORE_MAPPINGS = [
     {1:1,2:2,3:3,4:4,5:5}, {1:1,2:2,3:3,4:4,5:5}, {1:1,2:2,3:3,4:4,5:5}, {1:1,2:2,3:3,4:4,5:5}, {1:1,2:2,3:3,4:4,5:5},
     {1:4,2:3,3:2,4:1}, {1:4,2:3,3:2,4:1}, {1:5,2:4,3:3,4:2,5:1}, {1:5,2:4,3:3,4:2,5:1}, {1:5,2:4,3:3,4:2,5:1},
     {1:1,2:2,3:3,4:4}, {1:4,2:3,3:2,4:1}, {1:4,2:3,3:2,4:1}, {1:4,2:3,3:2,4:1}, {1:1,2:2,3:3,4:4},
     {1:1,2:2,3:3,4:4}, {1:1,2:2,3:3,4:4}, {1:1,2:2,3:3,4:4}, {1:1,2:2,3:3,4:4}, {1:1,2:2,3:3,4:4}
 ]
+
 MAX_OPTS = [5,5,5,5,5, 4,4,5,5,5, 4,4,4,4,4, 4,4,4,4,4]
 NEGATIVE_Q = {5,6,7,8,9, 11,12,13}
 
@@ -95,22 +96,42 @@ def make_person(idx):
     first = random.choice(MALE_FIRST if sex == "male" else FEMALE_FIRST)
     last  = random.choice(LAST_NAMES)
     age   = random.randint(16, 35)
-    # Ensure unique emails by using index
-    email = f"{first.lower()}.{last.lower()}{idx}@mentalhealth.ng"
+
+    # ✅ Updated Email Logic (Majority Gmail)
+    domain = random.choices(
+        ["gmail.com", "outlook.com", "yahoo.com"],
+        weights=[70, 20, 10]
+    )[0]
+
+    email = f"{first.lower()}.{last.lower()}{idx}@{domain}"
+
     phone = f"080{random.randint(10000000, 99999999)}"
+
     arch  = random.choices(
         ["thriving","mostly_well","moderate","struggling","critical"],
         weights=[10, 25, 35, 20, 10]
     )[0]
+
     answers = make_answers(arch)
     score   = calc_score(answers)
-    ts = (datetime.now() - timedelta(days=random.randint(0, 365), hours=random.randint(0, 23))).strftime("%Y-%m-%d %H:%M:%S")
-    
+
+    ts = (datetime.now() - timedelta(
+        days=random.randint(0, 365),
+        hours=random.randint(0, 23)
+    )).strftime("%Y-%m-%d %H:%M:%S")
+
     data = {
-        "timestamp": ts, "email": email, "phone": phone, "age": age, "sex": sex, "score": score
+        "timestamp": ts,
+        "email": email,
+        "phone": phone,
+        "age": age,
+        "sex": sex,
+        "score": score
     }
+
     for i in range(20):
         data[f"q{i+1}"] = answers[i]
+
     return data
 
 def score_band(s):
@@ -123,6 +144,7 @@ def score_band(s):
 # ── Generate 350 people ───────────────────────────────────────────────────────
 people = [make_person(i) for i in range(350)]
 
+# (Insertion logic remains completely unchanged below)
 # ── INSERTION LOGIC ───────────────────────────────────────────────────────────
 if USE_FLASK:
     with app.app_context():
