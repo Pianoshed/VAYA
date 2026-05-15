@@ -374,7 +374,7 @@
 
     <section class="hero">
         <div class="hero-card">
-            <h1>Empowering Ondo's Future 🚀</h1>
+            <h1>Empowering Ondo's Future</h1>
             <p>Your digital hub for mental wellness, growth, and community support. You are not alone.</p>
             <div class="hero-btns">
                 <a href="{{ url_for('mental') }}" class="btn btn-primary">Start Assessment</a>
@@ -390,15 +390,15 @@
         </div>
         <div class="feature-grid">
             <div class="f-card">
-                <h3>🧠 Wellness Scan</h3>
+                <h3>Wellness Scan</h3>
                 <p>Deep insights into your mental state with professional-grade assessments.</p>
             </div>
             <div class="f-card">
-                <h3>📅 Mood Analytics</h3>
+                <h3>Mood Analytics</h3>
                 <p>Visualize your emotional patterns and identify triggers effectively.</p>
             </div>
             <div class="f-card">
-                <h3>🤝 Live Support</h3>
+                <h3>Live Support</h3>
                 <p>Direct access to counseling and peer support groups across Ondo.</p>
             </div>
         </div>
@@ -410,11 +410,11 @@
             <p style="color: rgba(255,255,255,0.8);">Essential skills for modern life success.</p>
         </div>
         <div class="sel-container">
-            <div class="sel-box"><h4>🌟 Self-Awareness</h4><p>Know yourself deeply</p></div>
-            <div class="sel-box"><h4>⚡ Self-Management</h4><p>Control your responses</p></div>
-            <div class="sel-box"><h4>👁️ Social Awareness</h4><p>Understand others</p></div>
-            <div class="sel-box"><h4>🤝 Relationships</h4><p>Build meaningful bonds</p></div>
-            <div class="sel-box"><h4>✅ Responsibility</h4><p>Own your choices</p></div>
+            <div class="sel-box"><h4>Self-Awareness</h4><p>Know yourself deeply</p></div>
+            <div class="sel-box"><h4>Self-Management</h4><p>Control your responses</p></div>
+            <div class="sel-box"><h4>Social Awareness</h4><p>Understand others</p></div>
+            <div class="sel-box"><h4>Relationships</h4><p>Build meaningful bonds</p></div>
+            <div class="sel-box"><h4>Responsibility</h4><p>Own your choices</p></div>
         </div>
     </section>
 
@@ -450,23 +450,6 @@
     <div id="scrollTop" onclick="toTop()" title="Back to top">↑</div>
 
     <script>
-        /*
-         * ✅ PERF: Deferred background image loading.
-         *
-         * The old approach (body::before with background-image) caused the browser
-         * to block rendering until you1.jpg was downloaded — hence the "small image"
-         * / slow load you were seeing on Render's free tier.
-         *
-         * New approach:
-         *  1. Page paints instantly with a dark gradient (#bg div).
-         *  2. We create an off-screen Image() object to download you1.jpg.
-         *  3. Once downloaded (onload fires), we add class .loaded to #bg which
-         *     applies the real background-image with a smooth fade-in.
-         *
-         * The <link rel="preload"> in <head> tells the browser to start
-         * fetching the image in parallel with HTML parsing, so it's usually
-         * ready by the time onload fires — giving the fastest possible result.
-         */
         (function () {
             var img = new Image();
             img.onload = function () {
