@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assessment Results - Youth Connect Hub</title>
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -15,13 +14,10 @@
       --success: #06FFA5;
       --warning: #FDC500;
       --danger: #FF006E;
+      --whatsapp: #25D366;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -34,10 +30,8 @@
     /* Loading Animation */
     #loading {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
+      width: 100%; height: 100%;
+      top: 0; left: 0;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       z-index: 9999;
       display: flex;
@@ -48,89 +42,48 @@
       animation-delay: 3s;
     }
 
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        pointer-events: none;
-      }
-    }
+    @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
 
-    .spinner-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-    }
-
+    .spinner-container { position: relative; width: 200px; height: 200px; }
     .spinner {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border: 8px solid rgba(255, 255, 255, 0.2);
+      position: absolute; width: 100%; height: 100%;
+      border: 8px solid rgba(255,255,255,0.2);
       border-top: 8px solid white;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .loading-text {
-      color: white;
-      margin-top: 2rem;
-      font-size: 1.5rem;
-      font-weight: 600;
+      color: white; margin-top: 2rem; font-size: 1.5rem; font-weight: 600;
       animation: pulse 1.5s ease-in-out infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
 
     .loading-emoji {
-      font-size: 4rem;
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      font-size: 4rem; position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       animation: bounce 1s ease-in-out infinite;
     }
-
-    @keyframes bounce {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.2); }
-    }
+    @keyframes bounce { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.2); } }
 
     /* Main Container */
     .container {
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 900px; margin: 0 auto;
       animation: slideUp 0.8s ease-out;
     }
-
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Header */
     .header {
-      text-align: center;
-      margin-bottom: 2rem;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      text-align: center; margin-bottom: 2rem;
+      background: rgba(255,255,255,0.95);
+      padding: 2rem; border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
-
     .header h1 {
       font-family: 'Righteous', cursive;
       font-size: clamp(2rem, 5vw, 3rem);
@@ -143,270 +96,313 @@
 
     /* Results Card */
     .results-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      margin-bottom: 2rem;
+      background: white; border-radius: 20px; padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 2rem;
     }
 
     /* Score Display */
     .score-container {
-      text-align: center;
-      padding: 2rem;
+      text-align: center; padding: 2rem;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 15px;
-      color: white;
-      margin-bottom: 2rem;
-      position: relative;
-      overflow: hidden;
+      border-radius: 15px; color: white; margin-bottom: 2rem;
+      position: relative; overflow: hidden;
     }
-
-    .score-circle {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 1rem;
-      position: relative;
-    }
-
-    .score-ring {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-
-    .score-ring circle {
-      fill: none;
-      stroke-width: 15;
-      stroke-linecap: round;
-      transition: stroke-dasharray 2s ease-out;
-    }
-
-    .score-bg {
-      stroke: rgba(255, 255, 255, 0.2);
-    }
-
-    .score-progress {
-      stroke: url(#gradient);
-      stroke-dasharray: 0 628;
-      animation: fillProgress 2s ease-out forwards;
-    }
-
-    @keyframes fillProgress {
-      to {
-        stroke-dasharray: var(--progress) 628;
-      }
-    }
-
+    .score-circle { width: 200px; height: 200px; margin: 0 auto 1rem; position: relative; }
+    .score-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .score-ring circle { fill: none; stroke-width: 15; stroke-linecap: round; transition: stroke-dasharray 2s ease-out; }
+    .score-bg { stroke: rgba(255,255,255,0.2); }
+    .score-progress { stroke: url(#gradient); stroke-dasharray: 0 628; animation: fillProgress 2s ease-out forwards; }
+    @keyframes fillProgress { to { stroke-dasharray: var(--progress) 628; } }
     .score-value {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 4rem;
-      font-weight: 800;
-      color: white;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      font-size: 4rem; font-weight: 800; color: white;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-
-    .score-label {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
+    .score-label { font-size: 1.2rem; opacity: 0.9; }
 
     /* Feedback Section */
-    .feedback-section {
-      margin: 2rem 0;
-    }
-
-    .feedback-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--dark);
-    }
-
+    .feedback-section { margin: 2rem 0; }
+    .feedback-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--dark); }
     .feedback-text {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      color: #555;
-      background: #f9f9f9;
-      padding: 1.5rem;
-      border-radius: 10px;
+      font-size: 1.1rem; line-height: 1.8; color: #555;
+      background: #f9f9f9; padding: 1.5rem; border-radius: 10px;
       border-left: 4px solid var(--primary);
     }
 
     /* Recommendation Cards */
-    .recommendations {
-      display: grid;
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
+    .recommendations { display: grid; gap: 1.5rem; margin: 2rem 0; }
     .recommendation-card {
       background: linear-gradient(135deg, #f093fb, #f5576c);
-      padding: 2rem;
-      border-radius: 15px;
-      color: white;
-      position: relative;
-      overflow: hidden;
+      padding: 2rem; border-radius: 15px; color: white;
+      position: relative; overflow: hidden;
     }
-
     .recommendation-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      content: ''; position: absolute; top: -50%; right: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
       animation: shimmer 3s infinite;
     }
-
-    @keyframes shimmer {
-      0% { transform: translate(-50%, -50%); }
-      100% { transform: translate(50%, 50%); }
-    }
-
-    .recommendation-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .recommendation-card p {
-      line-height: 1.6;
-      opacity: 0.95;
-    }
-
-    .recommendation-icon {
-      font-size: 2.5rem;
-    }
+    @keyframes shimmer { 0% { transform: translate(-50%,-50%); } 100% { transform: translate(50%,50%); } }
+    .recommendation-card h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .recommendation-card p { line-height: 1.6; opacity: 0.95; }
+    .recommendation-icon { font-size: 2.5rem; }
 
     /* Action Buttons */
-    .actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
+    .actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
     .btn {
-      flex: 1;
-      min-width: 200px;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-decoration: none;
-      text-align: center;
-      display: inline-block;
+      flex: 1; min-width: 200px; padding: 1rem 2rem; border: none;
+      border-radius: 50px; font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.3s; text-decoration: none;
+      text-align: center; display: inline-block;
     }
-
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+      color: white; box-shadow: 0 10px 30px rgba(255,107,53,0.4);
     }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
-    }
-
-    .btn-secondary {
-      background: white;
-      color: var(--dark);
-      border: 2px solid var(--dark);
-    }
-
-    .btn-secondary:hover {
-      background: var(--dark);
-      color: white;
-    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,107,53,0.6); }
+    .btn-secondary { background: white; color: var(--dark); border: 2px solid var(--dark); }
+    .btn-secondary:hover { background: var(--dark); color: white; }
 
     /* Resources Grid */
     .resources-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem; margin: 2rem 0;
     }
-
     .resource-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s;
+      background: white; padding: 1.5rem; border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s;
       border-top: 4px solid var(--primary);
     }
-
-    .resource-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .resource-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .resource-card h4 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: var(--dark);
-    }
-
-    .resource-card p {
-      color: #666;
-      line-height: 1.6;
-    }
+    .resource-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    .resource-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .resource-card h4 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--dark); }
+    .resource-card p { color: #666; line-height: 1.6; }
 
     /* Encouragement Banner */
     .encouragement {
       background: linear-gradient(135deg, #06FFA5, #00D9C0);
-      color: white;
-      padding: 2rem;
-      border-radius: 15px;
-      text-align: center;
-      margin: 2rem 0;
+      color: white; padding: 2rem; border-radius: 15px;
+      text-align: center; margin: 2rem 0;
       animation: glow 2s ease-in-out infinite;
     }
-
     @keyframes glow {
-      0%, 100% { box-shadow: 0 10px 40px rgba(6, 255, 165, 0.3); }
-      50% { box-shadow: 0 10px 60px rgba(6, 255, 165, 0.6); }
+      0%,100% { box-shadow: 0 10px 40px rgba(6,255,165,0.3); }
+      50% { box-shadow: 0 10px 60px rgba(6,255,165,0.6); }
+    }
+    .encouragement h3 { font-size: 2rem; margin-bottom: 1rem; }
+
+    /* ===================== */
+    /* CARE SUPPORT SECTION  */
+    /* ===================== */
+    .care-support-section {
+      margin: 2.5rem 0;
     }
 
-    .encouragement h3 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    .care-support-banner {
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+      border-radius: 20px;
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .care-support-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(255,107,53,0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .care-support-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 150px; height: 150px;
+      background: radial-gradient(circle, rgba(37,211,102,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .care-banner-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .care-banner-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+    }
+
+    .care-banner-header h2 {
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .care-banner-header h2 span {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      margin-top: 2px;
+    }
+
+    .care-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(37,211,102,0.18);
+      border: 1px solid rgba(37,211,102,0.4);
+      color: #06FFA5;
+      padding: 0.3rem 0.9rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .care-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: #06FFA5;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    /* Contact Cards Grid */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.97);
+      border-radius: 16px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .contact-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 70px; height: 70px;
+      background: radial-gradient(circle at top right, rgba(255,107,53,0.08), transparent 70%);
+    }
+
+    .contact-top {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .contact-avatar {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .contact-info { flex: 1; }
+
+    .contact-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1A1A2E;
+      line-height: 1.2;
+    }
+
+    .contact-role {
+      font-size: 0.78rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .contact-phone {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .contact-phone svg {
+      width: 15px; height: 15px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--whatsapp);
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.25s;
+      box-shadow: 0 4px 12px rgba(37,211,102,0.35);
+      width: 100%;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1ebe5d;
+      box-shadow: 0 6px 18px rgba(37,211,102,0.5);
+      transform: scale(1.02);
+    }
+
+    .whatsapp-btn svg {
+      width: 18px; height: 18px; flex-shrink: 0;
     }
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
-      .score-circle {
-        width: 150px;
-        height: 150px;
-      }
-
-      .score-value {
-        font-size: 3rem;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
+      .score-circle { width: 150px; height: 150px; }
+      .score-value { font-size: 3rem; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .contacts-grid { grid-template-columns: 1fr; }
+      .care-banner-header h2 { font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -439,7 +435,7 @@
               </linearGradient>
             </defs>
             <circle class="score-bg" cx="100" cy="100" r="90"></circle>
-            <circle class="score-progress" cx="100" cy="100" r="90" 
+            <circle class="score-progress" cx="100" cy="100" r="90"
                     style="--progress: {{ (score / 100 * 628)|round|int }}"></circle>
           </svg>
           <div class="score-value">{{ score }}</div>
@@ -483,37 +479,168 @@
         </div>
       </div>
 
+      <!-- ========================= -->
+      <!-- EXPERIENCED CARE SUPPORT  -->
+      <!-- ========================= -->
+      <div class="care-support-section">
+        <div class="care-support-banner">
+          <div class="care-banner-header">
+            <div class="care-banner-icon">🩺</div>
+            <h2>
+              Experienced Care Support
+              <span>Reach a qualified professional on WhatsApp</span>
+            </h2>
+          </div>
+          <div class="care-badge">● Available for consultations</div>
+
+          <div class="contacts-grid">
+
+            <!-- Dr Idowu -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-avatar">👨‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Dr Idowu</div>
+                  <div class="contact-role">Medical Doctor</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                0706 658 7303
+              </div>
+              <a href="https://wa.me/2347066587303" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <!-- Mrs Elewa -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">👩‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Mrs Elewa</div>
+                  <div class="contact-role">Maternal & Child Health</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                0803 800 7074
+              </div>
+              <a href="https://wa.me/2348038007074" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <!-- Mrs Sade Aiyemo -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">👩‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Mrs Sade Aiyemo</div>
+                  <div class="contact-role">Family Planning</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                0706 557 9767
+              </div>
+              <a href="https://wa.me/2347065579767" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <!-- Samagbeyi Ruth -->
+            <div class="contact-card">
+              <div class="contact-top">
+                <div class="contact-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">👩‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Samagbeyi Ruth</div>
+                  <div class="contact-role">Nutrition</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                0803 781 3769
+              </div>
+              <a href="https://wa.me/2348037813769" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <!-- Dr Toyin Adeyalo-Ogundare -->
+            <div class="contact-card" style="border-left-color: #764ba2;">
+              <div class="contact-top">
+                <div class="contact-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">👩‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Dr Toyin Adeyalo-Ogundare</div>
+                  <div class="contact-role" style="color:#764ba2;">Lead Counselor</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                0703 071 0096
+              </div>
+              <a href="https://wa.me/2347030710096" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <!-- Mrs Adebimpe Adewuyi -->
+            <div class="contact-card" style="border-left-color: #f5576c;">
+              <div class="contact-top">
+                <div class="contact-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">👩‍⚕️</div>
+                <div class="contact-info">
+                  <div class="contact-name">Mrs Adebimpe Adewuyi</div>
+                  <div class="contact-role" style="color:#f5576c;">Counsellor</div>
+                </div>
+              </div>
+              <div class="contact-phone">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                +234 703 779 9072
+              </div>
+              <a href="https://wa.me/2347037799072" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chat on WhatsApp
+              </a>
+            </div>
+
+          </div><!-- /contacts-grid -->
+        </div><!-- /care-support-banner -->
+      </div><!-- /care-support-section -->
+
       <!-- Encouragement Banner -->
       <div class="encouragement">
         <h3>🌟 You're Not Alone! 🌟</h3>
         <p style="font-size: 1.2rem; line-height: 1.6;">
-          Taking this assessment shows you care about your mental health. That's amazing! 
-          Every journey starts with a single step, and you've just taken yours. 
+          Taking this assessment shows you care about your mental health. That's amazing!
+          Every journey starts with a single step, and you've just taken yours.
           We're here to support you every step of the way.
         </p>
       </div>
 
       <!-- Resources -->
-      <h2 class="feedback-title">Next Steps & Resources</h2>
+      <h2 class="feedback-title">Next Steps &amp; Resources</h2>
       <div class="resources-grid">
         <div class="resource-card">
           <div class="resource-icon">📚</div>
           <h4>Learn More</h4>
           <p>Explore our resource library for articles, videos, and guides on mental wellness.</p>
         </div>
-
         <div class="resource-card">
           <div class="resource-icon">💬</div>
           <h4>Join Community</h4>
           <p>Connect with peers who understand what you're going through in a safe space.</p>
         </div>
-
         <div class="resource-card">
           <div class="resource-icon">🎮</div>
           <h4>Interactive Tools</h4>
           <p>Use our mood tracker, challenges, and activities to build healthy habits.</p>
         </div>
-
         <div class="resource-card">
           <div class="resource-icon">🆘</div>
           <h4>Crisis Support</h4>
@@ -533,12 +660,10 @@
   </div>
 
   <script>
-    // Hide loading screen after animation
     setTimeout(() => {
       document.getElementById('loading').style.display = 'none';
     }, 4000);
 
-    // Animate score on load
     window.addEventListener('load', () => {
       const scoreValue = {{ score }};
       const scoreElement = document.querySelector('.score-value');

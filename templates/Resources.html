@@ -552,15 +552,16 @@
                 <img src="{{ url_for('static', filename='log1.png') }}" alt="YCH Logo">
                 <img src="{{ url_for('static', filename='odmoh.png') }}" alt="ODMOH">
             </div>
-            <ul class="nav-links" id="navMenu">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" class="nav-cta">Get Support</a></li>
-            </ul>
+        <ul class="nav-links" id="navMenu" role="list">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+            <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+            <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+            <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
+            <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+            <li><a href="{{ url_for('meet_counselors') }}" class="active">Our Team</a></li>
+            <li><a href="{{ url_for('register') }}" class="nav-cta">Get Support</a></li>
+        </ul>
             <button class="menu-toggle" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
@@ -1475,7 +1476,7 @@
 
     <!-- FLOATING BUTTONS -->
     <div class="float-help">
-        <a href="https://wa.me/2348134812419" class="float-btn whatsapp" target="_blank">
+        <a href="https://wa.me/+2348062366907" class="float-btn whatsapp" target="_blank">
             <i class="fab fa-whatsapp"></i> WhatsApp Support
         </a>
         <a href="{{ url_for('register') }}" class="float-btn counsel">
@@ -1500,8 +1501,8 @@
             <div class="footer-col">
                 <h4>Support</h4>
                 <a href="{{ url_for('register') }}">Get a Counselor</a>
-                <a href="mailto:support@ondoyouth.gov.ng">Email Us</a>
-                <a href="tel:08001111113">Crisis Line: 0800 1111 113</a>
+                <a href="adolescent@vas.org">Email Us</a>
+                <a href="+2348062366907">Crisis Line: +234 806 236 6907</a>
             </div>
             <div class="footer-col">
                 <h4>Global Partners</h4>

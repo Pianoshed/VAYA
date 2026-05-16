@@ -6,22 +6,32 @@
     <title>Mood Tracker - Youth Connect Hub</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='odmoh.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* ═══════════════════════════════════════════
+           0. CSS CUSTOM PROPERTIES
+        ═══════════════════════════════════════════ */
         :root {
-            --primary: #FF6B35;
-            --secondary: #F7931E;
-            --accent: #FDC500;
-            --dark: #1A1A2E;
-            --happy: #FFD93D;
-            --sad: #6C88C4;
-            --angry: #FF5E5B;
-            --calm: #00D9C0;
-            --excited: #FF006E;
+            --primary:    #FF6B35;
+            --secondary:  #F7931E;
+            --accent:     #FDC500;
+            --dark:       #1A1A2E;
+            --happy:      #FFD93D;
+            --sad:        #6C88C4;
+            --angry:      #FF5E5B;
+            --calm:       #00D9C0;
+            --excited:    #FF006E;
+            --whatsapp:   #25D366;
+
+            --nav-height: 58px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
+        /* ═══════════════════════════════════════════
+           1. RESET & BASE
+        ═══════════════════════════════════════════ */
+        *, *::before, *::after {
+            margin: 0; padding: 0;
             box-sizing: border-box;
         }
 
@@ -35,74 +45,161 @@
             transition: background 0.8s ease;
         }
 
-        /* Navigation */
+        /* ═══════════════════════════════════════════
+           2. NAVIGATION  (matches site-wide standard)
+        ═══════════════════════════════════════════ */
         nav {
-            background: rgba(26, 26, 46, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 0.7rem 1.5rem;
+            background: rgba(26, 26, 46, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            height: var(--nav-height);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
         }
 
         .nav-container {
             max-width: 1200px;
+            height: 100%;
             margin: 0 auto;
+            padding: 0 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
 
+        /* Logo */
         .logo-section {
             display: flex;
-            gap: 0.8rem;
             align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            z-index: 1001;
         }
+        .logo-section img { height: 34px; }
 
-        .logo-section img {
-            height: 32px;
-            transition: 0.3s;
-        }
-
-        .logo-section img:hover {
-            transform: scale(1.05);
-        }
-
+        /* Desktop nav links */
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.4rem;
             list-style: none;
+            align-items: center;
         }
-
         .nav-links a {
-            color: white;
+            color: rgba(255, 255, 255, 0.72);
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            opacity: 0.9;
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            transition: color 0.25s;
+            padding: 0.2rem 0;
+            position: relative;
+            white-space: nowrap;
         }
-
-        .nav-links a:hover {
-            opacity: 1;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: width 0.25s;
+        }
+        .nav-links a:hover         { color: #fff; }
+        .nav-links a:hover::after  { width: 100%; }
+        .nav-links a.active        { color: var(--primary); }
+        .nav-links a.nav-cta {
             color: var(--primary);
+            border: 1px solid rgba(255, 107, 53, 0.35);
+            padding: 0.3rem 0.85rem;
+            border-radius: 50px;
         }
+        .nav-links a.nav-cta:hover { background: rgba(255, 107, 53, 0.12); }
+        .nav-links a.nav-cta::after { display: none; }
 
+        /* Hamburger button */
         .menu-toggle {
             display: none;
             background: none;
-            border: none;
-            color: white;
-            font-size: 1.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1.2rem;
             cursor: pointer;
+            border-radius: 8px;
+            width: 38px; height: 38px;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            z-index: 1001;
         }
-        
-        /* Main Layout */
+        .menu-toggle:hover { background: rgba(255, 255, 255, 0.08); }
+
+        /* Overlay behind mobile menu */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .nav-overlay.active { opacity: 1; }
+
+        /* ── Mobile nav ── */
+        @media (max-width: 900px) {
+            .menu-toggle  { display: flex; }
+            .nav-overlay  { display: block; pointer-events: none; }
+            .nav-overlay.active { pointer-events: auto; }
+
+            .nav-links {
+                position: fixed;
+                top: 0; right: -280px;
+                width: 260px;
+                height: 100dvh;
+                background: #1A1A2E;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0;
+                padding: calc(var(--nav-height) + 1rem) 0 2rem;
+                transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -6px 0 30px rgba(0, 0, 0, 0.5);
+                border-left: 1px solid rgba(255, 255, 255, 0.06);
+                overflow-y: auto;
+                z-index: 1000;
+            }
+            .nav-links.active { right: 0; }
+
+            .nav-links li  { width: 100%; }
+            .nav-links a {
+                display: block;
+                padding: 0.85rem 1.6rem;
+                font-size: 0.9rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            }
+            .nav-links a::after { display: none; }
+            .nav-links a.active {
+                background: rgba(255, 107, 53, 0.08);
+                border-left: 3px solid var(--primary);
+                padding-left: calc(1.6rem - 3px);
+            }
+            .nav-links a.nav-cta {
+                margin: 1rem 1.6rem 0;
+                width: auto;
+                text-align: center;
+                padding: 0.65rem 1rem;
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           3. MAIN LAYOUT
+        ═══════════════════════════════════════════ */
         .container {
             max-width: 1200px;
-            margin: 6rem auto 2rem;
+            margin: calc(var(--nav-height) + 2rem) auto 2rem;
             padding: 0 1rem;
             flex: 1;
         }
@@ -111,11 +208,6 @@
             text-align: center;
             margin-bottom: 3rem;
             animation: fadeInDown 0.8s ease-out;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
@@ -133,7 +225,9 @@
             margin: 0 auto;
         }
 
-        /* Grid & Cards */
+        /* ═══════════════════════════════════════════
+           4. GRID & CARDS
+        ═══════════════════════════════════════════ */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -157,11 +251,6 @@
         .card:nth-child(3) { animation-delay: 0.3s; }
         .card:nth-child(4) { animation-delay: 0.4s; }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .card h2 {
             font-size: 1.4rem;
             margin-bottom: 1.5rem;
@@ -171,11 +260,11 @@
             gap: 0.75rem;
         }
 
-        .card-icon {
-            font-size: 1.8rem;
-        }
+        .card-icon { font-size: 1.8rem; }
 
-        /* Mood Selection */
+        /* ═══════════════════════════════════════════
+           5. MOOD SELECTION
+        ═══════════════════════════════════════════ */
         .mood-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -217,7 +306,9 @@
             margin-top: 0.5rem;
         }
 
-        /* Affirmation & Challenge Boxes */
+        /* ═══════════════════════════════════════════
+           6. AFFIRMATION & CHALLENGE BOXES
+        ═══════════════════════════════════════════ */
         .affirmation-box, .challenge-box {
             min-height: 120px;
             padding: 2rem;
@@ -233,15 +324,12 @@
             justify-content: center;
         }
 
-        .affirmation-box {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
+        .affirmation-box { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .challenge-box   { background: linear-gradient(135deg, #f093fb, #f5576c); }
 
-        .challenge-box {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-        }
-
-        /* Streak Display */
+        /* ═══════════════════════════════════════════
+           7. STREAK DISPLAY
+        ═══════════════════════════════════════════ */
         .streak-display {
             text-align: center;
             padding: 2.5rem;
@@ -268,12 +356,9 @@
             display: inline-block;
         }
 
-        @keyframes flicker {
-            0%, 100% { transform: scale(1) rotate(-2deg); }
-            50% { transform: scale(1.1) rotate(2deg); }
-        }
-
-        /* Journal */
+        /* ═══════════════════════════════════════════
+           8. JOURNAL
+        ═══════════════════════════════════════════ */
         textarea {
             width: 100%;
             padding: 1.25rem;
@@ -285,6 +370,7 @@
             margin-top: 0.5rem;
             background: #f8fafc;
             transition: border-color 0.3s;
+            resize: vertical;
         }
 
         textarea:focus {
@@ -292,7 +378,9 @@
             border-color: var(--primary);
         }
 
-        /* Buttons */
+        /* ═══════════════════════════════════════════
+           9. BUTTONS
+        ═══════════════════════════════════════════ */
         .btn {
             width: 100%;
             padding: 1.1rem;
@@ -335,7 +423,9 @@
             gap: 1rem;
         }
 
-        /* Journal Entries */
+        /* ═══════════════════════════════════════════
+           10. JOURNAL ENTRIES
+        ═══════════════════════════════════════════ */
         .journal-entries {
             margin-top: 2rem;
             max-height: 400px;
@@ -367,7 +457,9 @@
             margin-right: 0.5rem;
         }
 
-        /* Footer */
+        /* ═══════════════════════════════════════════
+           11. FOOTER
+        ═══════════════════════════════════════════ */
         footer {
             background: var(--dark);
             color: white;
@@ -389,428 +481,414 @@
             font-family: 'Righteous', cursive;
         }
 
-        .footer-section p, .footer-section li {
+        .footer-section p,
+        .footer-section li {
             font-size: 0.9rem;
             line-height: 1.6;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
-
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 10px; }
         .footer-section a {
             color: inherit;
             text-decoration: none;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
-
-        .footer-section a:hover {
-            color: var(--primary);
-        }
+        .footer-section a:hover { color: var(--primary); }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* WhatsApp Button */
+        /* ═══════════════════════════════════════════
+           12. WHATSAPP FLOAT BUTTON
+        ═══════════════════════════════════════════ */
         .chat-btn {
             position: fixed;
-            bottom: 2.5rem;
-            right: 2.5rem;
-            width: 65px;
-            height: 65px;
+            bottom: 2.5rem; right: 2.5rem;
+            width: 65px; height: 65px;
             border-radius: 50%;
-            background: #25D366;
+            background: var(--whatsapp);
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             transition: all 0.3s;
         }
-
         .chat-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Mobile Responsive */
+        /* ═══════════════════════════════════════════
+           13. KEYFRAMES
+        ═══════════════════════════════════════════ */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50%       { transform: scale(1.1) rotate(2deg); }
+        }
+
+        /* ═══════════════════════════════════════════
+           14. RESPONSIVE
+        ═══════════════════════════════════════════ */
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                width: 70%;
-                height: 100vh;
-                background: var(--dark);
-                flex-direction: column;
-                padding: 6rem 2rem;
-                transition: 0.4s;
-                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .logo-section img {
-                height: 28px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .mood-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .btn-group {
-                grid-template-columns: 1fr;
-            }
-
-            .chat-btn {
-                width: 55px;
-                height: 55px;
-                bottom: 1.5rem;
-                right: 1.5rem;
-            }
+            .grid          { grid-template-columns: 1fr; }
+            .mood-grid     { grid-template-columns: repeat(2, 1fr); }
+            .btn-group     { grid-template-columns: 1fr; }
+            .chat-btn      { width: 55px; height: 55px; bottom: 1.5rem; right: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-container">
-            <div class="logo-section">
-                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='log1.png') }}" alt="Youth Connect"></a>
-                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='odmoh.png') }}" alt="ODMOH"></a>
-                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='AYFHS.png') }}" alt="AYFHS"></a>
-            </div>
-            <ul class="nav-links" id="navMenu">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('Resources') }}">Resources</a></li>
-                <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
-                <li><a href="{{ url_for('mental') }}">Assessment</a></li>
-                <li><a href="{{ url_for('register') }}">Get Support</a></li>
-            </ul>
-            <button class="menu-toggle" onclick="toggleNav()">☰</button>
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — NAVIGATION
+══════════════════════════════════════════════ -->
+<nav role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+
+        <!-- Logo -->
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='log1.png') }}"  alt="Ondo Youth Logo" height="32" fetchpriority="high">
+            <img src="{{ url_for('static', filename='odmoh.png') }}"  alt="ODMOH"           height="32" fetchpriority="high">
+            <img src="{{ url_for('static', filename='AYFHS.png') }}"  alt="AYFHS"           height="32" fetchpriority="high">
         </div>
-    </nav>
 
-    <div class="container">
-        <header class="header">
-            <h1>🌟 Mood Tracker 🌟</h1>
-            <p class="subtitle">Your safe space to reflect, grow, and celebrate your mental health journey</p>
-        </header>
+        <!-- Desktop + mobile slide-in links -->
+        <ul class="nav-links" id="navMenu" role="list">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('Resources') }}">Resources</a></li>
+            <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
+            <li><a href="{{ url_for('mental') }}">Assessment</a></li>
+            <li><a href="{{ url_for('mood_tracker') }}" class="active">Mood Tracker</a></li>
+            <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
+            <li><a href="{{ url_for('meet_counselors') }}">Our Team</a></li>
+            <li><a href="{{ url_for('register') }}" class="nav-cta">Get Support</a></li>
+        </ul>
 
-        <div class="grid">
-            <!-- Mood Selection Card -->
-            <div class="card">
-                <h2><span class="card-icon">😊</span> How do you feel today?</h2>
-                <div class="mood-grid">
-                    <button class="mood-btn" data-mood="Happy" onclick="selectMood(this, '😊')">
-                        😊
-                        <span class="mood-label">Happy</span>
-                    </button>
-                    <button class="mood-btn" data-mood="Calm" onclick="selectMood(this, '😌')">
-                        😌
-                        <span class="mood-label">Calm</span>
-                    </button>
-                    <button class="mood-btn" data-mood="Sad" onclick="selectMood(this, '😢')">
-                        😢
-                        <span class="mood-label">Sad</span>
-                    </button>
-                    <button class="mood-btn" data-mood="Angry" onclick="selectMood(this, '😠')">
-                        😠
-                        <span class="mood-label">Angry</span>
-                    </button>
-                    <button class="mood-btn" data-mood="Excited" onclick="selectMood(this, '🤩')">
-                        🤩
-                        <span class="mood-label">Excited</span>
-                    </button>
-                    <button class="mood-btn" data-mood="Anxious" onclick="selectMood(this, '😰')">
-                        😰
-                        <span class="mood-label">Anxious</span>
-                    </button>
-                </div>
-            </div>
+        <!-- Hamburger (mobile only) -->
+        <button class="menu-toggle" id="menuToggle"
+                onclick="toggleNav()"
+                aria-label="Toggle navigation"
+                aria-expanded="false"
+                aria-controls="navMenu">☰</button>
+    </div>
+</nav>
 
-            <!-- Affirmation Card -->
-            <div class="card">
-                <h2><span class="card-icon">✨</span> Daily Affirmation</h2>
-                <div class="affirmation-box" id="affirmation-text">
-                    Click below for your daily boost of positivity
-                </div>
-                <button class="btn btn-primary" onclick="getAffirmation()">Get Affirmation</button>
-            </div>
+<!-- Tap-outside overlay -->
+<div class="nav-overlay" id="navOverlay" onclick="closeNav()"></div>
 
-            <!-- Challenge Card -->
-            <div class="card">
-                <h2><span class="card-icon">🎯</span> Today's Challenge</h2>
-                <div class="challenge-box" id="challenge-text">
-                    Ready for today's wellness challenge?
-                </div>
-                <button class="btn btn-primary" onclick="getChallenge()">Get Challenge</button>
-            </div>
 
-            <!-- Streak Card -->
-            <div class="card">
-                <div class="streak-display">
-                    <div class="flame-icon">🔥</div>
-                    <span class="streak-number" id="streak-number">0</span>
-                    <div style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Day Streak</div>
-                    <p style="margin-top: 1rem; opacity: 0.9; font-size: 0.9rem;">Keep checking in daily!</p>
-                </div>
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — PAGE HEADER
+══════════════════════════════════════════════ -->
+<div class="container">
+    <header class="header">
+        <h1>Mood Tracker</h1>
+        <p class="subtitle">Your safe space to reflect, grow, and celebrate your mental health journey</p>
+    </header>
+
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 3 — MOOD & WELLNESS CARDS
+    ══════════════════════════════════════════════ -->
+    <div class="grid">
+
+        <!-- Mood Selection -->
+        <div class="card">
+            <h2><span class="card-icon">😊</span> How do you feel today?</h2>
+            <div class="mood-grid">
+                <button class="mood-btn" data-mood="Happy"   onclick="selectMood(this,'😊')">😊<span class="mood-label">Happy</span></button>
+                <button class="mood-btn" data-mood="Calm"    onclick="selectMood(this,'😌')">😌<span class="mood-label">Calm</span></button>
+                <button class="mood-btn" data-mood="Sad"     onclick="selectMood(this,'😢')">😢<span class="mood-label">Sad</span></button>
+                <button class="mood-btn" data-mood="Angry"   onclick="selectMood(this,'😠')">😠<span class="mood-label">Angry</span></button>
+                <button class="mood-btn" data-mood="Excited" onclick="selectMood(this,'🤩')">🤩<span class="mood-label">Excited</span></button>
+                <button class="mood-btn" data-mood="Anxious" onclick="selectMood(this,'😰')">😰<span class="mood-label">Anxious</span></button>
             </div>
         </div>
 
-        <!-- Journal Card -->
-        <div class="card" style="max-width: 800px; margin: 0 auto;">
-            <h2><span class="card-icon">📝</span> Journal Your Thoughts</h2>
-            <p style="color: #666; margin-bottom: 1rem;">Writing helps process emotions and track your journey</p>
-            <textarea id="journal-entry" placeholder="What's on your mind today? How are you feeling? What happened?"></textarea>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="saveJournal()">Save Entry</button>
-                <button class="btn btn-secondary" onclick="toggleJournals()">View Past Entries</button>
+        <!-- Daily Affirmation -->
+        <div class="card">
+            <h2><span class="card-icon">✨</span> Daily Affirmation</h2>
+            <div class="affirmation-box" id="affirmation-text">
+                Click below for your daily boost of positivity
             </div>
-            <div class="journal-entries" id="journal-container" style="display: none;"></div>
+            <button class="btn btn-primary" onclick="getAffirmation()">Get Affirmation</button>
         </div>
+
+        <!-- Today's Challenge -->
+        <div class="card">
+            <h2><span class="card-icon">🎯</span> Today's Challenge</h2>
+            <div class="challenge-box" id="challenge-text">
+                Ready for today's wellness challenge?
+            </div>
+            <button class="btn btn-primary" onclick="getChallenge()">Get Challenge</button>
+        </div>
+
+        <!-- Streak -->
+        <div class="card">
+            <div class="streak-display">
+                <div class="flame-icon">🔥</div>
+                <span class="streak-number" id="streak-number">0</span>
+                <div style="font-weight:700;text-transform:uppercase;letter-spacing:2px;">Day Streak</div>
+                <p style="margin-top:1rem;opacity:0.9;font-size:0.9rem;">Keep checking in daily!</p>
+            </div>
+        </div>
+
+    </div><!-- /.grid -->
+
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 4 — JOURNAL
+    ══════════════════════════════════════════════ -->
+    <div class="card" style="max-width:800px;margin:0 auto;">
+        <h2><span class="card-icon">📝</span> Journal Your Thoughts</h2>
+        <p style="color:#666;margin-bottom:1rem;">Writing helps process emotions and track your journey</p>
+        <textarea id="journal-entry" placeholder="What's on your mind today? How are you feeling? What happened?"></textarea>
+        <div class="btn-group">
+            <button class="btn btn-primary"   onclick="saveJournal()">Save Entry</button>
+            <button class="btn btn-secondary" onclick="toggleJournals()">View Past Entries</button>
+        </div>
+        <div class="journal-entries" id="journal-container" style="display:none;"></div>
     </div>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-section">
-                <h3>Ondo Youth Connect</h3>
-                <p>Empowering young minds through technology and community. We provide the tools you need to navigate life's journey safely.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
+</div><!-- /.container -->
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5 — FOOTER
+══════════════════════════════════════════════ -->
+<footer role="contentinfo">
+    <div class="footer-grid">
+        <div class="footer-section">
+            <h3>Ondo Youth Connect</h3>
+            <p>Empowering young minds through technology and community. We provide the tools you need to navigate life's journey safely.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('Resources') }}">Resources</a></li>
                 <li><a href="{{ url_for('sel_activities') }}">SEL Activities</a></li>
                 <li><a href="{{ url_for('mental') }}">Assessment</a></li>
                 <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
                 <li><a href="{{ url_for('runner_app') }}">Spark Runner</a></li>
-                <li><a href="{{ url_for('register') }}" style="color: var(--primary);">Get Support</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Emergency Support</h3>
-                <p>If you are in immediate danger, please contact local emergency services or a 24/7 helpline immediately.</p>
-                <p style="margin-top: 1rem;"><strong>Hotline:</strong> +234 805 123 4567</p>
-            </div>
+                <li><a href="{{ url_for('register') }}" style="color:var(--primary);">Get Support</a></li>
+            </ul>
         </div>
-        <div class="footer-bottom">
-            &copy; 2024 Ondo Youth Connect Hub. All rights reserved.
+        <div class="footer-section">
+            <h3>Emergency Support</h3>
+            <p>If you are in immediate danger, please contact local emergency services or a 24/7 helpline immediately.</p>
+            <p style="margin-top:1rem;"><strong>Hotline:</strong> +234 806 236 6907</p>
         </div>
-    </footer>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Ondo Youth Connect Hub. All rights reserved.
+    </div>
+</footer>
 
-    <a href="https://wa.me/01233445" class="chat-btn" target="_blank">💬</a>
+<!-- WhatsApp float -->
+<a href="https://wa.me/+2348062366907" class="chat-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">💬</a>
 
-    <script>
-        let selectedMood = '';
-        let selectedMoodEmoji = '';
-        let selectedChallenge = '';
 
-        // Load on page start
-        window.onload = function() {
-            loadStreak();
-            getAffirmation();
-            getChallenge();
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════ -->
+<script>
+    let selectedMood      = '';
+    let selectedMoodEmoji = '';
+    let selectedChallenge = '';
+
+    /* ── Page load ── */
+    window.onload = function () {
+        loadStreak();
+        getAffirmation();
+        getChallenge();
+    };
+
+    /* ── Nav toggle (matches site-wide standard) ── */
+    function toggleNav() {
+        const menu    = document.getElementById('navMenu');
+        const overlay = document.getElementById('navOverlay');
+        const toggle  = document.getElementById('menuToggle');
+        const isOpen  = menu.classList.toggle('active');
+        overlay.classList.toggle('active', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen);
+        toggle.textContent = isOpen ? '✕' : '☰';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function closeNav() {
+        const menu    = document.getElementById('navMenu');
+        const overlay = document.getElementById('navOverlay');
+        const toggle  = document.getElementById('menuToggle');
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.textContent = '☰';
+        document.body.style.overflow = '';
+    }
+
+    /* Close on link click (mobile) */
+    document.querySelectorAll('#navMenu a').forEach(link => {
+        link.addEventListener('click', () => { if (window.innerWidth <= 900) closeNav(); });
+    });
+
+    /* Close on Escape */
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+
+    /* ── Mood selection ── */
+    function selectMood(button, emoji) {
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        selectedMood      = button.dataset.mood;
+        selectedMoodEmoji = emoji;
+
+        const colors = {
+            Happy:   'linear-gradient(135deg, #FFD93D, #F7931E)',
+            Calm:    'linear-gradient(135deg, #00D9C0, #667eea)',
+            Sad:     'linear-gradient(135deg, #6C88C4, #4E4CB8)',
+            Angry:   'linear-gradient(135deg, #FF5E5B, #F7931E)',
+            Excited: 'linear-gradient(135deg, #FF006E, #FF5E5B)',
+            Anxious: 'linear-gradient(135deg, #764ba2, #667eea)'
+        };
+        document.body.style.background =
+            colors[selectedMood] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    }
+
+    /* ── Affirmation ── */
+    async function getAffirmation() {
+        try {
+            const res  = await fetch('/api/affirmation');
+            const data = await res.json();
+            document.getElementById('affirmation-text').textContent = data.affirmation;
+            updateStreak();
+        } catch (e) { console.error('Affirmation error:', e); }
+    }
+
+    /* ── Challenge ── */
+    async function getChallenge() {
+        try {
+            const res  = await fetch('/api/challenge');
+            const data = await res.json();
+            document.getElementById('challenge-text').textContent = data.challenge;
+            selectedChallenge = data.challenge;
+            updateStreak();
+        } catch (e) { console.error('Challenge error:', e); }
+    }
+
+    /* ── Streak ── */
+    function updateStreak() {
+        let streak    = parseInt(localStorage.getItem('streak') || '0');
+        const last    = localStorage.getItem('lastVisit');
+        const today   = new Date().toDateString();
+        if (last !== today) {
+            streak++;
+            localStorage.setItem('streak',    streak);
+            localStorage.setItem('lastVisit', today);
+        }
+        document.getElementById('streak-number').textContent = streak;
+        if (streak % 7 === 0 && streak > 0) {
+            alert(`🎉 Amazing! You've reached a ${streak}-day streak! Keep going! 🔥`);
+        }
+    }
+
+    function loadStreak() {
+        document.getElementById('streak-number').textContent =
+            localStorage.getItem('streak') || '0';
+    }
+
+    /* ── Save journal ── */
+    async function saveJournal() {
+        const entry = document.getElementById('journal-entry').value.trim();
+        if (!entry)        { alert('Please write something before saving.');     return; }
+        if (!selectedMood) { alert('Please select your mood before saving.');    return; }
+
+        const payload = {
+            mood:      selectedMood,
+            entry,
+            activity:  selectedChallenge || '',
+            timestamp: new Date().toISOString()
         };
 
-        function toggleNav() {
-            document.getElementById('navMenu').classList.toggle('active');
-        }
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
+        try {
+            const res = await fetch('/save_journal_entry', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(payload)
             });
-        });
 
-        function selectMood(button, emoji) {
-            // Remove active class from all buttons
-            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to selected button
-            button.classList.add('active');
-            
-            // Store selected mood
-            selectedMood = button.dataset.mood;
-            selectedMoodEmoji = emoji;
-            
-            // Change background based on mood
-            const colors = {
-                'Happy': 'linear-gradient(135deg, #FFD93D, #F7931E)',
-                'Calm': 'linear-gradient(135deg, #00D9C0, #667eea)',
-                'Sad': 'linear-gradient(135deg, #6C88C4, #4E4CB8)',
-                'Angry': 'linear-gradient(135deg, #FF5E5B, #F7931E)',
-                'Excited': 'linear-gradient(135deg, #FF006E, #FF5E5B)',
-                'Anxious': 'linear-gradient(135deg, #764ba2, #667eea)'
-            };
-            
-            document.body.style.background = colors[selectedMood] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-        }
-
-        async function getAffirmation() {
-            try {
-                const response = await fetch('/api/affirmation');
-                const data = await response.json();
-                document.getElementById('affirmation-text').textContent = data.affirmation;
-                updateStreak();
-            } catch (error) {
-                console.error('Error fetching affirmation:', error);
-            }
-        }
-
-        async function getChallenge() {
-            try {
-                const response = await fetch('/api/challenge');
-                const data = await response.json();
-                document.getElementById('challenge-text').textContent = data.challenge;
-                selectedChallenge = data.challenge;
-                updateStreak();
-            } catch (error) {
-                console.error('Error fetching challenge:', error);
-            }
-        }
-
-        function updateStreak() {
-            let streak = parseInt(localStorage.getItem('streak') || '0');
-            const lastVisit = localStorage.getItem('lastVisit');
-            const today = new Date().toDateString();
-            
-            if (lastVisit !== today) {
-                streak++;
-                localStorage.setItem('streak', streak);
-                localStorage.setItem('lastVisit', today);
-            }
-            
-            document.getElementById('streak-number').textContent = streak;
-            
-            // Celebration for milestones
-            if (streak % 7 === 0 && streak > 0) {
-                alert(`🎉 Amazing! You've reached a ${streak}-day streak! Keep going! 🔥`);
-            }
-        }
-
-        function loadStreak() {
-            const streak = localStorage.getItem('streak') || '0';
-            document.getElementById('streak-number').textContent = streak;
-        }
-
-        async function saveJournal() {
-            const entry = document.getElementById('journal-entry').value.trim();
-            
-            if (!entry) {
-                alert('Please write something in your journal before saving.');
-                return;
-            }
-            
-            if (!selectedMood) {
-                alert('Please select your mood before saving.');
-                return;
-            }
-
-            const journalData = {
-                mood: selectedMood,
-                entry: entry,
-                activity: selectedChallenge || '',
-                timestamp: new Date().toISOString()
-            };
-
-            try {
-                const response = await fetch('/save_journal_entry', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(journalData)
+            if (res.ok) {
+                let journals = JSON.parse(localStorage.getItem('journals') || '[]');
+                journals.unshift({
+                    timestamp: new Date().toLocaleString(),
+                    mood:      selectedMood,
+                    moodEmoji: selectedMoodEmoji,
+                    entry,
+                    challenge: selectedChallenge
                 });
-
-                if (response.ok) {
-                    // Also save to localStorage for immediate display
-                    let journals = JSON.parse(localStorage.getItem('journals') || '[]');
-                    journals.unshift({
-                        timestamp: new Date().toLocaleString(),
-                        mood: selectedMood,
-                        moodEmoji: selectedMoodEmoji,
-                        entry: entry,
-                        challenge: selectedChallenge
-                    });
-                    localStorage.setItem('journals', JSON.stringify(journals));
-
-                    document.getElementById('journal-entry').value = '';
-                    alert('✅ Journal entry saved successfully!');
-                    
-                    // Refresh journal display if visible
-                    if (document.getElementById('journal-container').style.display === 'block') {
-                        loadJournals();
-                    }
-                } else {
-                    alert('Failed to save journal entry. Please try again.');
+                localStorage.setItem('journals', JSON.stringify(journals));
+                document.getElementById('journal-entry').value = '';
+                alert('✅ Journal entry saved successfully!');
+                if (document.getElementById('journal-container').style.display === 'block') {
+                    loadJournals();
                 }
-            } catch (error) {
-                console.error('Error saving journal:', error);
-                alert('An error occurred. Please try again.');
-            }
-        }
-
-        function toggleJournals() {
-            const container = document.getElementById('journal-container');
-            
-            if (container.style.display === 'none') {
-                loadJournals();
-                container.style.display = 'block';
             } else {
-                container.style.display = 'none';
+                alert('Failed to save. Please try again.');
             }
+        } catch (e) {
+            console.error('Save error:', e);
+            alert('An error occurred. Please try again.');
         }
+    }
 
-        function loadJournals() {
-            const journals = JSON.parse(localStorage.getItem('journals') || '[]');
-            const container = document.getElementById('journal-container');
-            
-            if (journals.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No journal entries yet. Start writing!</p>';
-                return;
-            }
+    /* ── Toggle journal list ── */
+    function toggleJournals() {
+        const container = document.getElementById('journal-container');
+        if (container.style.display === 'none') {
+            loadJournals();
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
 
-            container.innerHTML = journals.map(journal => `
-                <div class="journal-entry">
-                    <div class="entry-date">${journal.timestamp}</div>
-                    <div>
-                        <span class="entry-mood">${journal.moodEmoji} ${journal.mood}</span>
-                        ${journal.challenge ? `<span style="color: #666; font-size: 0.9rem;">Challenge: ${journal.challenge}</span>` : ''}
-                    </div>
-                    <div style="margin-top: 0.5rem; line-height: 1.6; color: #333;">${journal.entry}</div>
+    function loadJournals() {
+        const journals  = JSON.parse(localStorage.getItem('journals') || '[]');
+        const container = document.getElementById('journal-container');
+        if (!journals.length) {
+            container.innerHTML = '<p style="text-align:center;color:#666;padding:2rem;">No journal entries yet. Start writing!</p>';
+            return;
+        }
+        container.innerHTML = journals.map(j => `
+            <div class="journal-entry">
+                <div class="entry-date">${j.timestamp}</div>
+                <div>
+                    <span class="entry-mood">${j.moodEmoji} ${j.mood}</span>
+                    ${j.challenge ? `<span style="color:#666;font-size:0.9rem;">Challenge: ${j.challenge}</span>` : ''}
                 </div>
-            `).join('');
-        }
-    </script>
+                <div style="margin-top:0.5rem;line-height:1.6;color:#333;">${j.entry}</div>
+            </div>
+        `).join('');
+    }
+</script>
+
 </body>
 </html>

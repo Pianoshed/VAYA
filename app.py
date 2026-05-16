@@ -942,6 +942,110 @@ def health_check():
         'version': '2.1'
     }), 200
 
+@app.route("/meet-counselors")
+def meet_counselors():
+    counselors = [
+        {
+            "id":       1,
+            "name":     "Dr Idowu",
+            "role":     "Medical Doctor",
+            "emoji":    "👨‍⚕️",
+            "phone":    "0706 658 7303",
+            "wa_link":  "https://wa.me/2347066587303",
+            "tags":     ["General Medicine", "Youth Health", "Clinical Care"],
+            "color":    "var(--primary)",          # stripe / role colour
+            "gradient": "linear-gradient(90deg, var(--primary), var(--secondary))",
+            "glow":     "var(--primary)",
+            "avatar_bg":"rgba(255,107,53,0.15)",
+            "featured": False,
+        },
+        {
+            "id":       2,
+            "name":     "Mrs Elewa",
+            "role":     "Maternal & Child Health",
+            "emoji":    "👩‍⚕️",
+            "phone":    "0803 800 7074",
+            "wa_link":  "https://wa.me/2348038007074",
+            "tags":     ["Maternal Care", "Child Wellness", "Prenatal Support"],
+            "color":    "#f093fb",
+            "gradient": "linear-gradient(90deg, #f093fb, #f5576c)",
+            "glow":     "#f093fb",
+            "avatar_bg":"rgba(240,147,251,0.15)",
+            "featured": False,
+        },
+        {
+            "id":       3,
+            "name":     "Mrs Sade Aiyemo",
+            "role":     "Family Planning",
+            "emoji":    "👩‍⚕️",
+            "phone":    "0706 557 9767",
+            "wa_link":  "https://wa.me/2347065579767",
+            "tags":     ["Reproductive Health", "Family Planning", "Women's Health"],
+            "color":    "#43e97b",
+            "gradient": "linear-gradient(90deg, #43e97b, #38f9d7)",
+            "glow":     "#43e97b",
+            "avatar_bg":"rgba(67,233,123,0.13)",
+            "featured": False,
+        },
+        {
+            "id":       4,
+            "name":     "Samagbeyi Ruth",
+            "role":     "Nutrition Specialist",
+            "emoji":    "👩‍⚕️",
+            "phone":    "0803 781 3769",
+            "wa_link":  "https://wa.me/2348037813769",
+            "tags":     ["Nutrition", "Dietary Guidance", "Youth Wellness"],
+            "color":    "var(--accent)",
+            "gradient": "linear-gradient(90deg, var(--accent), #fa8231)",
+            "glow":     "var(--accent)",
+            "avatar_bg":"rgba(253,197,0,0.13)",
+            "featured": False,
+        },
+        {
+            "id":       5,
+            "name":     "Dr Toyin Adeyalo-Ogundare",
+            "role":     "Lead Counselor",
+            "emoji":    "👩‍⚕️",
+            "phone":    "0703 071 0096",
+            "wa_link":  "https://wa.me/2347030710096",
+            "tags":     ["Mental Health", "Psychotherapy", "Crisis Support", "Adolescent Care"],
+            "color":    "#c084fc",
+            "gradient": "linear-gradient(90deg, var(--purple), #c084fc)",
+            "glow":     "var(--purple)",
+            "avatar_bg":"rgba(157,78,221,0.2)",
+            "featured": True,          # ← renders with the purple "Lead Counselor" badge
+        },
+        {
+            "id":       6,
+            "name":     "Mrs Adebimpe Adewuyi",
+            "role":     "Counsellor",
+            "emoji":    "👩‍⚕️",
+            "phone":    "+234 703 779 9072",
+            "wa_link":  "https://wa.me/2347037799072",
+            "tags":     ["Counseling", "Stress Management", "Emotional Support"],
+            "color":    "var(--blue)",
+            "gradient": "linear-gradient(90deg, var(--blue), #0077b6)",
+            "glow":     "var(--blue)",
+            "avatar_bg":"rgba(0,180,216,0.15)",
+            "featured": False,
+        },
+        {
+            "id":       7,
+            "name":     "Mrs Ajayi",
+            "role":     "Programme Coordinator",
+            "emoji":    "👩‍💼",
+            "phone":    "+234 806 236 6907",
+            "wa_link":  "https://wa.me/2348062366907",
+            "tags":     ["Programme Management", "Youth Outreach", "Coordination"],
+            "color":    "#06d6a0",
+            "gradient": "linear-gradient(90deg, #06d6a0, #0096c7)",
+            "glow":     "#06d6a0",
+            "avatar_bg":"rgba(6,214,160,0.13)",
+            "featured": False,
+        },
+    ]
+
+    return render_template("meet_counselors.html", counselors=counselors)
 
 # ── UTILITIES ─────────────────────────────────────────────────────────────────
 
